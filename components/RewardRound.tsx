@@ -63,9 +63,9 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         <h2 className="font-bold">Period</h2>
         <p>{rewardRound.monthYear}</p>
         <h2 className="font-bold">Budget</h2>
-        <p>{rewardRound.budget}</p>
+        <p>{String(rewardRound.budget)}</p>
         <h2 className="font-bold">ContentPoints per Voter</h2>
-        <p>{rewardRound.contentPoints}</p>
+        <p>{String(rewardRound.contentPoints)}</p>
         <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
         <div className="grid grid-cols-3 mt-4">
           <p className="font-bold">Content piece</p>
