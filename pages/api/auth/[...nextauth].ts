@@ -49,18 +49,12 @@ const options = {
             where: { wallet: address },
           })
 
-          console.log("userdb " + userDB)
+          const user = { address, profileId, signature };
 
-          const name = userDB?.name
+          // const name = userDB?.name
 
-          console.log("name " + userDB)
-          //address is the wallet - can I connect that to the db?
-          const user = { address, profileId, signature, name };
-          console.log("user " + userDB)
-          // returning the user object and creating  a session
+          // const user = { address, profileId, signature, name };
 
-          // console.log("Authorize User " + name)
-          // return user;
           if (user) {
             return user
           }
