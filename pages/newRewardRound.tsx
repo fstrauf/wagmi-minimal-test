@@ -94,4 +94,4 @@ const NewRewardRound: React.FC = (props) => {
   );
 };
 
-export default newRewardRound;
+export default NewRewardRound;

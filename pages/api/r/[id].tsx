@@ -1,9 +1,9 @@
 import React, { use, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Router from 'next/router';
-import Layout from '../../components/Layout';
+import Layout from '../../../components/Layout';
 import { useSession } from 'next-auth/react';
-import prisma from '../../lib/prisma';
+import prisma from '../../../lib/prisma';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 

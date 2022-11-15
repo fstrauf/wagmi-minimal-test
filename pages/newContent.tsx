@@ -85,8 +85,8 @@ const NewContent: React.FC<Props> = (props) => {
       })
       // await Router.push('/');
       console.log('successful');
-      const { url } = await signOut({callbackUrl: '/'})
-      await Router.push(url);
+      await signOut({callbackUrl: '/'})
+      // await Router.push(url);
 
     } catch (error) {
       console.error(error);
@@ -203,4 +203,4 @@ const NewContent: React.FC<Props> = (props) => {
   );
 };
 
-export default newContent;
+export default NewContent;
