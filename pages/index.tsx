@@ -1,8 +1,18 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useAccount, useConnect, useEnsName } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 
 export default function Home() {
+  const { address, isConnected } = useAccount()
+  const { data: ensName } = useEnsName({ address })
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  })
+
+  if (isConnected) return <div>Connected to {ensName ?? address}</div>
+  return <button onClick={() => connect()}>Connect Wallet</button>
   return (
     <div className={styles.container}>
       <Head>
