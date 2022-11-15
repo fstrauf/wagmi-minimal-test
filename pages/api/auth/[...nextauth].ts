@@ -31,50 +31,50 @@ const options = {
         },
       },
       authorize: async (credentials, _req) => {
-      // async authorize(credentials) {
+        // async authorize(credentials) {
         // try {
 
-          // console.log('authorize')
-          // "message" and "signature" are needed for authorisation
-          // we described them in "credentials" above
-          const { message, signature } = credentials;
+        // console.log('authorize')
+        // "message" and "signature" are needed for authorisation
+        // we described them in "credentials" above
+        const { message, signature } = credentials;
 
-          await Moralis.start({ apiKey: process.env.MORALIS_API_KEY });
+        await Moralis.start({ apiKey: process.env.MORALIS_API_KEY });
 
-          const { address, profileId } = (
-            await Moralis.Auth.verify({ message, signature, network: 'evm' })
-          ).raw;
+        const { address, profileId } = (
+          await Moralis.Auth.verify({ message, signature, network: 'evm' })
+        ).raw;
 
-          const userDB = await prisma.user.findUnique({
-            where: { wallet: address },
-          })
+        const userDB = await prisma.user.findUnique({
+          where: { wallet: address },
+        })
 
-          let user=null
+        let user = null
 
-          if(!userDB){
-            const name = userDB?.name
+        // if(!userDB){
+        const name = userDB?.name
 
-            user = { address, profileId, signature, name };
-          }else{
-            user = { address, profileId, signature };
-          }
+        user = { address, profileId, signature, name };
+        // }else{
+        // user = { address, profileId, signature };
+        // }
 
-          // console.log(userDB)
+        // console.log(userDB)
 
-          
 
-          
 
-          if (user) {
-            return user
-          }
-          // Return null if user data could not be retrieved
-          return null
+
+
+        if (user) {
+          return user
+        }
+        // Return null if user data could not be retrieved
+        return null
 
 
         // } catch (e) {
-          // console.error(e);
-          // return null;
+        // console.error(e);
+        // return null;
         // }
       },
     }),

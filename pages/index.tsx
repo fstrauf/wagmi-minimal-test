@@ -4,8 +4,7 @@ import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
 import RewardRound from "../components/RewardRound";
-import { useSession, signIn } from 'next-auth/react';
-import { getSession, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
