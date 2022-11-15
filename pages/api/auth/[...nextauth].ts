@@ -45,15 +45,25 @@ const options = {
             await Moralis.Auth.verify({ message, signature, network: 'evm' })
           ).raw;
 
-          // const userDB = await prisma.user.findUnique({
-          //   where: { wallet: address },
-          // })
+          const userDB = await prisma.user.findUnique({
+            where: { wallet: address },
+          })
 
-          const user = { address, profileId, signature };
+          let user=null
 
-          // const name = userDB?.name
+          if(!userDB){
+            const name = userDB?.name
 
-          // const user = { address, profileId, signature, name };
+            user = { address, profileId, signature, name };
+          }else{
+            user = { address, profileId, signature };
+          }
+
+          // console.log(userDB)
+
+          
+
+          
 
           if (user) {
             return user
