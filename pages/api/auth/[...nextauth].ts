@@ -32,7 +32,7 @@ const options = {
       },
       authorize: async (credentials, _req) => {
       // async authorize(credentials) {
-        try {
+        // try {
 
           // console.log('authorize')
           // "message" and "signature" are needed for authorisation
@@ -49,19 +49,29 @@ const options = {
             where: { wallet: address },
           })
 
-          // console.log(userDB)
+          console.log("userdb " + userDB)
 
           const name = userDB?.name
+
+          console.log("name " + userDB)
           //address is the wallet - can I connect that to the db?
           const user = { address, profileId, signature, name };
+          console.log("user " + userDB)
           // returning the user object and creating  a session
 
           // console.log("Authorize User " + name)
-          return user;
-        } catch (e) {
-          console.error(e);
-          return null;
-        }
+          // return user;
+          if (user) {
+            return user
+          }
+          // Return null if user data could not be retrieved
+          return null
+
+
+        // } catch (e) {
+          // console.error(e);
+          // return null;
+        // }
       },
     }),
   ],
