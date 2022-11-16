@@ -9,6 +9,7 @@ import { getSession, signOut } from 'next-auth/react';
 import prisma from '../lib/prisma';
 import { Listbox } from '@headlessui/react'
 import { useSession } from 'next-auth/react';
+import { useForm } from "react-hook-form";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -51,6 +52,7 @@ const NewContent: React.FC<Props> = (props) => {
   const [user, setUser] = useState("");
   const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
   const [url, setUrl] = useState('');
+  const { register, handleSubmit, watch, formState } = useForm();
 
   if (!session) {
     return (
@@ -82,7 +84,7 @@ const NewContent: React.FC<Props> = (props) => {
   }
 
   const submitData = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     try {
       const body = { title, selectedUsers, url, selectedRewardRound };
       await fetch('/api/post/createContent', {
@@ -116,7 +118,7 @@ const NewContent: React.FC<Props> = (props) => {
         </div>
       )}
       <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
-        <form onSubmit={submitData}>
+        <form onSubmit={handleSubmit(submitData)}>
           <h1 className="text-3xl font-bold">Create New Content</h1>
           <input
             autoFocus
@@ -182,8 +184,7 @@ const NewContent: React.FC<Props> = (props) => {
               </Listbox.Options>
             </div>
           </Listbox>
-          {/* <input className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUsers || !title || !selectedRewardRound} type="submit" value="Create" /> */}
-          <button className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUsers || !title || !selectedRewardRound } onClick={submitData}>Create</button>
+          <input className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUsers || !title || !selectedRewardRound || formState.isSubmitting} type="submit" value="Create" />
           <a className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4" href="#" onClick={() => Router.push('/')}>
             or Cancel
           </a>
