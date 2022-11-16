@@ -52,7 +52,7 @@ const NewContent: React.FC<Props> = (props) => {
   const [user, setUser] = useState("");
   const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
   const [url, setUrl] = useState('');
-  const { register, handleSubmit, watch, formState } = useForm();
+  const { handleSubmit, formState } = useForm();
 
   if (!session) {
     return (
@@ -184,7 +184,8 @@ const NewContent: React.FC<Props> = (props) => {
               </Listbox.Options>
             </div>
           </Listbox>
-          <input className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUsers || !title || !selectedRewardRound || formState.isSubmitting} type="submit" value="Create" />
+          {/* {`w-full top-3 ${isOpen ? '': 'z-50 sticky'}`} */}
+          <input className={`${formState.isSubmitting ? 'bg-black border-solid border-2 border-sky-500 rounded m-4': 'bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'}`} disabled={!selectedUsers || !title || !selectedRewardRound || formState.isSubmitting} type="submit" value="Create" />
           <a className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4" href="#" onClick={() => Router.push('/')}>
             or Cancel
           </a>
