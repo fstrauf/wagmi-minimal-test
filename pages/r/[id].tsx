@@ -1,15 +1,17 @@
 import React, { use, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Router from 'next/router';
-import Layout from '../../../components/Layout';
+import Layout from '../../components/Layout';
 import { useSession } from 'next-auth/react';
-import prisma from '../../../lib/prisma';
+import prisma from '../../lib/prisma';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
+  console.log("vote")
+
   const user = await prisma.user.findUnique({
     where: {
-      email: String(query.session),
+      wallet: String(query.session),
     },
   },
   );
@@ -72,6 +74,8 @@ type Props = {
 const RewardRound: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
   const util = require('util');
+
+  console.log("vote")
 
   // if (status === 'loading') {
   //   return <div>Authenticating ...</div>;

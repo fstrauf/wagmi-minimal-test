@@ -102,7 +102,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 pathname: "/r/[id]",
                 query: {
                   id: rewardRound.id,
-                  session: session?.user?.email,
+                  session: session?.user?.address,
                 },
               })
             }}>Vote</button>

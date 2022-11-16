@@ -38,8 +38,6 @@ export default async function handle(req, res) {
     );
   })
 
-
-
   const result = await prisma.$transaction(
     voteCalls
   )

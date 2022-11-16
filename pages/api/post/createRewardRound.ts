@@ -11,6 +11,7 @@ export default async function handle(req, res) {
       data: {
         budget: Number(budget),
         monthYear: new Date(period).toISOString().slice(0, 7),
+        contentPoints: 0,
       }
 
     });

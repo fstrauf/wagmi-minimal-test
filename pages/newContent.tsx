@@ -3,14 +3,12 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 // import Router from 'next/router';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import { GetServerSideProps } from 'next';
 import { getSession, signOut } from 'next-auth/react';
 import prisma from '../lib/prisma';
 import { Listbox } from '@headlessui/react'
-import { useSession, signIn } from 'next-auth/react';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { useAccount, useConnect, useSignMessage, useDisconnect } from 'wagmi';
+import { useSession } from 'next-auth/react';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -49,7 +47,7 @@ const NewContent: React.FC<Props> = (props) => {
   // console.log(props)
   const { data: session, status } = useSession();
   const [title, setTitle] = useState('');
-  const [selectedUser, setSelectedUser] = useState(props.users[0]);
+  const [selectedUsers, setSelectedUsers] = useState([props.users[0]]);
   const [user, setUser] = useState("");
   const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
   const [url, setUrl] = useState('');
@@ -61,16 +59,6 @@ const NewContent: React.FC<Props> = (props) => {
       </Layout>
     )
   }
-
-
-  
-  // const [date, setDate] = useState(new Date());
-  // const { connectAsync } = useConnect();
-  // const { disconnectAsync } = useDisconnect();
-  // const { isConnected } = useAccount();
-  // const { signMessageAsync } = useSignMessage();
-  // const { push } = useRouter();
-  // const { push } = useRouter();
 
   const setUserName = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -85,7 +73,7 @@ const NewContent: React.FC<Props> = (props) => {
       })
       // await Router.push('/');
       console.log('successful');
-      await signOut({callbackUrl: '/'})
+      await signOut({ callbackUrl: '/' })
       // await Router.push(url);
 
     } catch (error) {
@@ -96,7 +84,7 @@ const NewContent: React.FC<Props> = (props) => {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const body = { title, selectedUser, url, selectedRewardRound };
+      const body = { title, selectedUsers, url, selectedRewardRound };
       await fetch('/api/post/createContent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -173,9 +161,11 @@ const NewContent: React.FC<Props> = (props) => {
               </Listbox.Options>
             </div>
           </Listbox>
-          <Listbox value={selectedUser} onChange={setSelectedUser}>
+          <Listbox value={selectedUsers} onChange={setSelectedUsers} multiple>
             <div className="relative mt-1">
-              <Listbox.Button className="relative w-full m-2 cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">{selectedUser.name}</Listbox.Button>
+              <Listbox.Button className="relative w-full m-2 cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                {selectedUsers.map((person) => person.name).join(', ')}
+              </Listbox.Button>
               <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {props.users.map((user) => (
                   <Listbox.Option
@@ -192,7 +182,8 @@ const NewContent: React.FC<Props> = (props) => {
               </Listbox.Options>
             </div>
           </Listbox>
-          <input className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUser || !title || !selectedRewardRound} type="submit" value="Create" />
+          {/* <input className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUsers || !title || !selectedRewardRound} type="submit" value="Create" /> */}
+          <button className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUsers || !title || !selectedRewardRound } onClick={submitData}>Create</button>
           <a className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4" href="#" onClick={() => Router.push('/')}>
             or Cancel
           </a>
