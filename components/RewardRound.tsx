@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from 'react';
 import Router from "next/router";
 import { useSession, getSession } from 'next-auth/react';
+// import { Client } from "@notionhq/client"
 
 export type RewardRoundProps = {
   url: string;
@@ -57,15 +58,27 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     }
   };
 
+
+
   const importFromNotion = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
     try {
       const body = { rewardRound };
-      await fetch('/api/post/importNotion', {
+      const notionResult = await fetch('/api/post/importNotion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+
+      const data = await notionResult.json();
+
+      await fetch('/api/post/insertNotionContent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
       await Router.push('/');
       console.log('successful');
     } catch (error) {
