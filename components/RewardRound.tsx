@@ -130,13 +130,13 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
             </thead>
             <tbody>
               {rewardRound.Content?.map((content: any) => (
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr key={content.id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {content.description}
                   </th>
                   <td class="py-4 px-6">
                     {content.ContentAuthor.map((author: any) => (
-                      <p>{author.user.name}</p>
+                      <p key={author.id}>{author.user.name}</p>
                     ))}
                   </td>
                   <td class="py-4 px-6">
