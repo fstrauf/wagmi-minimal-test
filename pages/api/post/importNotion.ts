@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Client } from "@notionhq/client"
 import prisma from '../../../lib/prisma'
-import { start } from 'repl'
+// import { start } from 'repl'
 // import { connect } from 'http2'
 
 type Data = {

@@ -7,7 +7,7 @@ import Router from 'next/router';
 import { GetServerSideProps } from 'next';
 import { getSession, signOut } from 'next-auth/react';
 import prisma from '../lib/prisma';
-import { Listbox } from '@headlessui/react'
+// import { Listbox } from '@headlessui/react'
 import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
 
@@ -18,40 +18,33 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return { props: { users: [] } };
   }
 
-  const rewardRound = await prisma.rewardRound.findMany({
+  console.log(session)
+  const user = await prisma.user.findUnique({
     where: {
-      isOpen: false,
+      wallet: session.user.address
     },
-    orderBy: [
-      {
-        monthYear: 'desc',
-      },
-    ]
   });
 
-  const users = await prisma.user.findMany({
-
-  });
   return {
-    props: { users, rewardRound },
+    props: { user },
   };
 };
 
 type Props = {
-  users: any;
-  rewardRound: any;
-
+  user: any;
 }
 
 const UpdateUser: React.FC<Props> = (props) => {
 
   // console.log(props)
   const { data: session, status } = useSession();
-  const [title, setTitle] = useState('');
-  const [selectedUsers, setSelectedUsers] = useState([props.users[0]]);
-  const [user, setUser] = useState("");
-  const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
-  const [url, setUrl] = useState('');
+  const [name, setName] = useState(props.user.name);
+  const [email, setEmail] = useState(props.user.email);
+  const [wallet, setWallet] = useState(props.user.wallet);
+  // const [selectedUsers, setSelectedUsers] = useState([props.users[0]]);
+  const [user, setUser] = useState(props.user);
+  // const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
+  // const [url, setUrl] = useState('');
   const { handleSubmit, formState } = useForm();
 
   if (!session) {
@@ -62,20 +55,19 @@ const UpdateUser: React.FC<Props> = (props) => {
     )
   }
 
-  const setUserName = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const updateUser = async (e: React.SyntheticEvent) => {
+    // e.preventDefault();
 
-    console.log(user)
     try {
-      const body = { user, session };
-      await fetch('/api/post/setUserName', {
+      const body = { user, name, email, wallet };
+      await fetch('/api/post/updateUser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
-      // await Router.push('/');
+      await Router.push('/');
       console.log('successful');
-      await signOut({ callbackUrl: '/' })
+      // await signOut({ callbackUrl: '/' })
       // await Router.push(url);
 
     } catch (error) {
@@ -83,109 +75,37 @@ const UpdateUser: React.FC<Props> = (props) => {
     }
   }
 
-  const submitData = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { title, selectedUsers, url, selectedRewardRound };
-      await fetch('/api/post/createContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <Layout>
-      {!session?.user?.name && (
-        <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
-          <h1>First Time? Set Username!</h1>
-          <form onSubmit={setUserName}>
-            <input
-              autoFocus
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="Name"
-              type="text"
-              value={user}
-              className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
-            />
-          </form>
-          <button className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' onClick={setUserName}>Save</button>
-        </div>
-      )}
       <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
-        <form onSubmit={handleSubmit(submitData)}>
-          <h1 className="text-3xl font-bold">Create New Content</h1>
+        <form onSubmit={handleSubmit(updateUser)}>
+          <h1 className="text-3xl font-bold">Update User</h1>
           <input
             autoFocus
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Description"
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
             type="text"
-            value={title}
+            value={name}
             className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
           />
           <input
             autoFocus
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="url"
-            type="text"
-            value={url}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            type="email"
+            value={email}
             className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
           />
-          {/* <input
+          <input
             autoFocus
-            onChange={(e) => setDate(e.target.value)}
-            placeholder="dd-mm-yyyy"
-            type="date"
-            value={date}
+            onChange={(e) => setWallet(e.target.value)}
+            placeholder="Ethereum Address"
+            type="text"
+            value={wallet}
             className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
-          /> */}
-          <Listbox value={selectedRewardRound} onChange={setSelectedRewardRound}>
-            <div className="relative mt-1">
-              <Listbox.Button className="relative w-full m-2 cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">{selectedRewardRound.monthYear}</Listbox.Button>
-              <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {props.rewardRound.map((rewardRound) => (
-                  <Listbox.Option
-                    className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'z-50 bg-amber-100 text-amber-900' : 'text-gray-900'
-                      }`
-                    }
-                    key={rewardRound.id}
-                    value={rewardRound}
-                  >
-                    {rewardRound.monthYear}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </div>
-          </Listbox>
-          <Listbox value={selectedUsers} onChange={setSelectedUsers} multiple>
-            <div className="relative mt-1">
-              <Listbox.Button className="relative w-full m-2 cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                {selectedUsers.map((person) => person.name).join(', ')}
-              </Listbox.Button>
-              <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {props.users.map((user) => (
-                  <Listbox.Option
-                    className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'z-50 bg-amber-100 text-amber-900' : 'text-gray-900'
-                      }`
-                    }
-                    key={user.id}
-                    value={user}
-                  >
-                    {user.name}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </div>
-          </Listbox>
+          />
           {/* {`w-full top-3 ${isOpen ? '': 'z-50 sticky'}`} */}
-          <input className={`${formState.isSubmitting ? 'bg-black border-solid border-2 border-sky-500 rounded m-4': 'bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'}`} disabled={!selectedUsers || !title || !selectedRewardRound || formState.isSubmitting} type="submit" value="Create" />
+          <input className={`${formState.isSubmitting ? 'bg-black border-solid border-2 border-sky-500 rounded m-4' : 'bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'}`} disabled={formState.isSubmitting} type="submit" value="Update" />
           <a className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4" href="#" onClick={() => Router.push('/')}>
             or Cancel
           </a>
@@ -196,4 +116,4 @@ const UpdateUser: React.FC<Props> = (props) => {
   );
 };
 
-export default NewContent;
+export default UpdateUser;

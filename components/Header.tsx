@@ -112,7 +112,7 @@ export default function Header() {
     right = (
       <div className="flex">
         <p className='m-2'>
-          {session?.user?.name} ({session?.user?.email})
+          {session?.user?.name} ({session?.user?.address})
         </p>
         {/* <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newContent">
           <button>

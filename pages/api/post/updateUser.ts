@@ -1,18 +1,22 @@
 
-import { create } from 'domain';
+// import { create } from 'domain';
 import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
-  const { user, session } = req.body;
+  const { user, name, email, wallet } = req.body;
 
   // console.log(req.body)
 
   // var email = 
   
-  const response = await prisma.user.create({
+  const response = await prisma.user.update({
+    where: {
+      id: user.id,
+    },
     data: {
-      name: user,
-      wallet: session.user.address,
+      name: name,
+      wallet: wallet,
+      email: email,
     },
   })
 
