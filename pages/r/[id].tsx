@@ -36,27 +36,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   });
 
-  // const rewardRound = await prisma.rewardRound.findUnique({
-  //   where: {
-  //     id: String(query?.id),
-  //   },
-  //   include: {
-  //     Vote: {
-  //       where: {
-  //         userId: {
-  //           equals: user.id
-  //         }
-  //       },
-  //       include: {
-  //         content: {}
-  //       }
-  //     },
-  //     Content: {
-
-  //     }
-  //   },
-  // });
-
   return {
     props: {
       rewardRound,
@@ -72,21 +51,8 @@ type Props = {
 }
 
 const RewardRound: React.FC<Props> = (props) => {
-  // const { data: session, status } = useSession();
   const util = require('util');
-
-  console.log("vote")
-
-  // if (status === 'loading') {
-  //   return <div>Authenticating ...</div>;
-  // }
-
-  // const userHasValidSession = Boolean(session);
-  // const postBelongsToUser = session?.user?.email === props.author?.email;
-  // let title = props.title;
-  // if (!props.published) {
-  //   title = `${title} (Draft)`;
-  // }
+  const { handleSubmit, formState } = useForm();
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -103,19 +69,6 @@ const RewardRound: React.FC<Props> = (props) => {
       console.error(error);
     }
   };
-
-  // console.log(props.rewardRound)
-
-  // const votePrep = props.rewardRound?.Vote?.map(vote => {
-  //   return {
-  //     ...vote,
-  //     description: vote.content.description,
-  //   };
-  // }
-  // );
-
-  // console.log(votePrep2)
-
 
   const votePrep = props.rewardRound?.Content?.map(content => {
     return {
@@ -163,37 +116,53 @@ const RewardRound: React.FC<Props> = (props) => {
 
         <h1 className="font-bold mt-4 mb-4">points spent to be set</h1>
         <div>
-          <form className='grid grid-cols-4' onSubmit={submitData}>
-            {voteFields.map((input, index) => (
-              <>
-                <p>{input.description}</p>
-                <p>{input?.createdOn?.toDateString()}</p>
-                <p>{input.url}</p>
-                <input
-                  name='pointsSpent'
-                  placeholder='Vote'
-                  type="number"
-                  value={input.pointsSpent}
-                  onChange={event => handleFormChange(index, event)}
-                  className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
-                />
-              </>
-            ))}
-            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached ? 'bg-red-200' : 'bg-gray-200' }`} disabled={totalReached} onClick={submitData}>Submit</button>
+          <form className='' onSubmit={handleSubmit(submitData)}>
+
+            <div class="overflow-x-auto relative m-5">
+              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" class="py-3 px-6">
+                      Content piece (+link)
+                    </th>
+                    {/* <th scope="col" class="py-3 px-6">
+                      Link
+                    </th> */}
+                    <th scope="col" class="py-3 px-6">
+                      Your Vote
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {voteFields.map((input, index) => (
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <a className='hover:underline' href={input.url}>
+                        {input.description}
+                        </a>
+                      </th>
+                      {/* <td class="py-4 px-6">
+                        {input.url}
+                      </td> */}
+                      <td class="py-4 px-6">
+                        <input
+                          name='pointsSpent'
+                          placeholder='Vote'
+                          type="number"
+                          value={input.pointsSpent}
+                          onChange={event => handleFormChange(index, event)}
+                          class="bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+
+                </tbody>
+              </table>
+            </div>
+            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} disabled={totalReached || formState.isSubmitting} onClick={submitData}>Submit</button>
           </form>
         </div>
-
-
-        {/* <p>By {props?.author?.name || 'Unknown author'}</p> */}
-        {/* <ReactMarkdown children={props.content} />
-        {!props.published && userHasValidSession && postBelongsToUser && (
-          <button onClick={() => publishPost(props.id)}>Publish</button>
-        )}
-        {
-          userHasValidSession && postBelongsToUser && (
-            <button onClick={() => deletePost(props.id)}>Delete</button>
-          )
-        } */}
       </div>
     </Layout>
   );

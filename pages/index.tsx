@@ -97,7 +97,7 @@ const Blog: React.FC<Props> = (props) => {
           <h1 className="text-3xl font-bold">Reward Rounds (choose one to vote)</h1>
           <div className="flex flex-col">
             {props.rewardRound.map((rewardRound) => (
-              <div className="bg-gray-400 m-4" key={rewardRound.id}>
+              <div key={rewardRound.id}>
                 <RewardRound rewardRound={rewardRound} />
               </div>
             ))}
