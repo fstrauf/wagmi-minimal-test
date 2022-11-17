@@ -72,7 +72,7 @@ type Props = {
 }
 
 const RewardRound: React.FC<Props> = (props) => {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   const util = require('util');
 
   console.log("vote")
@@ -179,7 +179,7 @@ const RewardRound: React.FC<Props> = (props) => {
                 />
               </>
             ))}
-            <button className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' onClick={submitData}>Submit</button>
+            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached ? 'bg-red-200' : 'bg-gray-200' }`} disabled={totalReached} onClick={submitData}>Submit</button>
           </form>
         </div>
 
