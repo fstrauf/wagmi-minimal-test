@@ -16,7 +16,7 @@ export default async function handler(
 
   const { notionResult } = req.body;
 
-  console.log(notionResult)
+  // console.log(notionResult)
 
   // const notion = new Client({
   //   // auth: 'secret_tPIpoJbE56kTSUokH2i7sDro4OK5yAq7TkeKc8gdswY',
@@ -171,42 +171,42 @@ export default async function handler(
 
   // console.log(contentAuthors)
 
-  var authorCallsMoreAuthors = []
-  notionResult.forEach((element, contentIndex) => {
-    if (element.users.length > 1) {
-      element.users.forEach((user, userIndex) => {
-        //skip first
-        if(userIndex==0){
-          return
-        }
-        authorCallsMoreAuthors.push(
-          prisma.contentAuthor.create({
-            data: {
-              content: {
-                connect: {
-                  id: contentAuthors[contentIndex].contentId,
-                }
-              },
-              user: {
-                connectOrCreate: {
-                  where: {
-                    email: user.person.email,
-                  },
-                  create: {
-                    email: user.person.email,
-                  }
-                }
-              }
-            }
-          })
-        )
-      })
-    }
-  })
+  // var authorCallsMoreAuthors = []
+  // notionResult.forEach((element, contentIndex) => {
+  //   if (element.users.length > 1) {
+  //     element.users.forEach((user, userIndex) => {
+  //       //skip first
+  //       if(userIndex==0){
+  //         return
+  //       }
+  //       authorCallsMoreAuthors.push(
+  //         prisma.contentAuthor.create({
+  //           data: {
+  //             content: {
+  //               connect: {
+  //                 id: contentAuthors[contentIndex].contentId,
+  //               }
+  //             },
+  //             user: {
+  //               connectOrCreate: {
+  //                 where: {
+  //                   email: user.person.email,
+  //                 },
+  //                 create: {
+  //                   email: user.person.email,
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         })
+  //       )
+  //     })
+  //   }
+  // })
 
-  const contentMoreAuthors = await prisma.$transaction(
-    authorCallsMoreAuthors
-  )
+  // const contentMoreAuthors = await prisma.$transaction(
+  //   authorCallsMoreAuthors
+  // )
 
   // console.log(contentMoreAuthors)
 
