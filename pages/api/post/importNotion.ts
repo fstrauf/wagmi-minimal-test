@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Client } from "@notionhq/client"
-import prisma from '../../lib/prisma'
+import prisma from '../../../lib/prisma'
+import { start } from 'repl'
 // import { connect } from 'http2'
 
 type Data = {
@@ -15,10 +16,18 @@ export default async function handler(
 
   const { rewardRound } = req.body;
 
+  // console.log(rewardRound)
 
   const notion = new Client({
-    auth: 'secret_tPIpoJbE56kTSUokH2i7sDro4OK5yAq7TkeKc8gdswY',
+    // auth: 'secret_tPIpoJbE56kTSUokH2i7sDro4OK5yAq7TkeKc8gdswY',
+    auth: process.env.NOTION_TOKEN
   })
+
+  const startDate = new Date(rewardRound.monthYear).toISOString().slice(0, 10)
+  const helpDate = new Date(rewardRound.monthYear)
+  // const startDate = rewardRound.monthYear + '-01'
+  const endDate = new Date(helpDate.getFullYear(), helpDate.getMonth()+1, 1).toISOString().slice(0, 10)
+  // console.log(endDate)
 
   const databaseId = 'e069a501d7ec4364a5d949bf6a8fbc83';
   const response = await notion.databases.query({
@@ -34,13 +43,13 @@ export default async function handler(
         {
           property: "Publication Date",
           date: {
-            on_or_after: '2022-10-01'
+            on_or_after: startDate
           }
         },
         {
           property: "Publication Date",
           date: {
-            on_or_before: '2022-10-31'
+            on_or_before: endDate
           }
         },
         {
@@ -160,7 +169,7 @@ export default async function handler(
     authorCallsFirstAuthor
   )
 
-  console.log(contentAuthors)
+  // console.log(contentAuthors)
 
   var authorCallsMoreAuthors = []
   notionResult.forEach((element, contentIndex) => {
@@ -199,7 +208,7 @@ export default async function handler(
     authorCallsMoreAuthors
   )
 
-  console.log(contentMoreAuthors)
+  // console.log(contentMoreAuthors)
 
 
   res.status(200).json(notionResult)

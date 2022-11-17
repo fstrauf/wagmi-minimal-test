@@ -61,7 +61,7 @@ export default function Header() {
   let left = (
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
       <Link href="/" data-active={isActive('/')}>
-        Feed
+        Home
       </Link>
 
     </div>
@@ -73,7 +73,7 @@ export default function Header() {
     left = (
       <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
         <Link href="/" className="bold" data-active={isActive('/')}>
-          Feed
+          Home
         </Link>
 
       </div>
@@ -114,9 +114,14 @@ export default function Header() {
         <p className='m-2'>
           {session?.user?.name} ({session?.user?.email})
         </p>
-        <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newContent">
+        {/* <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newContent">
           <button>
             New content
+          </button>
+        </Link> */}
+        <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/updateUser">
+          <button>
+            Update User
           </button>
         </Link>
         <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newRewardRound">
@@ -124,7 +129,7 @@ export default function Header() {
             New Reward Round
           </button>
         </Link>
-        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut({callbackUrl: '/'})}>
+        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut({ callbackUrl: '/' })}>
           <a>Log out</a>
         </button>
 

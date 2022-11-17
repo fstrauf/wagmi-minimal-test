@@ -61,7 +61,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     e.preventDefault();
     try {
       const body = { rewardRound };
-      await fetch('/api/importNotion', {
+      await fetch('/api/post/importNotion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -77,7 +77,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     e.preventDefault();
     try {
       const body = { rewardRound };
-      await fetch('/api/clearDB', {
+      await fetch('/api/post/clearDB', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
