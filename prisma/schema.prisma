@@ -103,6 +103,7 @@ model Content {
   createdAt       String?
   createdOn       DateTime?
   contentAuthorId String?
+  type            String?
   // ContentAuthor ContentAuthor @relation(fields: [contentAuthorId], references: [id])
   Vote            Vote[]
   ContentAuthor   ContentAuthor[]

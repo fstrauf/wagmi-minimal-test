@@ -127,6 +127,7 @@ export default async function handler(
             create: {
               description: element.title,
               url: element.url,
+              type: element.type,
               rewardRound: {
                 connect: {
                   id: element.rewardRound

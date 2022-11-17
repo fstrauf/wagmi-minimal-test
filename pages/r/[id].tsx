@@ -2,8 +2,9 @@ import React, { use, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Router from 'next/router';
 import Layout from '../../components/Layout';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import prisma from '../../lib/prisma';
+import { useForm } from "react-hook-form";
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
@@ -100,7 +101,7 @@ const RewardRound: React.FC<Props> = (props) => {
     }
   }
 
-  console.log(voteFields)
+  // console.log(voteFields)
 
   return (
     <Layout>
@@ -117,7 +118,6 @@ const RewardRound: React.FC<Props> = (props) => {
         <h1 className="font-bold mt-4 mb-4">points spent to be set</h1>
         <div>
           <form className='' onSubmit={handleSubmit(submitData)}>
-
             <div class="overflow-x-auto relative m-5">
               <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -125,9 +125,9 @@ const RewardRound: React.FC<Props> = (props) => {
                     <th scope="col" class="py-3 px-6">
                       Content piece (+link)
                     </th>
-                    {/* <th scope="col" class="py-3 px-6">
-                      Link
-                    </th> */}
+                    <th scope="col" class="py-3 px-6">
+                      Type
+                    </th>
                     <th scope="col" class="py-3 px-6">
                       Your Vote
                     </th>
@@ -141,9 +141,9 @@ const RewardRound: React.FC<Props> = (props) => {
                         {input.description}
                         </a>
                       </th>
-                      {/* <td class="py-4 px-6">
-                        {input.url}
-                      </td> */}
+                      <td class="py-4 px-6">
+                        {input.type}
+                      </td>
                       <td class="py-4 px-6">
                         <input
                           name='pointsSpent'

@@ -121,6 +121,9 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                   Content piece
                 </th>
                 <th scope="col" class="py-3 px-6">
+                  Type
+                </th>
+                <th scope="col" class="py-3 px-6">
                   Authors
                 </th>
                 <th scope="col" class="py-3 px-6">
@@ -134,6 +137,9 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                   <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {content.description}
                   </th>
+                  <td class="py-4 px-6">
+                    {content.type}
+                  </td>
                   <td class="py-4 px-6">
                     {content.ContentAuthor.map((author: any) => (
                       <p key={author.id}>{author.user.name}</p>

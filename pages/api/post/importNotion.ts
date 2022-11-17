@@ -113,7 +113,7 @@ export default async function handler(
       title: result.properties.Name.title[0].plain_text,
       url: result.properties.link.url,
       users: result.properties.Author.people,
-      type: result.properties.Type.multi_select[0],
+      type: result.properties.Type.multi_select[0].name,
       rewardRound: rewardRound.id
       // rewardRound: 'clakacvcl00fremx3581euv67'
     }
