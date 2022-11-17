@@ -90,7 +90,7 @@ model Payout {
   userId         String      @map("user_id")
   user           User        @relation(fields: [userId], references: [id])
   rewardRoundId  String
-  rewardRound    RewardRound @relation(fields: [rewardRoundId], references: [id])
+  rewardRound    RewardRound @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
   pointsReceived Int?
   cashReward     Float?
 }
@@ -107,7 +107,7 @@ model Content {
   Vote            Vote[]
   ContentAuthor   ContentAuthor[]
   rewardRoundId   String?         @default(cuid())
-  rewardRound     RewardRound?    @relation(fields: [rewardRoundId], references: [id])
+  rewardRound     RewardRound?    @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
 }
 
 model Vote {
@@ -118,7 +118,7 @@ model Vote {
   user          User        @relation(fields: [userId], references: [id])
   pointsSpent   Int?
   contentId     String
-  content       Content     @relation(fields: [contentId], references: [id])
+  content       Content     @relation(fields: [contentId], references: [id], onDelete: Cascade)
 }
 
 model ContentAuthor {
@@ -126,5 +126,5 @@ model ContentAuthor {
   userId    String  @map("user_id")
   user      User    @relation(fields: [userId], references: [id])
   contentId String
-  content   Content @relation(fields: [contentId], references: [id])
+  content   Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
 }

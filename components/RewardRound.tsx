@@ -57,6 +57,38 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     }
   };
 
+  const importFromNotion = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const body = { rewardRound };
+      await fetch('/api/importNotion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      await Router.push('/');
+      console.log('successful');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const clearRewardRound = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const body = { rewardRound };
+      await fetch('/api/clearDB', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      await Router.push('/');
+      console.log('successful');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="">
       <div className="border-solid border-black grid grid-cols-2" >
@@ -116,6 +148,18 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         <button className="border-solid border-2 border-sky-500 rounded m-3"
           onClick={openRewardRound}>
           Open Reward Round
+        </button>
+      )}
+      {session?.user && !rewardRound.isOpen && (
+        <button className="border-solid border-2 border-sky-500 rounded m-3"
+          onClick={importFromNotion}>
+          Import from Notion
+        </button>
+      )}
+      {session?.user && (
+        <button className="border-solid border-2 border-sky-500 rounded m-3"
+          onClick={clearRewardRound}>
+          Delete ALL reward round content
         </button>
       )}
     </div>
