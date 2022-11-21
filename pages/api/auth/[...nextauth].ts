@@ -80,6 +80,7 @@ const options = {
       
       // console.log(token)
       session.user.isAdmin = token?.user?.isAdmin
+      session.user.address = token?.user?.address
       // console.log(session)
       // return session;
       // session.user = token.user;

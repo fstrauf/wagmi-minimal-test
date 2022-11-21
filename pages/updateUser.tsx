@@ -55,6 +55,27 @@ const UpdateUser: React.FC<Props> = (props) => {
     )
   }
 
+  // const setUserName = async (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
+
+  //   // console.log(user)
+  //   try {
+  //     const body = { user, session };
+  //     await fetch('/api/post/setUserName', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     })
+  //     // await Router.push('/');
+  //     console.log('successful');
+  //     await signOut({ callbackUrl: '/' })
+  //     // await Router.push(url);
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
   const updateUser = async (e: React.SyntheticEvent) => {
     // e.preventDefault();
 
@@ -67,7 +88,7 @@ const UpdateUser: React.FC<Props> = (props) => {
       })
       await Router.push('/');
       console.log('successful');
-      // await signOut({ callbackUrl: '/' })
+      await signOut({ callbackUrl: '/' })
       // await Router.push(url);
 
     } catch (error) {
@@ -77,6 +98,9 @@ const UpdateUser: React.FC<Props> = (props) => {
 
   return (
     <Layout>
+      {session && !session?.user?.name && (
+        <h1>First Time? Set Username, save & then log back in</h1>
+      )}
       <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
         <form onSubmit={handleSubmit(updateUser)}>
           <h1 className="text-3xl font-bold">Update User</h1>

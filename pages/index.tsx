@@ -5,6 +5,7 @@ import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
 import RewardRound from "../components/RewardRound";
 import { useSession, signOut } from 'next-auth/react';
+import Router from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
@@ -51,48 +52,38 @@ type Props = {
 
 const Blog: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
-  const [user, setUser] = useState("");
+  // const [user, setUser] = useState("");
 
-  const setUserName = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  // const setUserName = async (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
 
-    console.log(user)
-    try {
-      const body = { user, session };
-      await fetch('/api/post/setUserName', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      })
-      // await Router.push('/');
-      console.log('successful');
-      await signOut({ callbackUrl: '/' })
-      // await Router.push(url);
+  //   // console.log(user)
+  //   try {
+  //     const body = { user, session };
+  //     await fetch('/api/post/setUserName', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     })
+  //     // await Router.push('/');
+  //     console.log('successful');
+  //     await signOut({ callbackUrl: '/' })
+  //     // await Router.push(url);
 
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <Layout>
-      {session && !session?.user?.name && (
-        <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
-          <h1>First Time? Set Username, save & then log back in</h1>
-          <form onSubmit={setUserName}>
-            <input
-              autoFocus
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="Name"
-              type="text"
-              value={user}
-              className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
-            />
-          </form>
-          <button className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' onClick={setUserName}>Save</button>
-        </div>
-      )}
       <div className="max-w-5xl mt-2 flex flex-col mb-10 m-auto">
+      {session && !session?.user?.name && (
+        <>
+          <h1 className='text-3xl text-rose-600'>First Time? Set user details, save & then log back in</h1>
+          <a href='/updateUser' className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'>Update User</a>
+        </> 
+      )}
         <main>
           <h1 className="text-3xl font-bold">Reward Rounds (choose one to vote)</h1>
           <div className="flex flex-col">
