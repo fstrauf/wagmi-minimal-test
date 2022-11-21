@@ -1,11 +1,9 @@
-// pages/drafts.tsx
-
-import React from 'react';
-import { GetServerSideProps } from 'next';
-import { useSession, getSession } from 'next-auth/react';
-import Layout from '../components/Layout';
-import RewardRound, { RewardRoundProps } from '../components/RewardRound';
-// import prisma from '../lib/prisma';
+import React from "react";
+import { GetServerSideProps } from "next";
+import Layout from "../components/Layout";
+import Post, { PostProps } from "../components/Post";
+import { useSession, getSession } from "next-auth/react";
+import prisma from "../lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -31,11 +29,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 };
 
 type Props = {
-  rewardRounds: RewardRoundProps[];
+  drafts: PostProps[];
 };
 
 const Drafts: React.FC<Props> = (props) => {
-  const { data: session } = useSession();
+  const {data: session} = useSession();
 
   if (!session) {
     return (
@@ -51,13 +49,27 @@ const Drafts: React.FC<Props> = (props) => {
       <div className="page">
         <h1>My Drafts</h1>
         <main>
-          {props.rewardRounds.map((post) => (
+          {props.drafts.map((post) => (
             <div key={post.id} className="post">
-              {/* <RewardRound post={post} /> */}
+              <Post post={post} />
             </div>
           ))}
         </main>
       </div>
+      <style jsx>{`
+        .post {
+          background: white;
+          transition: box-shadow 0.1s ease-in;
+        }
+
+        .post:hover {
+          box-shadow: 1px 1px 3px #aaa;
+        }
+
+        .post + .post {
+          margin-top: 2rem;
+        }
+      `}</style>
     </Layout>
   );
 };
