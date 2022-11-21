@@ -8,8 +8,6 @@ import { useForm } from "react-hook-form";
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
-  console.log("vote")
-
   const user = await prisma.user.findUnique({
     where: {
       wallet: String(query.session),
@@ -19,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const rewardRound = await prisma.rewardRound.findUnique({
     where: {
-      id: String(query?.id),
+      id: String(query?.id),      
     },
     include: {
       Content: {
@@ -30,6 +28,16 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
                 equals: user.id
               }
             },
+          },
+          ContentAuthor: {
+            // where: {
+            //   userId: {
+            //     not: user.id
+            //   }
+            // },
+            include: {
+              user: {}
+            }
           }
         }
 
@@ -71,17 +79,33 @@ const RewardRound: React.FC<Props> = (props) => {
     }
   };
 
+  // console.log(props.rewardRound)
+  
+
   const votePrep = props.rewardRound?.Content?.map(content => {
+
+    var AuthorIsVoter = false
+    const found = content.ContentAuthor.find(author => {
+      return author.userId === props.user.id
+    });
+    // console.log(found)
+    if(found===undefined){
+      AuthorIsVoter=false
+    }else{
+      AuthorIsVoter=true
+    }
+
     return {
       ...content,
       // rewardRoundID: props.rewardRound.id,
       userId: props.user.id,
+      AuthorIsVoter: AuthorIsVoter,
       pointsSpent: util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
       // voteId: props.rewardRound.Vote[index]?.id
     };
   });
 
-  console.log(votePrep)
+  // console.log(votePrep)
 
   const [voteFields, setvoteFields] = useState(votePrep)
   const [totalVoted, setTotalVoted] = useState(votePrep.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
@@ -125,6 +149,9 @@ const RewardRound: React.FC<Props> = (props) => {
                     <th scope="col" class="py-3 px-6">
                       Content piece (+link)
                     </th>
+                    <th scope="col" className="py-3 px-6">
+                      Authors
+                    </th>
                     <th scope="col" class="py-3 px-6">
                       Type
                     </th>
@@ -138,9 +165,14 @@ const RewardRound: React.FC<Props> = (props) => {
                     <tr key={input.id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                       <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <a className='hover:underline' href={input.url}>
-                        {input.description}
+                          {input.description}
                         </a>
                       </th>
+                      <td className="py-4 px-6">
+                        {input.ContentAuthor.map((author: any) => (
+                          <p key={author.id}>{author.user.name}</p>
+                        ))}
+                      </td>
                       <td class="py-4 px-6">
                         {input.type}
                       </td>
@@ -149,9 +181,10 @@ const RewardRound: React.FC<Props> = (props) => {
                           name='pointsSpent'
                           placeholder='Vote'
                           type="number"
+                          disabled={input.AuthorIsVoter}
                           value={input.pointsSpent}
                           onChange={event => handleFormChange(index, event)}
-                          class="bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          class={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
                         />
                       </td>
                     </tr>
