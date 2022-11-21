@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { GetServerSideProps, GetStaticProps } from "next"
+import React from 'react';
+import { GetServerSideProps } from "next"
 import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
 import RewardRound from "../components/RewardRound";
-import { useSession, signOut } from 'next-auth/react';
-import Router from 'next/router';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+// import Router from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
@@ -81,7 +82,7 @@ const Blog: React.FC<Props> = (props) => {
       {session && !session?.user?.name && (
         <>
           <h1 className='text-3xl text-rose-600'>First Time? Set user details, save & then log back in</h1>
-          <a href='/updateUser' className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'>Update User</a>
+          <Link href='/updateUser' className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'>Update User</Link>
         </> 
       )}
         <main>
