@@ -26,6 +26,8 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
   const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
+  console.log(session)
+
   const submitData = async (e: React.SyntheticEvent) => {
     // e.preventDefault();
     try {
@@ -104,48 +106,48 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4">
       <div className="border-solid border-black" >
         <div className='grid grid-cols-2 m-4 w-1/2'>
-        <h2 className="font-bold">Period</h2>
-        <p>{rewardRound.monthYear}</p>
-        <h2 className="font-bold">Budget</h2>
-        <p>$ {String(rewardRound.budget)}</p>
-        <h2 className="font-bold">ContentPoints per Voter</h2>
-        <p>{String(rewardRound.contentPoints)}</p>
-        <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
+          <h2 className="font-bold">Period</h2>
+          <p>{rewardRound.monthYear}</p>
+          <h2 className="font-bold">Budget</h2>
+          <p>$ {String(rewardRound.budget)}</p>
+          <h2 className="font-bold">ContentPoints per Voter</h2>
+          <p>{String(rewardRound.contentPoints)}</p>
+          <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
         </div>
 
-        <div class="overflow-x-auto relative m-5">
-          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div className="overflow-x-auto relative m-5">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" class="py-3 px-6">
+                <th scope="col" className="py-3 px-6">
                   Content piece
                 </th>
-                <th scope="col" class="py-3 px-6">
+                <th scope="col" className="py-3 px-6">
                   Type
                 </th>
-                <th scope="col" class="py-3 px-6">
+                <th scope="col" className="py-3 px-6">
                   Authors
                 </th>
-                <th scope="col" class="py-3 px-6">
+                <th scope="col" className="py-3 px-6">
                   Points Voted
                 </th>
               </tr>
             </thead>
             <tbody>
               {rewardRound.Content?.map((content: any) => (
-                <tr key={content.id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr key={content.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {content.description}
                   </th>
-                  <td class="py-4 px-6">
+                  <td className="py-4 px-6">
                     {content.type}
                   </td>
-                  <td class="py-4 px-6">
+                  <td className="py-4 px-6">
                     {content.ContentAuthor.map((author: any) => (
                       <p key={author.id}>{author.user.name}</p>
                     ))}
                   </td>
-                  <td class="py-4 px-6">
+                  <td className="py-4 px-6">
                     {content.pointsVote}
                   </td>
                 </tr>
@@ -155,26 +157,26 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           </table>
         </div>
         <h1 className='text-2xl m-5'>Voting Results</h1>
-        <div class="overflow-x-auto relative m-5">
-          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div className="overflow-x-auto relative m-5">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" class="py-3 px-6">
+                <th scope="col" className="py-3 px-6">
                   Author
                 </th>
-                <th scope="col" class="py-3 px-6">
+                <th scope="col" className="py-3 px-6">
                   Reward
                 </th>
               </tr>
             </thead>
             <tbody>
-            {rewardRound.Payout?.map((payout: any) => (
-                <tr key={payout.id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {payout.user.name}
+              {rewardRound.Payout?.map((payout: any) => (
+                <tr key={payout.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {payout.user.name}
                   </th>
-                  <td class="py-4 px-6">
-                  $ {payout.cashReward}
+                  <td className="py-4 px-6">
+                    $ {payout.cashReward}
                   </td>
                 </tr>
               ))}
@@ -185,7 +187,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
       </div>
       {session?.user && rewardRound.isOpen && (
         <>
-          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200' }`}
+          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
             onClick={handleSubmit(() => {
               Router.push({
                 pathname: "/r/[id]",
@@ -195,29 +197,30 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 },
               })
             })}>Vote</button>
-          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200' }`}
-            onClick={handleSubmit(submitData)}>
-            Close Reward Round for all
+        </>
+      )}
+      {session?.user?.isAdmin && rewardRound.isOpen && (
+          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+          onClick={handleSubmit(submitData)}>
+          Close Reward Round for all
+        </button>
+      )}
+      {session?.user?.isAdmin && !rewardRound.isOpen && (
+        <>
+          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+            onClick={handleSubmit(openRewardRound)}>
+            Open Reward Round
+          </button>
+          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+            onClick={handleSubmit(importFromNotion)}
+            disabled={formState.isSubmitting} >
+
+            Import from Notion
           </button>
         </>
       )}
-      {session?.user && !rewardRound.isOpen && (
-        <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200' }`}
-          onClick={handleSubmit(openRewardRound)}>
-          Open Reward Round
-        </button>
-      )}
-      {session?.user && !rewardRound.isOpen && (
-        // <button className="border-solid border-2 border-sky-500 rounded m-3"
-        <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200' }`}
-          onClick={handleSubmit(importFromNotion)}
-          disabled={formState.isSubmitting} >
-            
-          Import from Notion
-        </button>
-      )}
-      {session?.user && (
-        <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200' }`}
+      {session?.user?.isAdmin && (
+        <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
           onClick={handleSubmit(clearRewardRound)}>
           Delete ALL reward round content
         </button>
