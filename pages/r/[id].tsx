@@ -183,6 +183,8 @@ const RewardRound: React.FC<Props> = (props) => {
                           type="number"
                           disabled={input.AuthorIsVoter}
                           value={input.pointsSpent}
+                          min="0"
+                          onWheel={ event => event.currentTarget.blur() }
                           onChange={event => handleFormChange(index, event)}
                           class={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
                         />
