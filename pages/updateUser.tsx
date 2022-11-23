@@ -38,11 +38,11 @@ const UpdateUser: React.FC<Props> = (props) => {
 
   // console.log(props)
   const { data: session, status } = useSession();
-  const [name, setName] = useState(props.user.name);
-  const [email, setEmail] = useState(props.user.email);
-  const [wallet, setWallet] = useState(props.user.wallet);
+  const [name, setName] = useState(props?.user?.name);
+  const [email, setEmail] = useState(props?.user?.email);
+  const [wallet, setWallet] = useState(props?.user?.wallet);
   // const [selectedUsers, setSelectedUsers] = useState([props.users[0]]);
-  const [user, setUser] = useState(props.user);
+  const [user, setUser] = useState(props?.user);
   // const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
   // const [url, setUrl] = useState('');
   const { handleSubmit, formState } = useForm();
