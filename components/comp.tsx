@@ -26,19 +26,7 @@ export const Button = React.forwardRef(
     <span
       {...props}
       ref={ref}
-    //   className={cx(
-    //     className,
-    //     css`
-    //       cursor: pointer;
-    //       color: ${reversed
-    //         ? active
-    //           ? 'white'
-    //           : '#aaa'
-    //         : active
-    //         ? 'black'
-    //         : '#ccc'};
-    //     `
-    //   )}
+      className='bg-blue-600'
     />
   )
 )
@@ -64,34 +52,25 @@ export const EditorValue = React.forwardRef(
       <div
         ref={ref}
         {...props}
-        // className={cx(
-        //   className,
-        //   css`
-        //     margin: 30px -20px 0;
-        //   `
-        // )}
+        className='m-3'
       >
         <div
-        //   className={css`
-        //     font-size: 14px;
-        //     padding: 5px 20px;
-        //     color: #404040;
-        //     border-top: 2px solid #eeeeee;
-        //     background: #f8f8f8;
-        //   `}
+        className='text-sm text-gray-800 bg-gray-100 p-5 border-5'
+
         >
           Slate's value as text
         </div>
         <div
-        //   className={css`
-        //     color: #404040;
-        //     font: 12px monospace;
-        //     white-space: pre-wrap;
-        //     padding: 10px 20px;
-        //     div {
-        //       margin: 0 0 0.5em;
-        //     }
-        //   `}
+          className="text-gray-800 whitespace-pre-wrap p-4 m-2"
+          // {css`
+          //   color: #404040;
+          //   font: 12px monospace;
+          //   white-space: pre-wrap;
+          //   padding: 10px 20px;
+          //   div {
+          //     margin: 0 0 0.5em;
+          //   }
+          // `}
         >
           {textLines}
         </div>
@@ -108,14 +87,7 @@ export const Icon = React.forwardRef(
     <span
       {...props}
       ref={ref}
-    //   className={cx(
-    //     'material-icons',
-    //     className,
-    //     css`
-    //       font-size: 18px;
-    //       vertical-align: text-bottom;
-    //     `
-    //   )}
+      className='align-text-bottom'
     />
   )
 )
@@ -128,14 +100,15 @@ export const Instruction = React.forwardRef(
     <div
       {...props}
       ref={ref}
+      className='whitespace-pre-wrap text-sm bg-orange-100 p-5 m-4'
     //   className={cx(
     //     className,
     //     css`
-    //       white-space: pre-wrap;
-    //       margin: 0 -20px 10px;
-    //       padding: 10px 20px;
-    //       font-size: 14px;
-    //       background: #f8f8e8;
+          // white-space: pre-wrap;
+          // margin: 0 -20px 10px;
+          // padding: 10px 20px;
+          // font-size: 14px;
+          // background: #f8f8e8;
     //     `
     //   )}
     />
@@ -150,6 +123,7 @@ export const Menu = React.forwardRef(
     <div
       {...props}
       ref={ref}
+      className='relative mb-5'
     //   className={cx(
     //     className,
     //     css`
@@ -180,14 +154,15 @@ export const Toolbar = React.forwardRef(
     <Menu
       {...props}
       ref={ref}
+
     //   className={cx(
     //     className,
     //     css`
-    //       position: relative;
-    //       padding: 1px 18px 17px;
-    //       margin: 0 -20px;
-    //       border-bottom: 2px solid #eee;
-    //       margin-bottom: 20px;
+          // position: relative;
+          // padding: 1px 18px 17px;
+          // margin: 0 -20px;
+          // border-bottom: 2px solid #eee;
+          // margin-bottom: 20px;
     //     `
     //   )}
     />
