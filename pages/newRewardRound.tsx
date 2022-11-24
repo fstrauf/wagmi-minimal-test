@@ -29,7 +29,7 @@ const NewRewardRound: React.FC = (props) => {
   const { handleSubmit, formState } = useForm();
 
   const submitData = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     try {
       const body = { budget, period };
       await fetch('/api/post/createRewardRound', {
@@ -47,7 +47,7 @@ const NewRewardRound: React.FC = (props) => {
   return (
     <Layout>
       <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
-        <form onSubmit={submitData}>
+        <form onSubmit={handleSubmit(submitData)}>
           <h1 className="text-3xl font-bold">Reward Round</h1>
           <input
             autoFocus

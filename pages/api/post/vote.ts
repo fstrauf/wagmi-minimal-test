@@ -6,35 +6,36 @@ export default async function handle(req, res) {
   var voteCalls = []
   voteFields.forEach(element => {
     var voteId = ''
-    if(element.Vote.length > 0){
+    if (element.Vote.length > 0) {
       voteId = element.Vote[0]?.id
     }
-    voteCalls.push(prisma.vote.upsert({
-      where: {
-        id: voteId,
-      },
-      create: {
-        pointsSpent: Number(element.pointsSpent),
-        user: {
-          connect: {
-            id: element.userId
+    voteCalls.push(
+      prisma.vote.upsert({
+        where: {
+          id: voteId,
+        },
+        create: {
+          pointsSpent: Number(element.pointsSpent),
+          user: {
+            connect: {
+              id: element.userId
+            }
+          },
+          rewardRound: {
+            connect: {
+              id: element.rewardRoundId
+            }
+          },
+          content: {
+            connect: {
+              id: element.id
+            }
           }
         },
-        rewardRound: {
-          connect: {
-            id: element.rewardRoundId
-          }
-        },
-        content: {
-          connect: {
-            id: element.id
-          }
+        update: {
+          pointsSpent: Number(element.pointsSpent),
         }
-      },
-      update: {
-        pointsSpent: Number(element.pointsSpent),
-      }
-    })
+      })
     );
   })
 

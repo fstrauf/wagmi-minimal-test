@@ -64,7 +64,7 @@ const RewardRound: React.FC<Props> = (props) => {
   const { handleSubmit, formState } = useForm();
 
   const submitData = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     try {
       const body = { voteFields };
       await fetch('/api/post/vote', {
@@ -195,7 +195,7 @@ const RewardRound: React.FC<Props> = (props) => {
                 </tbody>
               </table>
             </div>
-            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} disabled={totalReached || formState.isSubmitting} onClick={submitData}>Submit</button>
+            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} disabled={totalReached || formState.isSubmitting} onClick={handleSubmit(submitData)}>Submit</button>
           </form>
         </div>
       </div>
