@@ -243,9 +243,9 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         </div>
       </div>
       <div className='flex flex-col-reverse m-5 justify-evenly lg:flex-row'>
-        <div className="overflow-x-auto relative">
+        <div className="overflow-x-auto relative max-w-2xl">
           {/* <h1 className='text-2xl mb-2'>All Content</h1> */}
-          <table className="m-auto text-sm text-left text-gray-500">
+          <table className="m-auto text-sm text-left text-gray-500 table-fixed">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 bg-gray-700 text-gray-400">
               <tr>
                 <th scope="col" className="py-1 px-3">
@@ -265,7 +265,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
             <tbody>
               {rewardRound.Content?.map((content: any) => (
                 <tr key={content.id} className="bg-white border-b bg-gray-800 border-gray-700">
-                  <th scope="row" className="py-2 px-4 font-medium text-gray-900 whitespace-nowrap text-white">
+                  <th scope="row" className="py-2 px-4 font-medium text-gray-900 w-1/2 text-white">
                     {content.description}
                   </th>
                   <td className="py-2 px-4">
