@@ -118,7 +118,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         <h1 className='text-2xl m-5'>Voters so far</h1>
         <div className='m-5'>
           {rewardRound?.Vote?.map((vote: any) => (
-            <div>{vote.user.name}</div>
+            <div key={vote.id}>{vote.user.name}</div>
           ))}
         </div>
         <div className="overflow-x-auto relative m-5">
