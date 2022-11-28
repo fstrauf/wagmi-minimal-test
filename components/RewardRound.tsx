@@ -95,7 +95,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     // e.preventDefault();
     try {
       const body = { rewardRound };
-      await fetch('/api/post/clearDB', {
+      await fetch('/api/post/clearRR', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -106,6 +106,22 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
       console.error(error);
     }
   };
+
+  // const clearRewardRounds = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/clearDB', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4">
@@ -185,10 +201,19 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                         <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                           onClick={handleSubmit(clearRewardRound)}
                           disabled={!session?.user?.isAdmin}>
-                          Delete ALL reward content
+                          Delete this reward round
                         </button>
                       )}
                     </Menu.Item>
+                    {/* <Menu.Item>
+                      {({ active }) => (
+                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                          onClick={handleSubmit(clearRewardRounds)}
+                          disabled={!session?.user?.isAdmin}>
+                          Delete ALL reward content
+                        </button>
+                      )}
+                    </Menu.Item> */}
                   </div>
                 </Menu.Items>
               </Transition>
