@@ -20,7 +20,6 @@ export default async function handler(
   // console.log(rewardRound)
 
   const notion = new Client({
-    // auth: 'secret_fT873NOpG6vavqmsxwbhltP4s4ejsYMSJMYkz3tJpsz',
     auth: process.env.NOTION_TOKEN
   })
 
