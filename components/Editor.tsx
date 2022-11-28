@@ -1,36 +1,74 @@
-import React, { useState } from 'react';
-// import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import dynamic from 'next/dynamic'
+import React from 'react';
+import { useQuill } from 'react-quilljs';
+import 'quill/dist/quill.snow.css';
+
+//https://github.com/gtgalone/react-quilljs
 
 export default function Editor() {
-  // const [value, setValue] = useState('');
-  const [formFields, setFormFields] = useState();
 
-  // const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
-  const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ size: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    },
+  };
+  
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video',
+  ];
 
-  return (
-    <ReactQuill
-      // name="reactQuill"
-      onChange={value => handleChangeInput(value)}
-      value={formFields}
+  const placeholder = 'Compose an epic...';
 
+  const { quill, quillRef } = useQuill({modules, formats, placeholder });
 
-    />
-  )
+  const submitData = async (e: React.SyntheticEvent) => {
 
-  function handleChangeInput(targetValue) {
-    console.log(targetValue)
-    // const values = [...formFields];
-    // values[0][targetName] = targetValue
-    setFormFields(targetValue);
+    console.log(quill.getText())
   }
 
-}
+  React.useEffect(() => {
+    if (quill) {
+      // quill.clipboard.dangerouslyPasteHTML('<h1>React Hook for Quill!</h1>');
+      quill.on('text-change', (delta, oldDelta, source) => {
+        console.log('Text change!');
+        console.log(quill.getText()); // Get text only
+        console.log(quill.getContents()); // Get delta contents
+        console.log(quill.root.innerHTML); // Get innerHTML using quill
+        console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
+      });
+    }
+  }, [quill]);
 
-// function handleChangeInput(index, event) {
-//   const values = [...formFields];
-//   values[index][event.target.name] = event.target.value
-//   setFormFields(values);
-// }
+  return (
+    <div className='w-3/4 h-90 m-auto'>
+      <div ref={quillRef} />
+      <button onClick={submitData}>Test</button>
+    </div>
+  )
+}

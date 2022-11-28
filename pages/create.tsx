@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useEffect } from 'react'
 
 import Layout from '../components/Layout';
 import Router from 'next/router';
-import Editor from '../components/Editor';
+// import Editor from '../components/Editor';
 
 
 // import ReactQuill from 'react-quill';
@@ -12,32 +12,9 @@ import dynamic from 'next/dynamic'
 
 const Draft: React.FC = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
-  const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-
-  // const [value, setValue] = useState();
-  const [formFields, setFormFields] = useState();
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-      ['link', 'image'],
-      ['clean']
-    ],
-  }
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
-  ]
+  const [content, setContent] = useState();
 
   const submitData = async (e: React.SyntheticEvent) => {
-
-    // console.log(value)
     e.preventDefault();
     try {
       const body = { title, content };
@@ -78,26 +55,9 @@ const Draft: React.FC = () => {
             or Cancel
           </a>
         </form>
-        <div className="text-editor">
-          <ReactQuill theme="snow"
-            // modules={modules}
-            // formats={formats}
-            onChange={value => handleChangeInput(value)}
-            value={formFields}
-          >
-          </ReactQuill>
-          <Editor/>
         </div>
-      </div>
     </Layout>
   );
-
-  function handleChangeInput(targetValue) {
-    console.log(targetValue)
-    // const values = [...formFields];
-    // values[0][targetName] = targetValue
-    setFormFields(targetValue);
-  }
 
 };
 
