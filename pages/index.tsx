@@ -27,6 +27,16 @@ export const getServerSideProps: GetServerSideProps = async () => {
         include: {
           user: {},
         }
+      },
+      Vote: {
+        distinct: ['userId'],
+        include:{        
+          user:{            
+            select: {          
+              name: true,
+            }
+          },
+        }
       }
     },
     orderBy: [
@@ -53,6 +63,8 @@ type Props = {
 
 const Blog: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
+
+  
   // const [user, setUser] = useState("");
 
   // const setUserName = async (e: React.SyntheticEvent) => {

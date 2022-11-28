@@ -26,7 +26,8 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
   const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
-  console.log(session)
+  // console.log(session)
+
 
   const submitData = async (e: React.SyntheticEvent) => {
     // e.preventDefault();
@@ -114,7 +115,12 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           <p>{String(rewardRound.contentPoints)}</p>
           <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
         </div>
-
+        <h1 className='text-2xl m-5'>Voters so far</h1>
+        <div className='m-5'>
+          {rewardRound?.Vote?.map((vote: any) => (
+            <div>{vote.user.name}</div>
+          ))}
+        </div>
         <div className="overflow-x-auto relative m-5">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -200,7 +206,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         </>
       )}
       {session?.user?.isAdmin && rewardRound.isOpen && (
-          <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+        <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
           onClick={handleSubmit(submitData)}>
           Close Reward Round for all
         </button>
