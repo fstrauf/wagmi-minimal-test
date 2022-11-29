@@ -48,8 +48,10 @@ export default function Editor() {
   const { quill, quillRef } = useQuill({modules, formats, placeholder });
 
   const submitData = async (e: React.SyntheticEvent) => {
+// there are a bunch of converters https://github.com/quilljs/awesome-quill
 
-    console.log(quill.getText())
+    // console.log(quill.getText())
+    console.log(quill.getContents())
   }
 
   React.useEffect(() => {
@@ -68,7 +70,7 @@ export default function Editor() {
   return (
     <div className='w-3/4 h-90 m-auto'>
       <div ref={quillRef} />
-      <button onClick={submitData}>Test</button>
+      <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={submitData}>Save</button>
     </div>
   )
 }

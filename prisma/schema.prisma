@@ -15,7 +15,7 @@ datasource db {
 model Post {
   id        String  @id @default(cuid())
   title     String
-  content   String?
+  content   String? @db.VarChar(10000)
   published Boolean @default(false)
   author    User?   @relation(fields: [authorId], references: [id])
   authorId  String?

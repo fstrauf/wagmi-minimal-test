@@ -77,7 +77,6 @@ const Blog: React.FC<Props> = (props) => {
           </div>
         </main>
       </div>
-      <Editor/>
     </Layout>
   )
 }

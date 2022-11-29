@@ -6,6 +6,11 @@ import Router from "next/router";
 import { PostProps } from "../../components/Post";
 import { useSession } from "next-auth/react";
 import prisma from "../../lib/prisma";
+import { useQuill } from 'react-quilljs';
+import 'quill/dist/quill.snow.css';
+
+import { deltaToMarkdown } from 'quill-delta-to-markdown'
+// const markdown = deltaToMarkdown(deltaFromElseWhere)
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.post.findUnique({
@@ -38,12 +43,69 @@ async function deletePost(id: string): Promise<void> {
 }
 
 const Post: React.FC<PostProps> = (props) => {
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
   if (status === "loading") {
     return <div>Authenticating ...</div>;
   }
-  const userHasValidSession = Boolean(session);
-  const postBelongsToUser = session?.user?.email === props.author?.email;
+  // const userHasValidSession = Boolean(session);
+  // const postBelongsToUser = session?.user?.email === props.author?.email;
+
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ size: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    },
+  };
+
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video',
+  ];
+
+  // const placeholder = 'Compose an epic...';
+
+  const { quill, quillRef } = useQuill({ modules, formats });
+
+  React.useEffect(() => {
+    if (quill) {
+      quill.setContents(JSON.parse(props.content))
+      // quill.clipboard.dangerouslyPasteHTML('<h1>React Hook for Quill!</h1>');
+      quill.on('text-change', (delta, oldDelta, source) => {
+        console.log('Text change!');
+        console.log(quill.getText()); // Get text only
+        console.log(quill.getContents()); // Get delta contents
+        console.log(quill.root.innerHTML); // Get innerHTML using quill
+        console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
+      });
+    }
+  }, [quill]);
+
+
   let title = props.title;
   if (!props.published) {
     title = `${title} (Draft)`;
@@ -55,12 +117,16 @@ const Post: React.FC<PostProps> = (props) => {
         <h2>{title}</h2>
         <p>By {props?.author?.name || "Unknown author"}</p>
         <ReactMarkdown children={props.content} />
-        {!props.published && userHasValidSession && postBelongsToUser && (
-          <button onClick={() => publishPost(props.id)}>Publish</button>
-        )}
-        {userHasValidSession && postBelongsToUser && (
-          <button onClick={() => deletePost(props.id)}>Delete</button>
-        )}
+        <div className='w-3/4 h-90 m-auto'>
+          <div ref={quillRef} />
+          <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded">Save</button>
+        </div>
+        {/* {!props.published && userHasValidSession && postBelongsToUser && ( */}
+        <button onClick={() => publishPost(props.id)}>Publish</button>
+        {/* )} */}
+        {/* {userHasValidSession && postBelongsToUser && ( */}
+        <button onClick={() => deletePost(props.id)}>Delete</button>
+        {/* )} */}
       </div>
       <style jsx>{`
         .page {
