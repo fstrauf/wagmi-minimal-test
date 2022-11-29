@@ -13,6 +13,8 @@ export default async function handler(
 
   const { rewardRound } = req.body;
 
+  console.log(rewardRound.id)
+
   const dbs = []
   // dbs.push(prisma.content.deleteMany())
   // dbs.push(prisma.contentAuthor.deleteMany())

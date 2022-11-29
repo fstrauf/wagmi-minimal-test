@@ -64,37 +64,13 @@ type Props = {
 const Blog: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
 
-  
-  // const [user, setUser] = useState("");
-
-  // const setUserName = async (e: React.SyntheticEvent) => {
-  //   e.preventDefault();
-
-  //   // console.log(user)
-  //   try {
-  //     const body = { user, session };
-  //     await fetch('/api/post/setUserName', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(body),
-  //     })
-  //     // await Router.push('/');
-  //     console.log('successful');
-  //     await signOut({ callbackUrl: '/' })
-  //     // await Router.push(url);
-
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   return (
     <Layout>
       <div className="max-w-5xl mt-2 flex flex-col mb-10 m-auto">
       {session && !session?.user?.name && (
         <>
           <h1 className='text-3xl text-rose-600'>First Time? Set user details, save & then log back in</h1>
-          <Link href='/updateUser' className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'>Update User</Link>
+          <Link href='/updateUser' className='bg-gray-200 border-solid border-1 border-sky-500 rounded m-4'>Update User</Link>
         </> 
       )}
         <main>

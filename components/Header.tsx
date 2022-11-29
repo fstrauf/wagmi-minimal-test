@@ -100,25 +100,13 @@ export default function Header() {
         <Link href="/" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/')}>
           Home
         </Link>
-        {/* <Link href="/drafts" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/drafts')}>
-          My drafts
-        </Link>
-        <Link href="/content" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/content')}>
-          Content
-        </Link> */}
-
       </div>
     );
     right = (
       <div className="flex">
         <p className='m-2'>
-          {session?.user?.name} ({session?.user?.address})
+          {session?.user?.name}
         </p>
-        {/* <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newContent">
-          <button>
-            New content
-          </button>
-        </Link> */}
         <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/updateUser">
           <button>
             Update User
