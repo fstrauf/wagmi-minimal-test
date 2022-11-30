@@ -15,7 +15,7 @@ datasource db {
 model Post {
   id        String  @id @default(cuid())
   title     String
-  content   String?
+  content   String? @db.VarChar(10000)
   published Boolean @default(false)
   author    User?   @relation(fields: [authorId], references: [id])
   authorId  String?
@@ -73,17 +73,21 @@ model User {
   Vote          Vote[]
   ContentAuthor ContentAuthor[]
   wallet        String?         @unique
+  TeamProposal  TeamsProposal[]
 }
 
 model RewardRound {
-  id            String    @id @default(cuid())
-  monthYear     String?   @unique
+  id            String          @id @default(cuid())
+  monthYear     String?         @unique
   budget        Int?
   contentPoints Int?
   Vote          Vote[]
   Payout        Payout[]
-  isOpen        Boolean   @default(false)
+  isOpen        Boolean         @default(false)
   Content       Content[]
+  TeamValueAdd  TeamValueAdd[]
+  TeamsProposal TeamsProposal[]
+  // TeamAllocationProposal TeamAllocationProposal[]
 }
 
 model Payout {
@@ -130,3 +134,50 @@ model ContentAuthor {
   contentId String
   content   Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
 }
+
+model Team {
+  id   String @id @default(cuid())
+  name String
+
+  TeamValueAdd TeamValueAdd[]
+  // TeamAllocationProposal TeamAllocationProposal[]
+}
+
+model TeamValueAdd {
+  id            String          @id @default(cuid())
+  teamId        String?         @default(cuid())
+  team          Team?           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  rewardRoundId String?         @default(cuid())
+  rewardRound   RewardRound?    @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
+  valueAdd      String
+  allocation    Int?
+  TeamProposal  TeamsProposal[]
+}
+
+model TeamsProposal {
+  id             String        @id @default(cuid())
+  userId         String        @map("user_id")
+  user           User          @relation(fields: [userId], references: [id])
+  reason         String
+  active         Boolean       @default(false)
+  rewardRoundId  String?       @default(cuid())
+  rewardRound    RewardRound?  @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
+  teamValueAddId String?       @default(cuid())
+  teamValueAdd   TeamValueAdd? @relation(fields: [teamValueAddId], references: [id], onDelete: Cascade)
+  allocation     Int?
+  proposalNumber Int?
+  submittedOn    DateTime?
+  // TeamAllocationProposal TeamAllocationProposal[]
+}
+
+// model TeamAllocationProposal {
+//   id             String         @id @default(cuid())
+//   teamProposalId String?        @default(cuid())
+//   teamProposal   TeamsProposal? @relation(fields: [teamProposalId], references: [id], onDelete: Cascade)
+//   teamId         String?        @default(cuid())
+//   team           Team?          @relation(fields: [teamId], references: [id], onDelete: Cascade)
+//   allocation     Int
+//   reason         String
+//   rewardRoundId  String?        @default(cuid())
+//   rewardRound    RewardRound?   @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
+// }

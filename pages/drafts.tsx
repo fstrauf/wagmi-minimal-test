@@ -4,7 +4,7 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useSession, getSession } from 'next-auth/react';
 import Layout from '../components/Layout';
-import RewardRound, { RewardRoundProps } from '../components/RewardRound';
+import RewardRound, { RewardRoundProps } from '../components/ContentRewardRound';
 // import prisma from '../lib/prisma';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
