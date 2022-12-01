@@ -54,6 +54,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
               }
             ]
           },
+          RewardRoundTeamMember: {
+            include: {
+              user: {},
+            },  
+            where: {
+              selected: true,
+            }          
+          }
         },
 
       },

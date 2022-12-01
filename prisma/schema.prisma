@@ -60,20 +60,21 @@ model VerificationToken {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  role          String?
-  posts         Post[]
-  accounts      Account[]
-  sessions      Session[]
-  Payout        Payout[]
-  Vote          Vote[]
-  ContentAuthor ContentAuthor[]
-  wallet        String?         @unique
-  TeamProposal  TeamsProposal[]
+  id                    String                  @id @default(cuid())
+  name                  String?
+  email                 String?                 @unique
+  emailVerified         DateTime?
+  image                 String?
+  role                  String?
+  posts                 Post[]
+  accounts              Account[]
+  sessions              Session[]
+  Payout                Payout[]
+  Vote                  Vote[]
+  ContentAuthor         ContentAuthor[]
+  wallet                String?                 @unique
+  TeamProposal          TeamsProposal[]
+  RewardRoundTeamMember RewardRoundTeamMember[]
 }
 
 model RewardRound {
@@ -144,14 +145,15 @@ model Team {
 }
 
 model TeamValueAdd {
-  id            String          @id @default(cuid())
-  teamId        String?         @default(cuid())
-  team          Team?           @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  rewardRoundId String?         @default(cuid())
-  rewardRound   RewardRound?    @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
-  valueAdd      String
-  allocation    Int?
-  TeamProposal  TeamsProposal[]
+  id                    String                  @id @default(cuid())
+  teamId                String?                 @default(cuid())
+  team                  Team?                   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  rewardRoundId         String?                 @default(cuid())
+  rewardRound           RewardRound?            @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
+  valueAdd              String
+  allocation            Int?
+  TeamProposal          TeamsProposal[]
+  RewardRoundTeamMember RewardRoundTeamMember[]
 }
 
 model TeamsProposal {
@@ -167,17 +169,14 @@ model TeamsProposal {
   allocation     Int?
   proposalNumber Int?
   submittedOn    DateTime?
-  // TeamAllocationProposal TeamAllocationProposal[]
 }
 
-// model TeamAllocationProposal {
-//   id             String         @id @default(cuid())
-//   teamProposalId String?        @default(cuid())
-//   teamProposal   TeamsProposal? @relation(fields: [teamProposalId], references: [id], onDelete: Cascade)
-//   teamId         String?        @default(cuid())
-//   team           Team?          @relation(fields: [teamId], references: [id], onDelete: Cascade)
-//   allocation     Int
-//   reason         String
-//   rewardRoundId  String?        @default(cuid())
-//   rewardRound    RewardRound?   @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
-// }
+model RewardRoundTeamMember {
+  id             String        @id @default(cuid())
+  userId         String        @map("user_id")
+  user           User          @relation(fields: [userId], references: [id])
+  teamValueAddId String?       @default(cuid())
+  teamValueAdd   TeamValueAdd? @relation(fields: [teamValueAddId], references: [id], onDelete: Cascade)
+  valueAdd       String?       @db.VarChar(1000)
+  selected       Boolean       @default(false)
+}

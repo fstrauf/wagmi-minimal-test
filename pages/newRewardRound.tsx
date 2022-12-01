@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import Router from 'next/router';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
-import prisma from '../lib/prisma';
+// import { GetServerSideProps } from 'next';
+// import { getSession } from 'next-auth/react';
+// import prisma from '../lib/prisma';
 import { useForm } from "react-hook-form";
 
 // export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
