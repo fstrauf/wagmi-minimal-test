@@ -8,22 +8,22 @@ import { getSession } from 'next-auth/react';
 import prisma from '../lib/prisma';
 import { useForm } from "react-hook-form";
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await getSession({ req });
-  if (!session) {
-    res.statusCode = 403;
-    return { props: { users: [] } };
-  }
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//   const session = await getSession({ req });
+//   if (!session) {
+//     res.statusCode = 403;
+//     return { props: { users: [] } };
+//   }
 
-  const users = await prisma.user.findMany({
+//   const users = await prisma.user.findMany({
 
-  });
-  return {
-    props: { users },
-  };
-};
+//   });
+//   return {
+//     props: { users },
+//   };
+// };
 
-const NewRewardRound: React.FC = (props) => {
+const NewRewardRound: React.FC = () => {
   const [budget, setBudget] = useState('');
   const [period, setPeriod] = useState(new Date());
   const { handleSubmit, formState } = useForm();

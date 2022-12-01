@@ -2,7 +2,7 @@ import React from 'react';
 import Router from "next/router";
 import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
-import { Menu, Transition, Disclosure, Popover } from '@headlessui/react'
+import { Transition, Popover } from '@headlessui/react'
 import { Fragment } from 'react'
 
 export type RewardRoundProps = {
@@ -27,121 +27,123 @@ export type RewardRoundProps = {
 };
 
 
-const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
+const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
   const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
   // console.log(session)
 
 
-  const submitData = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { rewardRound };
-      await fetch('/api/post/closeRewardRound', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const submitData = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/closeRewardRound', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const openRewardRound = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { rewardRound };
-      await fetch('/api/post/openRewardRound', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const openRewardRound = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/openRewardRound', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const importFromNotion = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
+  // const importFromNotion = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
 
-    try {
-      const body = { rewardRound };
-      const notionResult = await fetch('/api/post/importNotion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
+  //   try {
+  //     const body = { rewardRound };
+  //     const notionResult = await fetch('/api/post/importNotion', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
 
-      const data = await notionResult.json();
+  //     const data = await notionResult.json();
 
-      await fetch('/api/post/insertNotionContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+  //     await fetch('/api/post/insertNotionContent', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(data),
+  //     });
 
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const clearRewardRound = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { rewardRound };
-      await fetch('/api/post/clearRR', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const clearRewardRound = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/clearRR', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  console.log(rewardRound.TeamValueAdd)
+  // console.log(rewardRound.TeamValueAdd)
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4">
+      <h1 className="text-3xl font-bold">Ownership Reward Rounds (choose one to vote)</h1>
       <div className='flex m-4 justify-between'>
         <div className='grid grid-cols-2 w-1/2'>
-          <h2 className="font-bold">Period</h2>
-          <p>{rewardRound.monthYear}</p>
-          <h2 className="font-bold">Budget</h2>
-          <p>$ {String(rewardRound.budget)}</p>
+          {/* <h2 className="font-bold">Period</h2>
+          <p>{rewardRound.monthYear}</p> */}
+          {/* <h2 className="font-bold">Budget</h2>
+          <p>$ {String(rewardRound.budget)}</p> */}
           {/* <h2 className="font-bold">ContentPoints per Voter</h2>
           <p>{String(rewardRound.contentPoints)}</p> */}
-          <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
+
         </div>
         <div className='ml-4'>
           <div className="w-56 text-right">
-            <Menu as="div" className="relative inline-block text-left">
+            <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+              onClick={handleSubmit(() => {
+                Router.push({
+                  pathname: "/or/[id]",
+                  query: {
+                    id: rewardRound.id,
+                    session: session?.user?.address,
+                  },
+                })
+              })}
+              disabled={!rewardRound.isOpen || !session?.user}>
+              New Proposal / Veto
+            </button>
+            {/* <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   Options
                 </Menu.Button>
-                <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-                  onClick={handleSubmit(() => {
-                    Router.push({
-                      pathname: "/or/[id]",
-                      query: {
-                        id: rewardRound.id,
-                        session: session?.user?.address,
-                      },
-                    })
-                  })}
-                  disabled={!rewardRound.isOpen || !session?.user}>
-                  New Proposal / Veto
-                </button>
+
               </div>
               <Transition
                 as={Fragment}
@@ -195,7 +197,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                   </div>
                 </Menu.Items>
               </Transition>
-            </Menu>
+            </Menu> */}
           </div>
         </div>
       </div>
@@ -226,18 +228,18 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
             <tr key={teamValueAdd.id} className="bg-white border-b bg-gray-800 border-gray-700">
               <th scope="row" className="py-2 px-4 font-medium text-gray-900 text-white">
                 <button className='group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-                onClick={handleSubmit(() => {
-                  Router.push({
-                    pathname: "/t/[id]",
-                    query: {
-                      id: teamValueAdd.id,
-                      session: session?.user?.address,
-                    },
-                  })
-                })}
+                  onClick={handleSubmit(() => {
+                    Router.push({
+                      pathname: "/t/[id]",
+                      query: {
+                        id: teamValueAdd.id,
+                        session: session?.user?.address,
+                      },
+                    })
+                  })}
                 >
-                {teamValueAdd.team.name}
-                </button>                
+                  {teamValueAdd.team.name}
+                </button>
               </th>
               <td className="py-2 px-4">
                 {/* <textarea id="message" rows="4" class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
@@ -248,7 +250,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 </div>
               </td>
               <td className="py-2 px-4">
-                {teamValueAdd?.TeamProposal[0].allocation}% ({teamValueAdd?.TeamProposal[0].reason})
+                {teamValueAdd?.TeamProposal[0]?.allocation}% ({teamValueAdd?.TeamProposal[0]?.reason})
               </td>
               <td>
                 <div className="w-full max-w-sm px-4">
@@ -314,4 +316,4 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
   );
 };
 
-export default RewardRound;
+export default OwnerRewardRound;

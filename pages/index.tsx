@@ -3,11 +3,11 @@ import { GetServerSideProps } from "next"
 import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
-import ContentRewardRound from "../components/ContentRewardRound";
-import OwnerRewardRound from "../components/OwnerRewardRound";
+
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 // import Router from 'next/router';
+import RewardRound from '../components/RewardRound'
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
@@ -93,21 +93,17 @@ const Blog: React.FC<Props> = (props) => {
           </>
         )}
         <main>
-          <h1 className="text-3xl font-bold">Ownership Reward Rounds (choose one to vote)</h1>
           <div className="flex flex-col">
             {props.rewardRound.map((rewardRound) => (
-              <div key={rewardRound.id}>
-                <OwnerRewardRound rewardRound={rewardRound} />
-              </div>
+              <RewardRound rewardRound={rewardRound} />
             ))}
           </div>
-          <h1 className="text-3xl font-bold">Content Reward Rounds (choose one to vote)</h1>
           <div className="flex flex-col">
-            {props.rewardRound.map((rewardRound) => (
+            {/* {props.rewardRound.map((rewardRound) => (
               <div key={rewardRound.id}>
                 <ContentRewardRound rewardRound={rewardRound} />
               </div>
-            ))}
+            ))} */}
           </div>
         </main>
       </div>

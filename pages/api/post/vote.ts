@@ -44,11 +44,11 @@ export default async function handle(req, res) {
   )
   // res.json(result)
 
-  const pointsTest = await prisma.vote.findMany({
-    where: {
-      rewardRoundId: String(voteFields[0].rewardRoundId)
-    }
-  })
+  // const pointsTest = await prisma.vote.findMany({
+  //   where: {
+  //     rewardRoundId: String(voteFields[0].rewardRoundId)
+  //   }
+  // })
   // console.log(pointsTest)
 
   const pointsUpdate = await prisma.vote.groupBy({

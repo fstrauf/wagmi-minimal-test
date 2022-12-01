@@ -4,8 +4,8 @@ import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
 // import { Menu } from '@headlessui/react'
 // import Options from './Options';
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+// import { Menu, Transition } from '@headlessui/react'
+// import { Fragment } from 'react'
 
 export type RewardRoundProps = {
   url: string;
@@ -26,86 +26,86 @@ export type RewardRoundProps = {
 };
 
 
-const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
+const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
   const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
   // console.log(session)
 
 
-  const submitData = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { rewardRound };
-      await fetch('/api/post/closeRewardRound', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const submitData = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/closeRewardRound', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const openRewardRound = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { rewardRound };
-      await fetch('/api/post/openRewardRound', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const openRewardRound = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/openRewardRound', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const importFromNotion = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
+  // const importFromNotion = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
 
-    try {
-      const body = { rewardRound };
-      const notionResult = await fetch('/api/post/importNotion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
+  //   try {
+  //     const body = { rewardRound };
+  //     const notionResult = await fetch('/api/post/importNotion', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
 
-      const data = await notionResult.json();
+  //     const data = await notionResult.json();
 
-      await fetch('/api/post/insertNotionContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+  //     await fetch('/api/post/insertNotionContent', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(data),
+  //     });
 
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const clearRewardRound = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
-    try {
-      const body = { rewardRound };
-      await fetch('/api/post/clearRR', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      await Router.push('/');
-      console.log('successful');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const clearRewardRound = async (e: React.SyntheticEvent) => {
+  //   // e.preventDefault();
+  //   try {
+  //     const body = { rewardRound };
+  //     await fetch('/api/post/clearRR', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body),
+  //     });
+  //     await Router.push('/');
+  //     console.log('successful');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   // const clearRewardRounds = async (e: React.SyntheticEvent) => {
   //   // e.preventDefault();
@@ -125,19 +125,32 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4">
+      <h1 className="text-3xl font-bold">Content Reward Rounds (choose one to vote)</h1>
       <div className='flex m-4 justify-between'>
         <div className='grid grid-cols-2 w-1/2'>
-          <h2 className="font-bold">Period</h2>
-          <p>{rewardRound.monthYear}</p>
+
           <h2 className="font-bold">Budget</h2>
           <p>$ {String(rewardRound.budget)}</p>
           <h2 className="font-bold">ContentPoints per Voter</h2>
           <p>{String(rewardRound.contentPoints)}</p>
-          <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
+          {/* <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p> */}
         </div>
         <div className='ml-4'>
           <div className="w-56 text-right">
-            <Menu as="div" className="relative inline-block text-left">
+          <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+                  onClick={handleSubmit(() => {
+                    Router.push({
+                      pathname: "/r/[id]",
+                      query: {
+                        id: rewardRound.id,
+                        session: session?.user?.address,
+                      },
+                    })
+                  })}
+                  disabled={!rewardRound.isOpen || !session?.user}>
+                  Vote
+                </button>
+            {/* <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   Options
@@ -205,7 +218,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                         </button>
                       )}
                     </Menu.Item>
-                    {/* <Menu.Item>
+                    <Menu.Item>
                       {({ active }) => (
                         <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                           onClick={handleSubmit(clearRewardRounds)}
@@ -213,11 +226,11 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                           Delete ALL reward content
                         </button>
                       )}
-                    </Menu.Item> */}
+                    </Menu.Item>
                   </div>
                 </Menu.Items>
               </Transition>
-            </Menu>
+            </Menu> */}
           </div>
           {/* <button className={`border-solid border-2 border-sky-500 rounded m-1 text-sm p-1 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
           onClick={handleSubmit(() => {
@@ -355,4 +368,4 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
   );
 };
 
-export default RewardRound;
+export default ContentRewardRound;
