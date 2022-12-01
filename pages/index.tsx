@@ -41,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       TeamValueAdd: {
         select: {
           team: {},
+          id: true,
           valueAdd: true,
           TeamProposal: {
             take: 3,

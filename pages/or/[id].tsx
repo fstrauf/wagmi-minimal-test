@@ -28,33 +28,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             },
             include: {
               user: {},              
-            }
+            },
           }
         }
-      },  
-      // Content: {
-      //   include: {
-      //     Vote: {
-      //       where: {
-      //         userId: {
-      //           equals: user.id
-      //         }
-      //       },
-      //     },
-      //     ContentAuthor: {
-      //       // where: {
-      //       //   userId: {
-      //       //     not: user.id
-      //       //   }
-      //       // },
-      //       include: {
-      //         user: {}
-      //       }
-      //     }
-      //   }
-
-      // }
-    },
+      }
+    }
   });
 
   return {
@@ -71,7 +49,7 @@ type Props = {
 
 }
 
-const RewardRound: React.FC<Props> = (props) => {
+const OwnershipRewardRound: React.FC<Props> = (props) => {
   const util = require('util');
   const { handleSubmit, formState } = useForm();
 
@@ -143,19 +121,19 @@ const RewardRound: React.FC<Props> = (props) => {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                    <th scope="col" className="py-3 px-6">
+                    <th scope="col" className="py-3 px-6 w-1/6">
                       Team
                     </th>
                     <th scope="col" className="py-3 px-6">
                       Value Add
                     </th>
-                    <th scope="col" className="py-3 px-6">
+                    <th scope="col" className="py-3 px-6 w-1/6">
                       Current Vote
                     </th>
-                    <th scope="col" className="py-3 px-6">
+                    <th scope="col" className="py-3 px-6 w-1/6">
                       Your Vote
                     </th>
-                    <th scope="col" className="py-3 px-6">
+                    <th scope="col" className="py-3 px-6 w-2/6">
                       Reason
                     </th>
                   </tr>
@@ -166,11 +144,11 @@ const RewardRound: React.FC<Props> = (props) => {
                       <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                           {valueAdd.team.name}
                       </th>
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-6 text-xs">
                         {valueAdd.valueAdd}
                       </td>
                       <td className="py-4 px-6">
-                        {valueAdd.TeamProposal[0].allocation}
+                        {valueAdd.TeamProposal[0].allocation}% ({valueAdd.TeamProposal[0].reason})
                       </td>
                       <td className="py-4 px-6">
                         <input
@@ -179,17 +157,17 @@ const RewardRound: React.FC<Props> = (props) => {
                           type="number"
                           value={valueAdd.pointsSpent}
                           min="0"
+                          max="100"
                           onWheel={ event => event.currentTarget.blur() }
                           onChange={event => handleFormChange(index, event)}
                           className={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1`}
                         />
                       </td>
                       <td className="py-4 px-6">
-                        <input
+                        <textarea rows="4" class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                           name='newReason'
                           value={valueAdd.newReason}
-                          onChange={event => handleFormChange(index, event)}
-                          className={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1`}
+                          onChange={event => handleFormChange(index, event)}                          
                         />
                       </td>
                     </tr>
@@ -206,4 +184,4 @@ const RewardRound: React.FC<Props> = (props) => {
   );
 };
 
-export default RewardRound;
+export default OwnershipRewardRound;

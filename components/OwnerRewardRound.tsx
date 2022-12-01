@@ -208,7 +208,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 bg-gray-700 text-gray-400">
           <tr>
             <th scope="col" className="py-1 px-3 w-1/6">
-              Team
+              Team (click to edit)
             </th>
             <th scope="col" className="py-1 px-3 w-3/6">
               Value Add
@@ -225,15 +225,30 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           {rewardRound.TeamValueAdd.map((teamValueAdd: any) => (
             <tr key={teamValueAdd.id} className="bg-white border-b bg-gray-800 border-gray-700">
               <th scope="row" className="py-2 px-4 font-medium text-gray-900 text-white">
+                <button className='group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                onClick={handleSubmit(() => {
+                  Router.push({
+                    pathname: "/t/[id]",
+                    query: {
+                      id: teamValueAdd.id,
+                      session: session?.user?.address,
+                    },
+                  })
+                })}
+                >
                 {teamValueAdd.team.name}
+                </button>                
               </th>
               <td className="py-2 px-4">
-                <textarea id="message" rows="4" class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                {/* <textarea id="message" rows="4" class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                   {teamValueAdd.valueAdd}
-                </textarea>
+                </textarea> */}
+                <div id="message" className="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                  {teamValueAdd.valueAdd}
+                </div>
               </td>
               <td className="py-2 px-4">
-                {teamValueAdd?.TeamProposal[0].allocation}%
+                {teamValueAdd?.TeamProposal[0].allocation}% ({teamValueAdd?.TeamProposal[0].reason})
               </td>
               <td>
                 <div className="w-full max-w-sm px-4">
@@ -277,7 +292,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                                         {proposal.user.name}
                                       </p>
                                       <p className="text-sm text-gray-500">
-                                        {proposal.submittedOn}
+                                        {String(proposal.submittedOn)}
                                       </p>
                                     </div>
                                   </div>

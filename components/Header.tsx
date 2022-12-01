@@ -5,6 +5,9 @@ import { useRouter } from 'next/router';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useAccount, useConnect, useSignMessage, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
+import { Menu, Transition } from '@headlessui/react'
+import { useForm } from "react-hook-form";
+import { Fragment } from 'react'
 // import axios from 'axios';
 // import { EvmChain } from '@moralisweb3/evm-utils';
 
@@ -19,7 +22,9 @@ export default function Header() {
   const { disconnectAsync } = useDisconnect();
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
-  const { push } = useRouter();
+  // const { push } = useRouter();
+
+  const { handleSubmit, formState } = useForm();
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -40,18 +45,10 @@ export default function Header() {
       });
 
       const data = await response.json();
-      // console.log('Data')
-      // console.log(data)
-
-      // const message = data
       const message = data.message;
       const signature = await signMessageAsync({ message });
-      // const { url } = await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/' });
       await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/' });
 
-      // push(url);
-
-      // await Router.push('/');
       console.log('successful');
     } catch (error) {
       console.error(error);
@@ -69,22 +66,22 @@ export default function Header() {
 
   let right = null;
 
-  if (status === 'loading') {
-    left = (
-      <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
-        <Link href="/" className="bold" data-active={isActive('/')}>
-          Home
-        </Link>
+  // if (status === 'loading') {
+  //   left = (
+  //     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
+  //       <Link href="/" className="bold" data-active={isActive('/')}>
+  //         Home
+  //       </Link>
 
-      </div>
-    );
-    right = (
-      <div className="right">
-        <p>Validating session ...</p>
+  //     </div>
+  //   );
+  //   right = (
+  //     <div className="right">
+  //       <p>Validating session ...</p>
 
-      </div>
-    );
-  }
+  //     </div>
+  //   );
+  // }
 
   if (!session) {
     right = (
@@ -107,20 +104,72 @@ export default function Header() {
         <p className='m-2'>
           {session?.user?.name}
         </p>
-        <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/updateUser">
-          <button>
-            Update User
-          </button>
-        </Link>
-        <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newRewardRound">
-          <button>
-            New Reward Round
-          </button>
-        </Link>
-        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut({ callbackUrl: '/' })}>
-          <a>Log out</a>
-        </button>
+        <div className='mr-4'>
+          <div className="w-56 text-right">
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  Options
+                </Menu.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="z-50 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="px-1 py-1 ">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                          href="/updateUser">
+                          <button>
+                            Update User
+                          </button>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                          href="/newRewardRound"                          >
+                          <button disabled={!session?.user?.isAdmin}>
+                            New Reward Round
+                          </button>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                          href="/newTeam"                          >
+                          <button disabled={!session?.user?.isAdmin}>
+                            New Team
+                          </button>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  </div>
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                          onClick={() => signOut({ callbackUrl: '/' })}>
+                          <a>Log out</a>
+                        </button>
+                      )}
+                    </Menu.Item>
 
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
+        </div>
       </div>
     );
   }
