@@ -153,7 +153,7 @@ model TeamValueAdd {
   team                  Team?                   @relation(fields: [teamId], references: [id], onDelete: Cascade)
   rewardRoundId         String?                 @default(cuid())
   rewardRound           RewardRound?            @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
-  valueAdd              String
+  valueAdd              String                  @db.VarChar(1000)
   allocation            Int?
   TeamProposal          TeamsProposal[]
   RewardRoundTeamMember RewardRoundTeamMember[]
@@ -165,7 +165,7 @@ model TeamsProposal {
   id             String        @id @default(cuid())
   userId         String        @map("user_id")
   user           User          @relation(fields: [userId], references: [id])
-  reason         String
+  reason         String        @db.VarChar(1000)
   active         Boolean       @default(false)
   rewardRoundId  String?       @default(cuid())
   rewardRound    RewardRound?  @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)

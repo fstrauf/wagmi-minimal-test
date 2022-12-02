@@ -3,7 +3,7 @@
 import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
-  const { valueAdd, vaueAddId } = req.body;
+  const { valueAdd, vaueAddId, budget } = req.body;
 
   // console.log(req.body)
 
@@ -15,6 +15,7 @@ export default async function handle(req, res) {
     },
     data: {
       valueAdd: valueAdd,
+      cashAllocation: Number(budget),
     },
   })
 

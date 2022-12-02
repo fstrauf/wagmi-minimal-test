@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentRewardRound from "./ContentRewardRound";
 import OwnerRewardRound from "./OwnerRewardRound";
-import { Menu, Transition, Disclosure, Popover } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { useForm } from "react-hook-form";
 import Router from "next/router";
@@ -108,8 +108,10 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
   };
 
   return (
-    <div key={rewardRound.id} className='bg-gray-300'>
-      <div className="w-56 text-right">
+    <div key={rewardRound.id} className='bg-gray-300 p-5 rounded-lg border-slate-400 border-2'>
+      <div className="flex justify-between mb-5">
+        <p className="text-xl font-bold">{rewardRound.monthYear}</p>
+        <p className="text-2xl col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
         <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
@@ -170,10 +172,12 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           </Transition>
         </Menu>
       </div>
-      <h2 className="font-bold">Period</h2>
-      <p>{rewardRound.monthYear}</p>
-      <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
-      <div>
+      <div className="relative py-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-3/4 m-auto border-b border-gray-400"></div>
+        </div>
+      </div>
+      <div className={`${rewardRound.isOpen ? 'collapse' : ''}`}>
         <h1 className='text-2xl'>Voting Results</h1>
         <div className="mt-2">
           <table className="text-sm text-left text-gray-400">

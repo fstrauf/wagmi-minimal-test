@@ -97,15 +97,15 @@ const Blog: React.FC<Props> = (props) => {
 
   return (
     <Layout>
-      <div className="max-w-5xl mt-2 flex flex-col mb-10 m-auto">
+      <div className="mt-2 flex flex-col mb-10 m-auto">
         {session && !session?.user?.name && (
           <>
             <h1 className='text-3xl text-rose-600'>First Time? Set user details, save & then log back in</h1>
-            <Link href='/updateUser' className='bg-gray-200 border-solid border-1 border-sky-500 rounded m-4'>Update User</Link>
+            <Link href='/updateUser' className='bg-gray-200 border-solid border-1 border-sky-500 rounded'>Update User</Link>
           </>
         )}
         <main>
-          <div className="flex flex-col">
+          <div className="flex flex-col m-auto">
             {props.rewardRound.map((rewardRound) => (
               <div key={rewardRound.id}>
                 <RewardRound rewardRound={rewardRound} />
@@ -113,11 +113,6 @@ const Blog: React.FC<Props> = (props) => {
             ))}
           </div>
           <div className="flex flex-col">
-            {/* {props.rewardRound.map((rewardRound) => (
-              <div key={rewardRound.id}>
-                <ContentRewardRound rewardRound={rewardRound} />
-              </div>
-            ))} */}
           </div>
         </main>
       </div>
