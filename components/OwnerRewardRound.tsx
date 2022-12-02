@@ -119,19 +119,19 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     </pre>
                   </td>
                   <td className="py-2 px-4 flex flex-col text-center place-items-center">
-                    <p className='font-bold text-white'>{teamValueAdd?.TeamProposal[0]?.allocation}%</p> 
+                    <p className='font-bold text-white'>{teamValueAdd?.TeamProposal[0]?.allocation}%</p>
                     <p>({teamValueAdd?.TeamProposal[0]?.reason})</p>
                   </td>
                   <td>
-                    <div className="w-full max-w-sm px-4">
+                    <div className="">
                       <Popover className="relative">
                         {({ open }) => (
                           <>
                             <Popover.Button
                               className={`
                                 ${open ? '' : 'text-opacity-90'}
-                                group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-                              >
+                                group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-sm font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                            >
                               <span>Details</span>
                             </Popover.Button>
                             <Transition
@@ -145,7 +145,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                             >
                               <Popover.Panel className="absolute z-10 mt-3">
                                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                                  <div className="relative grid gap-8 bg-white p-7">
+                                  <div className="relative grid gap-2 bg-white p-2">
 
                                     {teamValueAdd?.TeamProposal?.slice(1).map((proposal: any) => (
                                       <div
@@ -156,15 +156,14 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                                           <p className="text-sm text-black font-bold">
                                             {proposal.allocation}%
                                           </p>
-                                          <p className="text-sm text-gray-900">
-                                            {proposal.reason}
+                                          <p className="text-sm text-gray-500">
+                                            {new Date(proposal.submittedOn).toISOString().slice(0, 10)}
                                           </p>
-
+                                          <p className="text-sm text-gray-900">
+                                            ({proposal.reason})
+                                          </p>
                                           <p className="text-sm text-gray-500">
                                             {proposal.user.name}
-                                          </p>
-                                          <p className="text-sm text-gray-500">
-                                            {String(proposal.submittedOn)}
                                           </p>
                                         </div>
                                       </div>
@@ -190,19 +189,21 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     ))}
                   </td>
                   <td colSpan={1}>
-                    <button className='group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-                      onClick={handleSubmit(() => {
-                        Router.push({
-                          pathname: "/teamVote/[id]",
-                          query: {
-                            id: teamValueAdd.id,
-                            session: session?.user?.address,
-                          },
-                        })
-                      })}
-                    >
-                      Team Vote
-                    </button>
+                    {/* <div className='px-4'> */}
+                      <button className='px-4 group inline-flex items-center rounded-md bg-gray-500 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                        onClick={handleSubmit(() => {
+                          Router.push({
+                            pathname: "/teamVote/[id]",
+                            query: {
+                              id: teamValueAdd.id,
+                              session: session?.user?.address,
+                            },
+                          })
+                        })}
+                      >
+                        Team Vote
+                      </button>
+                    {/* </div> */}
                   </td>
                 </tr>
               </>

@@ -70,22 +70,7 @@ const TeamVote: React.FC<Props> = (props) => {
     }
   };
 
-  // console.log(props.teamValueAdd)
-
-
   const votePrep = props.teamValueAdd?.RewardRoundTeamMember?.map(member => {
-
-    // var AuthorIsVoter = false
-    // const found = content.ContentAuthor.find(author => {
-    //   return author.userId === props.user.id
-    // });
-    // // console.log(found)
-    // if (found === undefined) {
-    //   AuthorIsVoter = false
-    // } else {
-    //   AuthorIsVoter = true
-    // }
-
     return {
       ...member,
       // rewardRoundID: props.rewardRound.id,
@@ -97,9 +82,6 @@ const TeamVote: React.FC<Props> = (props) => {
   });
 
   const votingPoints = 100
-
-  // console.log(votingPoints)
-
   const [voteFields, setvoteFields] = useState(votePrep)
   const [totalVoted, setTotalVoted] = useState(votePrep?.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
   const [totalReached, setTotalReached] = useState(false)
@@ -118,8 +100,6 @@ const TeamVote: React.FC<Props> = (props) => {
     }
   }
 
-  // console.log(voteFields)
-
   return (
     <Layout>
       <div className='max-w-5xl mt-2 flex flex-col mb-10 m-auto'>
@@ -129,9 +109,9 @@ const TeamVote: React.FC<Props> = (props) => {
           <h2 className="font-bold">Team</h2>
           <p>{props.teamValueAdd?.team?.name}</p>
           <h2 className="font-bold">Team Value Add</h2>
-          <p>{props.teamValueAdd?.valueAdd}</p>
-          {/* <h2 className="font-bold">Budget</h2>
-          <p>{props.teamValueAdd?.budget}</p> */}
+          <pre className='whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'>{props.teamValueAdd?.valueAdd}</pre>
+          <h2 className="font-bold">Budget</h2>
+          <p>$ {props.teamValueAdd?.cashAllocation}</p>
           <h2 className="font-bold">Your Vote vs. your vote budget</h2>
           <p className={`${totalReached ? 'text-red-600' : 'text-black'}`}>{totalVoted} / {votingPoints}</p>
         </div>
@@ -179,7 +159,7 @@ const TeamVote: React.FC<Props> = (props) => {
                           min="0"
                           onWheel={event => event.currentTarget.blur()}
                           onChange={event => handleFormChange(index, event)}
-                          className={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
+                          className={`bg-gray-50 w-20 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
                         />
                       </td>
                     </tr>
