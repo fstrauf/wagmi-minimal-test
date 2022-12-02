@@ -4,6 +4,8 @@ export default async function handle(req, res) {
   const { voteFields } = req.body;
   var voteCalls = []
 
+//update value add with final proposal value
+
   voteCalls.push(
     prisma.teamsProposal.updateMany({
       data: {

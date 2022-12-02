@@ -1,12 +1,8 @@
 import prisma from '../../../lib/prisma';
-// import TeamValueAdd from '../../t/[id]';
 
 export default async function handle(req, res) {
   const { rewardRound } = req.body;
   const contentPointsVoted = rewardRound.Content.reduce((a, v) => a = a + Number(v.pointsVote), 0)
-
-  //ownership: sum(proposal % * team member %)
-  //teamcash: sum(cashbounty * team member %)
 
   var payout = []
   rewardRound.Content.forEach(content => {
@@ -26,7 +22,7 @@ export default async function handle(req, res) {
         userId: teamMember.userId,
         authorCash: 0,
         teamCash: teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100)*teamValue.cashAllocation,
-        ownership: teamValue.allocation*(teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100))
+        ownership: teamValue.TeamProposal[0].allocation*(teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100))
       })
     })
   })

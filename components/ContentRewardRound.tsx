@@ -332,7 +332,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
               </div>
             ))}
           </div>
-          <div>
+          {/* <div>
             <h1 className='text-2xl'>Voting Results</h1>
             <div className="mt-2">
               <table className="text-sm text-left text-gray-400">
@@ -360,7 +360,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
         </div>
 
       </div>
