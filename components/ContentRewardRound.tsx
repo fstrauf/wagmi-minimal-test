@@ -353,7 +353,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
                         {payout.user.name}
                       </th>
                       <td className="py-1 px-2">
-                        $ {Number((payout.cashReward).toFixed(2)).toLocaleString()}
+                        $ {Number((payout.contentCashReward).toFixed(2)).toLocaleString()}
                       </td>
                     </tr>
                   ))}

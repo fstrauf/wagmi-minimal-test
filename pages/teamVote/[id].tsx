@@ -15,39 +15,31 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   },
   );
 
-  const rewardRound = await prisma.rewardRound.findUnique({
+  const teamValueAdd = await prisma.teamValueAdd.findUnique({
     where: {
-      id: String(query?.id),      
+      id: String(query?.id),
     },
     include: {
-      Content: {
+      team: {},
+      RewardRoundTeamMember: {
         include: {
-          Vote: {
+          user: {},
+          MemberVote: {
             where: {
               userId: {
-                equals: user.id
+                equals: user.id,
               }
-            },
-          },
-          ContentAuthor: {
-            // where: {
-            //   userId: {
-            //     not: user.id
-            //   }
-            // },
-            include: {
-              user: {}
             }
-          }
+          },
         }
-
-      }
+      },
+      rewardRound: {},
     },
   });
 
   return {
     props: {
-      rewardRound,
+      teamValueAdd,
       user,
     },
   };
@@ -55,11 +47,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
 type Props = {
   user: any;
-  rewardRound: any;
-
+  teamValueAdd: any;
 }
 
-const RewardRound: React.FC<Props> = (props) => {
+const TeamVote: React.FC<Props> = (props) => {
   const util = require('util');
   const { handleSubmit, formState } = useForm();
 
@@ -67,7 +58,7 @@ const RewardRound: React.FC<Props> = (props) => {
     // e.preventDefault();
     try {
       const body = { voteFields };
-      await fetch('/api/post/vote', {
+      await fetch('/api/post/teamMemberVote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -79,36 +70,38 @@ const RewardRound: React.FC<Props> = (props) => {
     }
   };
 
-  console.log(props.rewardRound)
-  
+  // console.log(props.teamValueAdd)
 
-  const votePrep = props.rewardRound?.Content?.map(content => {
 
-    var AuthorIsVoter = false
-    const found = content.ContentAuthor.find(author => {
-      return author.userId === props.user.id
-    });
-    // console.log(found)
-    if(found===undefined){
-      AuthorIsVoter=false
-    }else{
-      AuthorIsVoter=true
-    }
+  const votePrep = props.teamValueAdd?.RewardRoundTeamMember?.map(member => {
+
+    // var AuthorIsVoter = false
+    // const found = content.ContentAuthor.find(author => {
+    //   return author.userId === props.user.id
+    // });
+    // // console.log(found)
+    // if (found === undefined) {
+    //   AuthorIsVoter = false
+    // } else {
+    //   AuthorIsVoter = true
+    // }
 
     return {
-      ...content,
+      ...member,
       // rewardRoundID: props.rewardRound.id,
       userId: props.user.id,
-      AuthorIsVoter: AuthorIsVoter,
-      pointsSpent: util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
+      // AuthorIsVoter: AuthorIsVoter,
+      pointsSpent: util.isUndefined(member.MemberVote[0]?.pointsSpent) ? 0 : Number(member.MemberVote[0]?.pointsSpent),
       // voteId: props.rewardRound.Vote[index]?.id
     };
   });
 
-  // console.log(votePrep)
+  const votingPoints = 100
+
+  // console.log(votingPoints)
 
   const [voteFields, setvoteFields] = useState(votePrep)
-  const [totalVoted, setTotalVoted] = useState(votePrep.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
+  const [totalVoted, setTotalVoted] = useState(votePrep?.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
   const [totalReached, setTotalReached] = useState(false)
 
   const handleFormChange = (index, event) => {
@@ -118,7 +111,7 @@ const RewardRound: React.FC<Props> = (props) => {
 
     let totalVote = (data.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
     setTotalVoted(totalVote)
-    if (totalVote > Number(props.rewardRound.contentPoints)) {
+    if (totalVote > Number(votingPoints)) {
       setTotalReached(true)
     } else {
       setTotalReached(false)
@@ -132,51 +125,51 @@ const RewardRound: React.FC<Props> = (props) => {
       <div className='max-w-5xl mt-2 flex flex-col mb-10 m-auto'>
         <div className='grid grid-cols-2'>
           <h2 className="font-bold">Period</h2>
-          <p>{props.rewardRound.monthYear}</p>
-          <h2 className="font-bold">Budget</h2>
-          <p>{props.rewardRound.budget}</p>
+          <p>{props.teamValueAdd?.rewardRound?.monthYear}</p>
+          <h2 className="font-bold">Team</h2>
+          <p>{props.teamValueAdd?.team?.name}</p>
+          <h2 className="font-bold">Team Value Add</h2>
+          <p>{props.teamValueAdd?.valueAdd}</p>
+          {/* <h2 className="font-bold">Budget</h2>
+          <p>{props.teamValueAdd?.budget}</p> */}
           <h2 className="font-bold">Your Vote vs. your vote budget</h2>
-          <p className={`${totalReached ? 'text-red-600' : 'text-black'}`}>{totalVoted}/{props.rewardRound.contentPoints}</p>
+          <p className={`${totalReached ? 'text-red-600' : 'text-black'}`}>{totalVoted} / {votingPoints}</p>
         </div>
 
-        <h1 className="font-bold mt-4 mb-4">points spent to be set</h1>
         <div>
           <form className='' onSubmit={handleSubmit(submitData)}>
-            <div class="overflow-x-auto relative m-5">
-              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <div className="overflow-x-auto relative m-5">
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                    <th scope="col" class="py-3 px-6">
-                      Content piece (+link)
+                    <th scope="col" className="py-3 px-6">
+                      Team Member
                     </th>
                     <th scope="col" className="py-3 px-6">
-                      Authors
+                      Value Add
                     </th>
-                    <th scope="col" class="py-3 px-6">
-                      Type
-                    </th>
-                    <th scope="col" class="py-3 px-6">
+                    <th scope="col" className="py-3 px-6">
                       Your Vote
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {voteFields.map((input, index) => (
-                    <tr key={input.id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {voteFields?.map((input, index) => (
+                    <tr key={input.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <a className='hover:underline' href={input.url}>
-                          {input.description}
+                          {input.user?.name}
                         </a>
                       </th>
-                      <td className="py-4 px-6">
+                      {/* <td className="py-4 px-6">
                         {input.ContentAuthor.map((author: any) => (
                           <p key={author.id}>{author.user.name}</p>
                         ))}
+                      </td> */}
+                      <td className="py-4 px-6">
+                        {input.valueAdd}
                       </td>
-                      <td class="py-4 px-6">
-                        {input.type}
-                      </td>
-                      <td class="py-4 px-6">
+                      <td className="py-4 px-6">
                         <input
                           name='pointsSpent'
                           placeholder='Vote'
@@ -184,9 +177,9 @@ const RewardRound: React.FC<Props> = (props) => {
                           disabled={input.AuthorIsVoter}
                           value={input.pointsSpent}
                           min="0"
-                          onWheel={ event => event.currentTarget.blur() }
+                          onWheel={event => event.currentTarget.blur()}
                           onChange={event => handleFormChange(index, event)}
-                          class={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
+                          className={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
                         />
                       </td>
                     </tr>
@@ -203,4 +196,4 @@ const RewardRound: React.FC<Props> = (props) => {
   );
 };
 
-export default RewardRound;
+export default TeamVote;

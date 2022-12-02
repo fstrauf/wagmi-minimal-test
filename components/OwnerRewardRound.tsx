@@ -176,7 +176,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                 </td>
               </tr>
               <tr key={teamValueAdd.valueAdd} className="bg-white border-b bg-gray-800 border-gray-700">
-                <td colSpan={4} className="py-2 px-4">
+                <td colSpan={3} className="py-2 px-4">
                   <p>Members:</p>
                   {teamValueAdd?.RewardRoundTeamMember?.map((member: any) => (
                     <div className='flex ml-4'>
@@ -185,11 +185,26 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     </div>
                   ))}
                 </td>
+                <td colSpan={1}>
+                <button className='group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                    onClick={handleSubmit(() => {
+                      Router.push({
+                        pathname: "/teamVote/[id]",
+                        query: {
+                          id: teamValueAdd.id,
+                          session: session?.user?.address,
+                        },
+                      })
+                    })}
+                  >
+                    Team Vote 
+                  </button>
+                </td>
               </tr>
             </>
           ))}
         </tbody>
-      </table>
+      </table>      
     </div>
   );
 };

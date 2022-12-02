@@ -75,6 +75,7 @@ model User {
   wallet                String?                 @unique
   TeamProposal          TeamsProposal[]
   RewardRoundTeamMember RewardRoundTeamMember[]
+  MemberVote            MemberVote[]
 }
 
 model RewardRound {
@@ -92,13 +93,15 @@ model RewardRound {
 }
 
 model Payout {
-  id             String      @id @default(cuid())
-  userId         String      @map("user_id")
-  user           User        @relation(fields: [userId], references: [id])
-  rewardRoundId  String
-  rewardRound    RewardRound @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
-  pointsReceived Int?
-  cashReward     Float?
+  id                String      @id @default(cuid())
+  userId            String      @map("user_id")
+  user              User        @relation(fields: [userId], references: [id])
+  rewardRoundId     String
+  rewardRound       RewardRound @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
+  pointsReceived    Int?
+  contentCashReward Float?
+  teamCashReward    Float?
+  ownershipReward   Float?
 }
 
 model Content {
@@ -154,6 +157,8 @@ model TeamValueAdd {
   allocation            Int?
   TeamProposal          TeamsProposal[]
   RewardRoundTeamMember RewardRoundTeamMember[]
+  MemberVote            MemberVote[]
+  cashAllocation        Float?
 }
 
 model TeamsProposal {
@@ -172,11 +177,24 @@ model TeamsProposal {
 }
 
 model RewardRoundTeamMember {
-  id             String        @id @default(cuid())
-  userId         String        @map("user_id")
-  user           User          @relation(fields: [userId], references: [id])
-  teamValueAddId String?       @default(cuid())
-  teamValueAdd   TeamValueAdd? @relation(fields: [teamValueAddId], references: [id], onDelete: Cascade)
-  valueAdd       String?       @db.VarChar(1000)
-  selected       Boolean       @default(false)
+  id               String        @id @default(cuid())
+  userId           String        @map("user_id")
+  user             User          @relation(fields: [userId], references: [id])
+  teamValueAddId   String?       @default(cuid())
+  teamValueAdd     TeamValueAdd? @relation(fields: [teamValueAddId], references: [id], onDelete: Cascade)
+  valueAdd         String?       @db.VarChar(1000)
+  selected         Boolean       @default(false)
+  MemberVote       MemberVote[]
+  allocationPoints Int?
+}
+
+model MemberVote {
+  id                      String                 @id @default(cuid())
+  userId                  String                 @map("user_id")
+  user                    User                   @relation(fields: [userId], references: [id])
+  pointsSpent             Int?
+  teamValueAddId          String?                @default(cuid())
+  teamValueAdd            TeamValueAdd?          @relation(fields: [teamValueAddId], references: [id], onDelete: Cascade)
+  RewardRoundTeamMemberId String?                @default(cuid())
+  RewardRoundTeamMember   RewardRoundTeamMember? @relation(fields: [RewardRoundTeamMemberId], references: [id], onDelete: Cascade)
 }

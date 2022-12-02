@@ -3,10 +3,8 @@ import { GetServerSideProps } from "next"
 import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
-
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-// import Router from 'next/router';
 import RewardRound from '../components/RewardRound'
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -43,6 +41,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
           team: {},
           id: true,
           valueAdd: true,
+          cashAllocation: true,
+          allocation: true,
           TeamProposal: {
             take: 3,
             include: {
@@ -57,13 +57,17 @@ export const getServerSideProps: GetServerSideProps = async () => {
           RewardRoundTeamMember: {
             include: {
               user: {},
-            },  
+            },
             where: {
               selected: true,
-            }          
+            }
+          },
+          _count: {
+            select: {
+              RewardRoundTeamMember: true,
+            }
           }
         },
-
       },
     },
     orderBy: [
@@ -104,7 +108,7 @@ const Blog: React.FC<Props> = (props) => {
           <div className="flex flex-col">
             {props.rewardRound.map((rewardRound) => (
               <div key={rewardRound.id}>
-              <RewardRound rewardRound={rewardRound} />
+                <RewardRound rewardRound={rewardRound} />
               </div>
             ))}
           </div>
