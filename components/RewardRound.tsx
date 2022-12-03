@@ -1,8 +1,8 @@
-import React from 'react';
+// import React from 'react';
 import ContentRewardRound from "./ContentRewardRound";
 import OwnerRewardRound from "./OwnerRewardRound";
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import React, { Fragment, useRef } from 'react'
 import { useForm } from "react-hook-form";
 import Router from "next/router";
 import { useSession } from 'next-auth/react';
@@ -32,9 +32,11 @@ export type RewardRoundProps = {
 const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
   const { handleSubmit, formState } = useForm();
   const { data: session } = useSession();
+  const buttonRef = useRef();
 
-  const submitData = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
+  const closeRewardRound = async (data: any, e: React.SyntheticEvent) => {
+  // const closeRewardRound = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
     try {
       const body = { rewardRound };
       await fetch('/api/post/closeRewardRound', {
@@ -42,6 +44,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
     } catch (error) {
@@ -58,6 +61,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
     } catch (error) {
@@ -83,7 +87,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
     } catch (error) {
@@ -100,6 +104,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
     } catch (error) {
@@ -113,11 +118,11 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         <p className="text-xl font-bold">{rewardRound.monthYear}</p>
         <p className="text-2xl col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
         <Menu as="div" className="relative inline-block text-left">
-          <div>
-            <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          {/* <div> */}
+            <Menu.Button ref={buttonRef} className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
               Options
             </Menu.Button>
-          </div>
+          {/* </div> */}
           <Transition
             as={Fragment}
             enter="transition ease-out duration-100"
@@ -130,9 +135,13 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
             <Menu.Items className="z-50 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1 ">
                 <Menu.Item>
-                  {({ active }) => (
-                    <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
-                      onClick={handleSubmit(submitData)}
+                  {({ active, close }) => (
+                    <button 
+                      className={`${
+                          active ? 'bg-dao-green text-white' : 'text-gray-900'} 
+                          group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 
+                          ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      onClick={handleSubmit(closeRewardRound)}
                       disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
                       Close Reward Round for all
                     </button>
@@ -140,7 +149,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                       onClick={handleSubmit(openRewardRound)}
                       disabled={!session?.user?.isAdmin || rewardRound.isOpen}>
                       Open Reward Round
@@ -151,7 +160,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
               <div className="px-1 py-1">
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                       onClick={handleSubmit(importFromNotion)}
                       disabled={formState.isSubmitting || !session?.user?.isAdmin || rewardRound.isOpen} >
                       Import from Notion
@@ -160,7 +169,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                       onClick={handleSubmit(clearRewardRound)}
                       disabled={!session?.user?.isAdmin}>
                       Delete this reward round
@@ -177,11 +186,11 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           <div className="w-3/4 m-auto border-b border-gray-400"></div>
         </div>
       </div>
-      <div className={`${rewardRound.isOpen ? 'collapse' : ''}`}>
+      <div className={`mb-5 ${rewardRound.isOpen ? 'collapse' : ''}`}>
         <h1 className='text-2xl'>Voting Results</h1>
         <div className="mt-2">
           <table className="text-sm text-left text-gray-400">
-            <thead className="text-sm text-gray-700 uppercase bg-gray-50 bg-gray-700 text-gray-400">
+            <thead className="text-sm uppercase bg-gray-700 text-gray-400">
               <tr>
                 <th scope="col" className="py-2 px-2">
                   Member
@@ -199,8 +208,8 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
             </thead>
             <tbody>
               {rewardRound.Payout?.map((payout: any) => (
-                <tr key={payout.id} className="bg-white border-b bg-gray-800 border-gray-700">
-                  <th scope="row" className="py-1 px-2 font-sm text-gray-900 whitespace-nowrap text-white">
+                <tr key={payout.id} className="border-b bg-gray-800 border-gray-700">
+                  <th scope="row" className="py-1 px-2 font-sm whitespace-nowrap text-white">
                     {payout.user.name}
                   </th>
                   <td className="py-1 px-2">

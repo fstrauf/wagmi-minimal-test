@@ -39,7 +39,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
         </div>
         <div className='ml-4'>
           <div className="w-56 text-right">
-            <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+            <button className={`inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
               onClick={handleSubmit(() => {
                 Router.push({
                   pathname: "/r/[id]",

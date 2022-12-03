@@ -32,7 +32,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
   const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
-  console.log(rewardRound)
+  // console.log(rewardRound)
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-gray-400 rounded">
@@ -41,10 +41,10 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
         <div className='flex m-4 justify-between'>
           <div className='ml-4'>
             <div className="w-56 text-right">
-              <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+              <button className={`inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
                 onClick={handleSubmit(() => {
                   Router.push({
-                    pathname: "/or/[id]",
+                    pathname: "/teamProposal/[id]",
                     query: {
                       id: rewardRound.id,
                       session: session?.user?.address,
@@ -54,7 +54,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                 disabled={!rewardRound.isOpen || !session?.user}>
                 New Proposal / Veto
               </button>
-              <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+              <button className={`inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
                 onClick={handleSubmit(() => {
                   Router.push({
                     pathname: "/teamAssignment/[id]",
@@ -99,7 +99,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
               <>
                 <tr key={teamValueAdd.id} className="border-none bg-gray-800 border-gray-700">
                   <th scope="row" className="py-2 px-4 font-medium text-white">
-                    <button className='group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                    <button className='group inline-flex items-center rounded-md bg-dao-green px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
                       onClick={handleSubmit(() => {
                         Router.push({
                           pathname: "/t/[id]",
@@ -130,7 +130,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                             <Popover.Button
                               className={`
                                 ${open ? '' : 'text-opacity-90'}
-                                group inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-sm font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                                group inline-flex items-center rounded-md bg-dao-green px-3 py-2 text-sm font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
                             >
                               <span>Details</span>
                             </Popover.Button>
@@ -189,8 +189,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     ))}
                   </td>
                   <td colSpan={1}>
-                    {/* <div className='px-4'> */}
-                      <button className='px-4 group inline-flex items-center rounded-md bg-gray-500 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                      <button className='px-4 group inline-flex items-center rounded-md bg-dao-green py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
                         onClick={handleSubmit(() => {
                           Router.push({
                             pathname: "/teamVote/[id]",
@@ -203,7 +202,6 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                       >
                         Team Vote
                       </button>
-                    {/* </div> */}
                   </td>
                 </tr>
               </>

@@ -103,32 +103,33 @@ const TeamVote: React.FC<Props> = (props) => {
   return (
     <Layout>
       <div className='max-w-5xl mt-2 flex flex-col mb-10 m-auto'>
-        <div className='grid grid-cols-2'>
-          <h2 className="font-bold">Period</h2>
-          <p>{props.teamValueAdd?.rewardRound?.monthYear}</p>
-          <h2 className="font-bold">Team</h2>
-          <p>{props.teamValueAdd?.team?.name}</p>
-          <h2 className="font-bold">Team Value Add</h2>
-          <pre className='whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'>{props.teamValueAdd?.valueAdd}</pre>
-          <h2 className="font-bold">Budget</h2>
-          <p>$ {props.teamValueAdd?.cashAllocation}</p>
-          <h2 className="font-bold">Your Vote vs. your vote budget</h2>
-          <p className={`${totalReached ? 'text-red-600' : 'text-black'}`}>{totalVoted} / {votingPoints}</p>
+        {/* <div className=''> */}
+        {/* <h2 className="font-bold">Period</h2> */}
+        <div className='col-span-2 flex mb-10 justify-self-center'>
+          <p className='font-bold mr-5 text-2xl'>{props.teamValueAdd?.rewardRound?.monthYear}</p>
+          <p className='font-bold text-2xl'>{props.teamValueAdd?.team?.name}</p>
         </div>
+        <h2 className="font-bold">Team Value Add</h2>
+        <pre className='whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'>{props.teamValueAdd?.valueAdd}</pre>
+        <h2 className="font-bold">Budget</h2>
+        <p>$ {props.teamValueAdd?.cashAllocation}</p>
+        <h2 className="font-bold">Your Vote vs. your vote budget</h2>
+        <p className={`${totalReached ? 'text-red-600' : 'text-black'}`}>{totalVoted} / {votingPoints}</p>
+        {/* </div> */}
 
         <div>
-          <form className='' onSubmit={handleSubmit(submitData)}>
-            <div className="overflow-x-auto relative m-5">
+          <form className='mt-5' onSubmit={handleSubmit(submitData)}>
+            <div className="overflow-x-auto relative">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                    <th scope="col" className="py-3 px-6">
+                    <th scope="col" className="py-3 px-6 w-1/6">
                       Team Member
                     </th>
                     <th scope="col" className="py-3 px-6">
                       Value Add
                     </th>
-                    <th scope="col" className="py-3 px-6">
+                    <th scope="col" className="py-3 px-6 w-1/6">
                       Your Vote
                     </th>
                   </tr>
@@ -141,13 +142,10 @@ const TeamVote: React.FC<Props> = (props) => {
                           {input.user?.name}
                         </a>
                       </th>
-                      {/* <td className="py-4 px-6">
-                        {input.ContentAuthor.map((author: any) => (
-                          <p key={author.id}>{author.user.name}</p>
-                        ))}
-                      </td> */}
                       <td className="py-4 px-6">
-                        {input.valueAdd}
+                        <pre id="message" className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                          {input.valueAdd}
+                        </pre>
                       </td>
                       <td className="py-4 px-6">
                         <input
@@ -168,7 +166,10 @@ const TeamVote: React.FC<Props> = (props) => {
                 </tbody>
               </table>
             </div>
-            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} disabled={totalReached || formState.isSubmitting} onClick={handleSubmit(submitData)}>Submit</button>
+            <button className={`mt-5 inline-flex w-54 justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 
+                  ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+              disabled={totalReached || formState.isSubmitting}
+              onClick={handleSubmit(submitData)}>Submit</button>
           </form>
         </div>
       </div>

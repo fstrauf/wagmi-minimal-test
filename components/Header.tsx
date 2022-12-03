@@ -72,7 +72,7 @@ export default function Header() {
   if (session) {
     left = (
       <div className='flex '>
-        <Link href="/" className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75" data-active={isActive('/')}>
+        <Link href="/" className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75" data-active={isActive('/')}>
           Home
         </Link>
       </div>
@@ -85,7 +85,7 @@ export default function Header() {
         <div className="w-56 text-right">
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 Options
               </Menu.Button>
             </div>
@@ -102,7 +102,7 @@ export default function Header() {
                 <div className="px-1 py-1 ">
                   <Menu.Item>
                     {({ active }) => (
-                      <Link className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      <Link className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                         href="/updateUser">
                         <button>
                           Update User
@@ -112,7 +112,7 @@ export default function Header() {
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <Link className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      <Link className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                         href="/newRewardRound"                          >
                         <button disabled={!session?.user?.isAdmin}>
                           New Reward Round
@@ -122,7 +122,7 @@ export default function Header() {
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <Link className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      <Link className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                         href="/newTeam"                          >
                         <button disabled={!session?.user?.isAdmin}>
                           New Team
@@ -134,7 +134,7 @@ export default function Header() {
                 <div className="px-1 py-1">
                   <Menu.Item>
                     {({ active }) => (
-                      <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
                         onClick={() => signOut({ callbackUrl: '/' })}>
                         <a>Log out</a>
                       </button>

@@ -97,41 +97,45 @@ const TeamAssignment: React.FC<Props> = (props) => {
     <Layout>
       <div className='max-w-5xl mt-2 flex flex-col mb-10 m-auto'>
         <h1 className="font-bold mt-4 mb-4">Select the teams you worked in and enter the value you added to the team!</h1>
-          <form className='' onSubmit={handleSubmit(submitData)}>
-            <div className="overflow-x-auto relative m-5">
-              <ul className="w-1/2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                {voteFields.map((input, index) => (
-                  <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
-                    <div className="flex items-center pl-3">
-                      <label for="selected" class="py-3 ml-2 w-1/3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        {input.team.name}
-                      </label>
-                      <input
-                        name='checked'
-                        type="checkbox"
-                        // disabled={input.AuthorIsVoter}
-                        checked={input.checked}
-                        // min="0"
-                        // onWheel={event => event.currentTarget.blur()}
-                        onChange={event => handleCheckBoxChange(index, event)}
-                        className="w-6 h-6 mr-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500"
-                      />
-                      <textarea
-                        name='valueAdd'
-                        onChange={event => handleFormChange(index, event)}
-                        placeholder="Description"
-                        rows={4}
-                        value={input.valueAdd}
-                        className="relative m-2 w-full text-black cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-              disabled={formState.isSubmitting} onClick={handleSubmit(submitData)}>Submit</button>
-          </form>
+        <form className='' onSubmit={handleSubmit(submitData)}>
+          <div className="overflow-x-auto relative">
+            <ul className="w-1/2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+              {voteFields.map((input, index) => (
+                <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
+                  <div className="flex items-center pl-3">
+                    <label for="selected" class="py-3 ml-2 w-1/3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                      {input.team.name}
+                    </label>
+                    <input
+                      name='checked'
+                      type="checkbox"
+                      // disabled={input.AuthorIsVoter}
+                      checked={input.checked}
+                      // min="0"
+                      // onWheel={event => event.currentTarget.blur()}
+                      onChange={event => handleCheckBoxChange(index, event)}
+                      className="w-6 h-6 mr-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500"
+                    />
+                    <textarea
+                      name='valueAdd'
+                      onChange={event => handleFormChange(index, event)}
+                      placeholder="Description"
+                      rows={4}
+                      value={input.valueAdd}
+                      className="relative m-2 w-full text-black cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button className={`inline-flex w-40 justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 
+            ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+            disabled={formState.isSubmitting}
+            onClick={handleSubmit(submitData)}>
+            Submit
+          </button>
+        </form>
       </div>
     </Layout>
   );

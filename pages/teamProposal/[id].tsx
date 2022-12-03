@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const rewardRound = await prisma.rewardRound.findUnique({
     where: {
-      id: String(query?.id),      
+      id: String(query?.id),
     },
     include: {
       TeamValueAdd: {
@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
               active: true,
             },
             include: {
-              user: {},              
+              user: {},
             },
           }
         }
@@ -69,14 +69,14 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
     }
   };
 
-//preload fields with previous values
+  //preload fields with previous values
   const votePrep = props.rewardRound.TeamValueAdd.map(valueAdd => {
-      return {
+    return {
       ...valueAdd,
       rewardRoundID: props.rewardRound.id,
       userId: props.user.id,
       pointsSpent: 0, // util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
-      proposalNumber: valueAdd.TeamProposal.reduce((prev, current) => (prev.proposalNumber > current.proposalNumber) ? prev : current,0).proposalNumber,
+      proposalNumber: valueAdd.TeamProposal.reduce((prev, current) => (prev.proposalNumber > current.proposalNumber) ? prev : current, 0).proposalNumber,
       newReason: ''
     };
   });
@@ -117,20 +117,20 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
         <h1 className="font-bold mt-4 mb-4">points spent to be set</h1>
         <div>
           <form className='' onSubmit={handleSubmit(submitData)}>
-            <div className="overflow-x-auto relative m-5">
+            <div className="overflow-x-auto relative">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                    <th scope="col" className="py-3 px-6 w-1/6">
+                    <th scope="col" className="py-3 px-6 w-16">
                       Team
                     </th>
                     <th scope="col" className="py-3 px-6">
                       Value Add
                     </th>
-                    <th scope="col" className="py-3 px-6 w-1/6">
+                    <th scope="col" className="py-3 px-6 w-12">
                       Current Vote
                     </th>
-                    <th scope="col" className="py-3 px-6 w-1/6">
+                    <th scope="col" className="py-3 px-6 w-12">
                       Your Vote
                     </th>
                     <th scope="col" className="py-3 px-6 w-2/6">
@@ -142,13 +142,16 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
                   {voteFields.map((valueAdd, index) => (
                     <tr key={valueAdd.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                       <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {valueAdd.team.name}
+                        {valueAdd.team.name}
                       </th>
-                      <td className="py-4 px-6 text-xs">
+                      <pre id="message" className="whitespace-pre-line block mt-1 mb-1 p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                         {valueAdd.valueAdd}
-                      </td>
+                      </pre>
                       <td className="py-4 px-6">
-                        {valueAdd.TeamProposal[0].allocation}% ({valueAdd.TeamProposal[0].reason})
+                        <div className='flex flex-col'>
+                          <p>{valueAdd.TeamProposal[0].allocation}%</p>
+                          <p>({valueAdd.TeamProposal[0].reason})</p>
+                        </div>
                       </td>
                       <td className="py-4 px-6">
                         <input
@@ -158,7 +161,7 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
                           value={valueAdd.pointsSpent}
                           min="0"
                           max="100"
-                          onWheel={ event => event.currentTarget.blur() }
+                          onWheel={event => event.currentTarget.blur()}
                           onChange={event => handleFormChange(index, event)}
                           className={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1`}
                         />
@@ -167,7 +170,7 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
                         <textarea rows="4" class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                           name='newReason'
                           value={valueAdd.newReason}
-                          onChange={event => handleFormChange(index, event)}                          
+                          onChange={event => handleFormChange(index, event)}
                         />
                       </td>
                     </tr>
@@ -176,7 +179,13 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
                 </tbody>
               </table>
             </div>
-            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} disabled={totalReached || formState.isSubmitting} onClick={handleSubmit(submitData)}>Submit</button>
+            <button className={`inline-flex w-36 justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 
+              ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+              disabled={totalReached || formState.isSubmitting}
+              onClick={handleSubmit(submitData)}>
+              Submit
+            </button>
+            {/* <button className={`inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} */}
           </form>
         </div>
       </div>
