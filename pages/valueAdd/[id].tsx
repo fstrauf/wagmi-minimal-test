@@ -78,8 +78,13 @@ const TeamValueAdd: React.FC<Props> = (props) => {
             value={budget}
             className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
           />
-          <input className={`${formState.isSubmitting ? 'bg-black border-solid border-2 border-sky-500 rounded m-4' : 'bg-gray-200 border-solid border-2 border-sky-500 rounded m-4'}`} disabled={!valueAdd || formState.isSubmitting} type="submit" value="Create" />
-          <a className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4" href="#" onClick={() => Router.push('/')}>
+          <input className={`inline-flex w-30 justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40
+            ${formState.isSubmitting ? 'bg-red-600 border-solid border-2 rounded m-4' : ''}`} 
+            disabled={!valueAdd || formState.isSubmitting} 
+            type="submit" 
+            value="Create" />
+          <a className="inline-flex w-30 ml-5 justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40" 
+            href="#" onClick={() => Router.push('/')}>
             or Cancel
           </a>
         </form>

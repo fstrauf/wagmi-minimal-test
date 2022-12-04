@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
+  // console.log(query)
+
   const user = await prisma.user.findUnique({
     where: {
       wallet: String(query.session),

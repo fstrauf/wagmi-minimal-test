@@ -1,9 +1,10 @@
-import React from 'react';
 import Router from "next/router";
 import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
 import { Transition, Popover } from '@headlessui/react'
-import { Fragment } from 'react'
+import React, { Fragment, } from 'react'
+// import { GetServerSideProps } from 'next';
+// import { userAgent } from 'next/server';
 
 export type RewardRoundProps = {
   url: string;
@@ -27,26 +28,26 @@ export type RewardRoundProps = {
   RewardRoundTeamMember: any;
 };
 
-
 const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { handleSubmit, formState } = useForm();
 
-  const teamVote = async (data: any, e: React.SyntheticEvent) => {
-    // const closeRewardRound = async (e: React.SyntheticEvent) => {
+  const teamValueAdd = rewardRound?.TeamValueAdd?.map(tva => {
+    var userIsMember = false
+    const found = tva.RewardRoundTeamMember.find(member => {
+      return member.user.name === session?.user?.name
+    });
+    if (found === undefined) {
+      userIsMember = false
+    } else {
+      userIsMember = true
+    }
 
-      Router.push({
-        pathname: "/teamVote/[id]",
-        query: {
-          id: teamValueAdd.id,
-          session: session?.user?.address,
-        },
-      })
-
+    return {
+      ...tva,
+      userIsMember: userIsMember,
     };
-
-
-  
+  });
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded">
@@ -109,14 +110,14 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
             </tr>
           </thead>
           <tbody>
-            {rewardRound.TeamValueAdd.map((teamValueAdd: any) => (
+            {teamValueAdd.map((teamValueAdd: any) => (
               <>
                 <tr key={teamValueAdd.id} className="border-none bg-gray-800 border-gray-700">
                   <th scope="row" className="py-2 px-4 font-medium text-white">
                     <button className='group inline-flex items-center rounded-md bg-dao-green px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
                       onClick={handleSubmit(() => {
                         Router.push({
-                          pathname: "/t/[id]",
+                          pathname: "/valueAdd/[id]",
                           query: {
                             id: teamValueAdd.id,
                             session: session?.user?.address,
@@ -236,8 +237,17 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     </div>
                   </td>
                   <td colSpan={1}>
-                    <button className='px-4 group inline-flex items-center rounded-md bg-dao-green py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-                      onClick={handleSubmit(teamVote)}
+                    <button className='px-4 group inline-flex items-center rounded-md bg-dao-green py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 disabled:opacity-40'
+                      onClick={handleSubmit(() => {
+                        Router.push({
+                          pathname: "/teamVote/[id]",
+                          query: {
+                            id: teamValueAdd.id,
+                            session: session?.user?.address,
+                          },
+                        })
+                      })}
+                      disabled={!teamValueAdd.userIsMember}
                     >
                       Team Vote
                     </button>
