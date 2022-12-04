@@ -101,7 +101,7 @@ const TeamAssignment: React.FC<Props> = (props) => {
           <div className="overflow-x-auto relative">
             <ul className="w-1/2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
               {voteFields.map((input, index) => (
-                <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
+                <li key={input.id} className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
                   <div className="flex items-center pl-3">
                     <label for="selected" class="py-3 ml-2 w-1/3 text-sm font-medium text-gray-900 dark:text-gray-300">
                       {input.team.name}

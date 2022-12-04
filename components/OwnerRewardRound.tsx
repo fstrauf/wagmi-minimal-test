@@ -183,7 +183,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     <p className='font-bold text-white'>Members:</p>
                     <div className='flex'>
                       {teamValueAdd?.RewardRoundTeamMember?.map((member: any) => (
-                        <div className='flex ml-4'>
+                        <div key={member.id} className='flex ml-4'>
                           <Popover className="relative">
                             {({ open }) => (
                               <>
