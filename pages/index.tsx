@@ -99,6 +99,14 @@ type Props = {
 const Blog: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
 
+  if (!session) {
+    return (
+      <Layout>
+        <p>Please log in to see reward rounds</p>
+      </Layout>
+    )
+  }
+
   return (
     <Layout>
       <div className="mt-2 flex flex-col mb-10 m-auto">

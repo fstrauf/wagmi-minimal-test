@@ -64,7 +64,7 @@ export default function Header() {
   if (!session) {
     right = (
       <div className="inline-flex w-44 justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-        <button onClick={submitData}>Authenticate</button>
+        <button onClick={submitData}>Log-in</button>
       </div>
     );
   }
