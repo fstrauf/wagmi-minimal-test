@@ -107,7 +107,7 @@ const Blog: React.FC<Props> = (props) => {
         <main>
           <div className="flex flex-col m-auto">
             {props.rewardRound.map((rewardRound) => (
-              <div key={rewardRound.id}>
+              <div key={rewardRound.id} className='mb-5'>
                 <RewardRound rewardRound={rewardRound} />
               </div>
             ))}

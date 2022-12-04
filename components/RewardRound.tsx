@@ -213,13 +213,13 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                     {payout.user.name}
                   </th>
                   <td className="py-1 px-2">
-                    $ {Number((payout.contentCashReward).toFixed(2)).toLocaleString()}
+                    $ {Number((payout.contentCashReward)?.toFixed(2)).toLocaleString()}
                   </td>
                   <td className="py-1 px-2">
-                    $ {Number((payout.teamCashReward).toFixed(2)).toLocaleString()}
+                    $ {Number((payout.teamCashReward)?.toFixed(2)).toLocaleString()}
                   </td>
                   <td className="py-1 px-2">
-                    {Number((payout.ownershipReward)).toLocaleString()} %
+                    {Number((payout.ownershipReward))?.toLocaleString()} %
                   </td>
                 </tr>
               ))}

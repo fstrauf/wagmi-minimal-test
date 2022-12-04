@@ -32,7 +32,21 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
   const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
-  // console.log(rewardRound)
+  const teamVote = async (data: any, e: React.SyntheticEvent) => {
+    // const closeRewardRound = async (e: React.SyntheticEvent) => {
+
+      Router.push({
+        pathname: "/teamVote/[id]",
+        query: {
+          id: teamValueAdd.id,
+          session: session?.user?.address,
+        },
+      })
+
+    };
+
+
+  
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded">
@@ -223,15 +237,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                   </td>
                   <td colSpan={1}>
                     <button className='px-4 group inline-flex items-center rounded-md bg-dao-green py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-                      onClick={handleSubmit(() => {
-                        Router.push({
-                          pathname: "/teamVote/[id]",
-                          query: {
-                            id: teamValueAdd.id,
-                            session: session?.user?.address,
-                          },
-                        })
-                      })}
+                      onClick={handleSubmit(teamVote)}
                     >
                       Team Vote
                     </button>
