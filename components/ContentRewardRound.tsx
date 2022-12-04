@@ -28,7 +28,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-gray-400 rounded mt-5">
-      <h1 className="text-3xl font-bold">Content Reward Rounds (choose one to vote)</h1>
+      <h1 className="text-3xl font-bold text-left m-4">Content Reward Rounds (choose one to vote)</h1>
       <div className='flex m-4 justify-between'>
         <div className='grid grid-cols-2 w-1/2'>
 
@@ -42,7 +42,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
             <button className={`inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
               onClick={handleSubmit(() => {
                 Router.push({
-                  pathname: "/r/[id]",
+                  pathname: "/vote/[id]",
                   query: {
                     id: rewardRound.id,
                     session: session?.user?.address,
@@ -61,8 +61,8 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
         </div>
       </div>
       <div className='flex flex-col-reverse m-5 justify-evenly lg:flex-row'>
-        <div className="overflow-x-auto relative max-w-2xl">
-          <table className="m-auto text-sm text-left text-gray-500 table-fixed">
+        <div className="overflow-x max-w-2xl">
+          <table className="m-auto text-sm text-left text-gray-500 table-auto overflow-scroll w-full block">
             <thead className="text-xs uppercase bg-gray-700 text-gray-400">
               <tr>
                 <th scope="col" className="py-1 px-3">

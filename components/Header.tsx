@@ -78,11 +78,11 @@ export default function Header() {
       </div>
     );
     right = (
-      <div className="flex justify-center">
-        <p className=''>
+      <div className="flex">
+        <p className='mr-3'>
           {session?.user?.name}
         </p>
-        <div className="w-56 text-right">
+        <div className="">
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
@@ -140,7 +140,6 @@ export default function Header() {
                       </button>
                     )}
                   </Menu.Item>
-
                 </div>
               </Menu.Items>
             </Transition>
@@ -151,7 +150,7 @@ export default function Header() {
   }
 
   return (
-    <nav className="mt-16 mb-16 flex flex-col items-center md:mb-12 md:flex-row md:justify-between">
+    <nav className="mt-16 mb-16 flex md:mb-12 md:flex-row justify-between">
       {left}
       {right}
     </nav>

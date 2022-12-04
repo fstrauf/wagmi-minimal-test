@@ -181,27 +181,60 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                 <tr key={teamValueAdd.valueAdd} className="border-b bg-gray-800 border-gray-700">
                   <td colSpan={3} className="py-2 px-4">
                     <p className='font-bold text-white'>Members:</p>
-                    {teamValueAdd?.RewardRoundTeamMember?.map((member: any) => (
-                      <div className='flex ml-4'>
-                        <p className='text-white'>{member.user.name}</p>
-                        <p className='ml-5'>Value Add: {member.valueAdd}</p>
-                      </div>
-                    ))}
+                    <div className='flex'>
+                      {teamValueAdd?.RewardRoundTeamMember?.map((member: any) => (
+                        <div className='flex ml-4'>
+                          <Popover className="relative">
+                            {({ open }) => (
+                              <>
+                                <Popover.Button
+                                  className={`
+                                ${open ? '' : 'text-opacity-90'}
+                                group inline-flex items-center rounded-md bg-dao-green px-3 py-2 text-xs font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                                >
+                                  <span>{member.user.name}</span>
+                                </Popover.Button>
+                                <Transition
+                                  as={Fragment}
+                                  enter="transition ease-out duration-200"
+                                  enterFrom="opacity-0 translate-y-1"
+                                  enterTo="opacity-100 translate-y-0"
+                                  leave="transition ease-in duration-150"
+                                  leaveFrom="opacity-100 translate-y-0"
+                                  leaveTo="opacity-0 translate-y-1"
+                                >
+                                  <Popover.Panel className="absolute z-10 mt-3">
+                                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                      <div className="relative grid gap-2 bg-white p-2">
+                                        <pre id="message" className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                                          {member.valueAdd}
+                                        </pre>
+                                      </div>
+                                    </div>
+                                  </Popover.Panel>
+                                </Transition>
+                              </>
+                            )}
+                          </Popover>
+
+                        </div>
+                      ))}
+                    </div>
                   </td>
                   <td colSpan={1}>
-                      <button className='px-4 group inline-flex items-center rounded-md bg-dao-green py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-                        onClick={handleSubmit(() => {
-                          Router.push({
-                            pathname: "/teamVote/[id]",
-                            query: {
-                              id: teamValueAdd.id,
-                              session: session?.user?.address,
-                            },
-                          })
-                        })}
-                      >
-                        Team Vote
-                      </button>
+                    <button className='px-4 group inline-flex items-center rounded-md bg-dao-green py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                      onClick={handleSubmit(() => {
+                        Router.push({
+                          pathname: "/teamVote/[id]",
+                          query: {
+                            id: teamValueAdd.id,
+                            session: session?.user?.address,
+                          },
+                        })
+                      })}
+                    >
+                      Team Vote
+                    </button>
                   </td>
                 </tr>
               </>
