@@ -113,7 +113,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
   };
 
   return (
-    <div key={rewardRound.id} className='bg-gray-300 p-5 rounded-lg border-slate-400 border-2'>
+    <div key={rewardRound.id} className='bg-gray-300 p-5 rounded-lg border-dao-red border-2'>
       <div className="flex justify-between mb-5">
         <p className="text-xl font-bold">{rewardRound.monthYear}</p>
         <p className="text-2xl col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>

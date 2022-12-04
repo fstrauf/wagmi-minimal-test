@@ -27,7 +27,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
   const { handleSubmit, formState } = useForm();
 
   return (
-    <div className="bg-gray-200 border-solid border-2 border-gray-400 rounded mt-5">
+    <div className="bg-gray-200 border-solid border-2 border-dao-red rounded mt-5">
       <h1 className="text-3xl font-bold text-left m-4">Content Reward Rounds (choose one to vote)</h1>
       <div className='flex m-4 justify-between'>
         <div className='grid grid-cols-2 w-1/2'>
@@ -74,9 +74,9 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
                 <th scope="col" className="py-1 px-3">
                   Authors
                 </th>
-                <th scope="col" className="py-1 px-3">
+                {/* <th scope="col" className="py-1 px-3">
                   Points Voted
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -93,9 +93,9 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
                       <p key={author.id}>{author.user.name}</p>
                     ))}
                   </td>
-                  <td className="py-2 px-4">
+                  {/* <td className="py-2 px-4">
                     {content.pointsVote}
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

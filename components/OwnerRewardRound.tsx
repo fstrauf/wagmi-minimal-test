@@ -35,7 +35,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
   // console.log(rewardRound)
 
   return (
-    <div className="bg-gray-200 border-solid border-2 border-gray-400 rounded">
+    <div className="bg-gray-200 border-solid border-2 border-dao-red rounded">
       <div className='flex justify-between'>
         <h1 className="text-3xl font-bold text-center m-4">Ownership Reward Round</h1>
         <div className='flex m-4 justify-between'>
