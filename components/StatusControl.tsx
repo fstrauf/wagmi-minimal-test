@@ -79,7 +79,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                 <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     2.1 Vote on the content reward round<br />
-                    2.2 Let's find consensus on which team added how much value by using Proposals/Vetos<br />
+                    2.2 Lets find consensus on which team added how much value by using Proposals/Vetos<br />
                     2.3 Add yourself and your team value add to each team to contributed to<br />
                   </pre>
                 </Disclosure.Panel>
@@ -98,7 +98,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                    3.1 Let's find consensus on how much each individual contributed to each team
+                    3.1 Lets find consensus on how much each individual contributed to each team
                   </pre>
                 </Disclosure.Panel>
               </>
