@@ -231,7 +231,6 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                               </>
                             )}
                           </Popover>
-
                         </div>
                       ))}
                     </div>

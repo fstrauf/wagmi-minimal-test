@@ -3,25 +3,8 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import Router from 'next/router';
-// import { GetServerSideProps } from 'next';
-// import { getSession } from 'next-auth/react';
-// import prisma from '../lib/prisma';
 import { useForm } from "react-hook-form";
-
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//   const session = await getSession({ req });
-//   if (!session) {
-//     res.statusCode = 403;
-//     return { props: { users: [] } };
-//   }
-
-//   const users = await prisma.user.findMany({
-
-//   });
-//   return {
-//     props: { users },
-//   };
-// };
+import {sendDiscordUpdate} from '../lib/discordUpdate'
 
 const NewRewardRound: React.FC = () => {
   const [budget, setBudget] = useState('');
@@ -29,6 +12,9 @@ const NewRewardRound: React.FC = () => {
   const { handleSubmit, formState } = useForm();
 
   const submitData = async (e: React.SyntheticEvent) => {
+    var expiryDate = new Date()
+    expiryDate.setDate(expiryDate.getDate() + 3)
+    
     // e.preventDefault();
     try {
       const body = { budget, period };
@@ -39,6 +25,10 @@ const NewRewardRound: React.FC = () => {
       });
       await Router.push('/');
       console.log('reward round created');
+      sendDiscordUpdate(`***New Reward Round ${period.toISOString().slice(0, 7)} has been created:*** \n 
+        1. Make sure your content for ${period.toISOString().slice(0, 7)} is in the content calendar https://tokenomicsdao.notion.site/e069a501d7ec4364a5d949bf6a8fbc83?v=b2b8ca583f3845a493f8635032b877d7 \n\n
+        2. Discuss team value add with team members and add on the tool \n\n
+        Next phase starts: <t:${Math.floor(Number(expiryDate)/1000)}:d>`)
     } catch (error) {
       console.error(error);
     }

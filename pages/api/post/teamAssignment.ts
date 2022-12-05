@@ -3,9 +3,9 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req, res) {
   const { voteFields } = req.body;
   var voteCalls = []
-  var delCalls = []
+  // var delCalls = []
 
-  console.log(voteFields)
+  // console.log(voteFields)
 
   // prisma.rewardRoundTeamMember.deleteMany({
   //   where: {

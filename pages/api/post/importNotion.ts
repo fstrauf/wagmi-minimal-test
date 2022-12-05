@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Client } from "@notionhq/client"
-import type { Readable } from 'node:stream';
+// import type { Readable } from 'node:stream';
 // import prisma from '../../../lib/prisma'
 // import { start } from 'repl'
 // import { connect } from 'http2'
@@ -20,7 +20,6 @@ export default async function handler(
   // console.log(rewardRound)
 
   const notion = new Client({
-    // auth: 'secret_tPIpoJbE56kTSUokH2i7sDro4OK5yAq7TkeKc8gdswY',
     auth: process.env.NOTION_TOKEN
   })
 

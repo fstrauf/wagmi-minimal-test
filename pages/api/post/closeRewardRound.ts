@@ -3,13 +3,20 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req, res) {
   const { rewardRound } = req.body;
   const contentPointsVoted = rewardRound.Content.reduce((a, v) => a = a + Number(v.pointsVote), 0)
+  var authorCash:number = 0
 
   var payout = []
   rewardRound.Content.forEach(content => {
     content.ContentAuthor.forEach(contentAuthor => {
+      authorCash = content.pointsVote / contentPointsVoted * rewardRound.budget / content.ContentAuthor.length
+      if(isNaN(authorCash)){ //probably a 0 somewhere in division
+        authorCash = 0
+      }
+      
+      // console.log(authorCash)
       payout.push({
         userId: contentAuthor.userId,
-        authorCash: content.pointsVote / contentPointsVoted * rewardRound.budget / content.ContentAuthor.length,
+        authorCash: authorCash,
         teamCash: 0,
         ownership: 0
       })
@@ -27,6 +34,8 @@ export default async function handle(req, res) {
     })
   })
 
+  // console.log(payout)
+
   var memberPayout = [];
   payout.reduce(function (res, value) {
     if (!res[value.userId]) {
@@ -40,6 +49,8 @@ export default async function handle(req, res) {
   }, {});
 
   var payCalls = []
+
+  // console.log(memberPayout)
 
   memberPayout.forEach(memberPayout => {
     payCalls.push(prisma.payout.create({
@@ -60,6 +71,8 @@ export default async function handle(req, res) {
       },
     }))
   })
+
+  
 
   payCalls.push(
     prisma.rewardRound.update({

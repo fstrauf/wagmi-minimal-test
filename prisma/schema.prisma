@@ -89,6 +89,7 @@ model RewardRound {
   Content       Content[]
   TeamValueAdd  TeamValueAdd[]
   TeamsProposal TeamsProposal[]
+  phase         String?         @default("preparation")
   // TeamAllocationProposal TeamAllocationProposal[]
 }
 
@@ -108,7 +109,7 @@ model Content {
   id              String          @id @default(cuid())
   description     String?
   url             String?
-  pointsVote      Int?
+  pointsVote      Int?            @default(0)
   createdAt       String?
   createdOn       DateTime?
   contentAuthorId String?

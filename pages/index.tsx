@@ -3,16 +3,11 @@ import { GetServerSideProps } from "next"
 import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
-import { useSession, getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import RewardRound from '../components/RewardRound'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-
-  // const session = await getSession();
-
-  // console.log(session)
-
   const rewardRound = await prisma.rewardRound.findMany({
     take: 3,
     include: {
