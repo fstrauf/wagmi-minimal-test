@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const rewardRound = await prisma.rewardRound.findUnique({
     where: {
-      id: String(query?.id),      
+      id: String(query?.id),
     },
     include: {
       Content: {
@@ -79,33 +79,24 @@ const RewardRound: React.FC<Props> = (props) => {
     }
   };
 
-  // console.log(props.rewardRound)
-  
-
   const votePrep = props.rewardRound?.Content?.map(content => {
-
     var AuthorIsVoter = false
     const found = content.ContentAuthor.find(author => {
       return author.userId === props.user.id
     });
-    // console.log(found)
-    if(found===undefined){
-      AuthorIsVoter=false
-    }else{
-      AuthorIsVoter=true
+    if (found === undefined) {
+      AuthorIsVoter = false
+    } else {
+      AuthorIsVoter = true
     }
 
     return {
       ...content,
-      // rewardRoundID: props.rewardRound.id,
       userId: props.user.id,
       AuthorIsVoter: AuthorIsVoter,
       pointsSpent: util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
-      // voteId: props.rewardRound.Vote[index]?.id
     };
   });
-
-  // console.log(votePrep)
 
   const [voteFields, setvoteFields] = useState(votePrep)
   const [totalVoted, setTotalVoted] = useState(votePrep.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
@@ -125,8 +116,6 @@ const RewardRound: React.FC<Props> = (props) => {
     }
   }
 
-  // console.log(voteFields)
-
   return (
     <Layout>
       <div className='max-w-5xl mt-2 flex flex-col mb-10 m-auto'>
@@ -142,7 +131,7 @@ const RewardRound: React.FC<Props> = (props) => {
         <h1 className="font-bold mt-4 mb-4">points spent to be set</h1>
         <div>
           <form className='' onSubmit={handleSubmit(submitData)}>
-            <div class="overflow-x-auto relative m-5">
+            <div class="overflow-x-auto relative">
               <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -184,7 +173,7 @@ const RewardRound: React.FC<Props> = (props) => {
                           disabled={input.AuthorIsVoter}
                           value={input.pointsSpent}
                           min="0"
-                          onWheel={ event => event.currentTarget.blur() }
+                          onWheel={event => event.currentTarget.blur()}
                           onChange={event => handleFormChange(index, event)}
                           class={`bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 ${input.AuthorIsVoter ? 'bg-red-200' : 'bg-gray-200'}`}
                         />
@@ -195,7 +184,12 @@ const RewardRound: React.FC<Props> = (props) => {
                 </tbody>
               </table>
             </div>
-            <button className={`border-solid border-2 border-sky-500 rounded m-4 ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`} disabled={totalReached || formState.isSubmitting} onClick={handleSubmit(submitData)}>Submit</button>
+            <button className={`inline-flex w-44 mt-4 justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75
+            ${totalReached || formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
+              disabled={totalReached || formState.isSubmitting}
+              onClick={handleSubmit(submitData)}>
+              Submit
+            </button>
           </form>
         </div>
       </div>

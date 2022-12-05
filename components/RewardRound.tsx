@@ -1,11 +1,14 @@
-import React from 'react';
+// import React from 'react';
+import ContentRewardRound from "./ContentRewardRound";
+import OwnerRewardRound from "./OwnerRewardRound";
+import { Menu, Transition } from '@headlessui/react'
+import React, { Fragment, useRef, useState } from 'react'
+import { useForm } from "react-hook-form";
 import Router from "next/router";
 import { useSession } from 'next-auth/react';
-import { useForm } from "react-hook-form";
-// import { Menu } from '@headlessui/react'
-// import Options from './Options';
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { sendDiscordUpdate } from '../lib/discordUpdate'
+import StatusControl from "./StatusControl";
+
 
 export type RewardRoundProps = {
   url: string;
@@ -23,43 +26,80 @@ export type RewardRoundProps = {
   monthYear: any;
   Content: any;
   Payout: any;
+  TeamsProposal: any;
+  TeamAllocationProposal: any;
+  TeamValueAdd: any;
+  phase: any;
+  Vote: any;
 };
 
-
 const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
-  const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
+  const { data: session } = useSession();
+  const buttonRef = useRef();
 
-  // console.log(session)
+  const closeRewardRound = async (data: any, e: React.SyntheticEvent) => {
+    // const closeRewardRound = async (e: React.SyntheticEvent) => {
 
-
-  const submitData = async (e: React.SyntheticEvent) => {
-    // e.preventDefault();
+    e.preventDefault();
     try {
-      const body = { rewardRound };
+      const body = { rewardRound, phase: 'closed' };
       await fetch('/api/post/closeRewardRound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
+      sendDiscordUpdate(`Reward Round ${rewardRound.monthYear} has been closed - thanks for voting!`)
     } catch (error) {
       console.error(error);
     }
   };
 
   const openRewardRound = async (e: React.SyntheticEvent) => {
+    var expiryDate = new Date()
+    expiryDate.setDate(expiryDate.getDate() + 2)
     // e.preventDefault();
     try {
-      const body = { rewardRound };
+      const body = { rewardRound, phase: 'open' };
       await fetch('/api/post/openRewardRound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
+      sendDiscordUpdate(`**Reward Round ${rewardRound.monthYear} was just opened!** \n
+        1. Vote on the content reward round \n\n
+        2. Let's find consensus on which team added how much value by using Proposals/Vetos\n\n
+        3. Add yourself and your team value add to each team to contributed to \n\n
+        Next phase starts: <t:${Math.floor(Number(expiryDate) / 1000)}:d>`)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  const startMemberVotePhase = async (e: React.SyntheticEvent) => {
+    var expiryDate = new Date()
+    expiryDate.setDate(expiryDate.getDate() + 2)
+    // e.preventDefault();
+    try {
+      const body = { rewardRound, phase: 'memberVote' };
+      await fetch('/api/post/setRrPhase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      buttonRef.current?.click() //dirty hack
+      await Router.push('/');
+      console.log('successful');
+      sendDiscordUpdate(`**Reward Round ${rewardRound.monthYear} has moved to member allocation phase!** \n        
+        1. Let's find consensus on how much each individual contributed to each team.\n\n
+        Reward closes: <t:${Math.floor(Number(expiryDate) / 1000)}:d>`)
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +123,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
     } catch (error) {
@@ -100,6 +140,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      buttonRef.current?.click() //dirty hack
       await Router.push('/');
       console.log('successful');
     } catch (error) {
@@ -107,252 +148,134 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     }
   };
 
-  // const clearRewardRounds = async (e: React.SyntheticEvent) => {
-  //   // e.preventDefault();
-  //   try {
-  //     const body = { rewardRound };
-  //     await fetch('/api/post/clearDB', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(body),
-  //     });
-  //     await Router.push('/');
-  //     console.log('successful');
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   return (
-    <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4">
-      <div className='flex m-4 justify-between'>
-        <div className='grid grid-cols-2 w-1/2'>
-          <h2 className="font-bold">Period</h2>
-          <p>{rewardRound.monthYear}</p>
-          <h2 className="font-bold">Budget</h2>
-          <p>$ {String(rewardRound.budget)}</p>
-          <h2 className="font-bold">ContentPoints per Voter</h2>
-          <p>{String(rewardRound.contentPoints)}</p>
-          <p className="col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p>
-        </div>
-        <div className='ml-4'>
-          <div className="w-56 text-right">
-            <Menu as="div" className="relative inline-block text-left">
-              <div>
-                <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  Options
-                </Menu.Button>
-                <button className={`inline-flex w-full justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-                  onClick={handleSubmit(() => {
-                    Router.push({
-                      pathname: "/r/[id]",
-                      query: {
-                        id: rewardRound.id,
-                        session: session?.user?.address,
-                      },
-                    })
-                  })}
-                  disabled={!rewardRound.isOpen || !session?.user}>
-                  Vote
-                </button>
+    <div key={rewardRound.id} className='bg-gray-300 p-5 rounded-lg border-dao-red border-2'>
+      <div className="flex justify-between mb-5">
+        <p className="text-xl font-bold w-28">{rewardRound.monthYear}</p>
+        {/* <p className="text-2xl col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p> */}
+        <StatusControl rewardRound={rewardRound}/>
+        <Menu as="div" className="relative inline-block text-left">
+          {/* <div> */}
+          <Menu.Button ref={buttonRef} className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+            Options
+          </Menu.Button>
+          {/* </div> */}
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="z-50 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className="px-1 py-1 ">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} 
+                          group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 
+                          ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      onClick={handleSubmit(closeRewardRound)}
+                      disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
+                      Close Reward Round for all
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      onClick={handleSubmit(openRewardRound)}
+                      disabled={!session?.user?.isAdmin || rewardRound.isOpen}>
+                      Open Reward Round
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      onClick={handleSubmit(startMemberVotePhase)}
+                      disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
+                      Start member vote phase
+                    </button>
+                  )}
+                </Menu.Item>
               </div>
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="z-50 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="px-1 py-1 ">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
-                          onClick={handleSubmit(submitData)}
-                          disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
-                          Close Reward Round for all
-                        </button>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
-                          onClick={handleSubmit(openRewardRound)}
-                          disabled={!session?.user?.isAdmin || rewardRound.isOpen}>
-                          Open Reward Round
-                        </button>
-                      )}
-                    </Menu.Item>
-                  </div>
-                  <div className="px-1 py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
-                          onClick={handleSubmit(importFromNotion)}
-                          disabled={formState.isSubmitting || !session?.user?.isAdmin || rewardRound.isOpen} >
-                          Import from Notion
-                        </button>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
-                          onClick={handleSubmit(clearRewardRound)}
-                          disabled={!session?.user?.isAdmin}>
-                          Delete this reward round
-                        </button>
-                      )}
-                    </Menu.Item>
-                    {/* <Menu.Item>
-                      {({ active }) => (
-                        <button className={`${active ? 'bg-sky-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
-                          onClick={handleSubmit(clearRewardRounds)}
-                          disabled={!session?.user?.isAdmin}>
-                          Delete ALL reward content
-                        </button>
-                      )}
-                    </Menu.Item> */}
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
-          </div>
-          {/* <button className={`border-solid border-2 border-sky-500 rounded m-1 text-sm p-1 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-          onClick={handleSubmit(() => {
-            Router.push({
-              pathname: "/r/[id]",
-              query: {
-                id: rewardRound.id,
-                session: session?.user?.address,
-              },
-            })
-          })}
-          disabled={!rewardRound.isOpen || !session?.user}>
-          Vote
-        </button> */}
-          {/* {session?.user?.isAdmin && rewardRound.isOpen && ( */}
-          {/* <button className={`border-solid border-2 border-sky-500 rounded m-1 text-sm p-1 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-          onClick={handleSubmit(submitData)}
-          disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
-          Close Reward Round for all
-        </button> */}
-          {/* )} */}
-          {/* {session?.user?.isAdmin && !rewardRound.isOpen && ( */}
-          {/* <> */}
-          {/* <button className={`border-solid border-2 border-sky-500 rounded m-1 text-sm p-1 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-          onClick={handleSubmit(openRewardRound)}
-          disabled={!session?.user?.isAdmin || rewardRound.isOpen}>
-          Open Reward Round
-        </button> */}
-          {/* <button className={`border-solid border-2 border-sky-500 rounded m-1 text-sm p-1 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-          onClick={handleSubmit(importFromNotion)}
-          disabled={formState.isSubmitting || !session?.user?.isAdmin || rewardRound.isOpen} >
-          Import from Notion
-        </button> */}
-          {/* </> */}
-          {/* )} */}
-          {/* {session?.user?.isAdmin && ( */}
-          {/* <button className={`border-solid border-2 border-sky-500 rounded m-1 text-sm p-1 disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
-          onClick={handleSubmit(clearRewardRound)}
-          disabled={!session?.user?.isAdmin}>
-          Delete ALL reward round content
-        </button> */}
-          {/* )} */}
+              <div className="px-1 py-1">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      onClick={handleSubmit(importFromNotion)}
+                      disabled={formState.isSubmitting || !session?.user?.isAdmin || rewardRound.isOpen} >
+                      Import from Notion
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                      onClick={handleSubmit(clearRewardRound)}
+                      disabled={!session?.user?.isAdmin}>
+                      Delete this reward round
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
+      </div>
+      <div className="relative py-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-3/4 m-auto border-b border-gray-400"></div>
         </div>
       </div>
-      <div class="relative py-4">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-3/4 m-auto border-b border-gray-400"></div>
-        </div>
-      </div>
-      <div className='flex flex-col-reverse m-5 justify-evenly lg:flex-row'>
-        <div className="overflow-x-auto relative max-w-2xl">
-          {/* <h1 className='text-2xl mb-2'>All Content</h1> */}
-          <table className="m-auto text-sm text-left text-gray-500 table-fixed">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 bg-gray-700 text-gray-400">
+      <div className={`mb-5 ${rewardRound.isOpen ? 'collapse' : ''}`}>
+        <h1 className='text-2xl'>Voting Results</h1>
+        <div className="mt-2">
+          <table className="text-sm text-left text-gray-400">
+            <thead className="text-sm uppercase bg-gray-700 text-gray-400">
               <tr>
-                <th scope="col" className="py-1 px-3">
-                  Content piece
+                <th scope="col" className="py-2 px-2">
+                  Member
                 </th>
-                <th scope="col" className="py-1 px-3">
-                  Type
+                <th scope="col" className="py-2 px-2">
+                  Content Reward
                 </th>
-                <th scope="col" className="py-1 px-3">
-                  Authors
+                <th scope="col" className="py-2 px-2">
+                  Team Reward
                 </th>
-                <th scope="col" className="py-1 px-3">
-                  Points Voted
+                <th scope="col" className="py-2 px-2">
+                  Ownership
                 </th>
               </tr>
             </thead>
             <tbody>
-              {rewardRound.Content?.map((content: any) => (
-                <tr key={content.id} className="bg-white border-b bg-gray-800 border-gray-700">
-                  <th scope="row" className="py-2 px-4 font-medium text-gray-900 w-1/2 text-white">
-                    {content.description}
+              {rewardRound.Payout?.map((payout: any) => (
+                <tr key={payout.id} className="border-b bg-gray-800 border-gray-700">
+                  <th scope="row" className="py-1 px-2 font-sm whitespace-nowrap text-white">
+                    {payout.user.name}
                   </th>
-                  <td className="py-2 px-4">
-                    {content.type}
+                  <td className="py-1 px-2">
+                    $ {Number((payout.contentCashReward)?.toFixed(2)).toLocaleString()}
                   </td>
-                  <td className="py-2 px-4">
-                    {content.ContentAuthor.map((author: any) => (
-                      <p key={author.id}>{author.user.name}</p>
-                    ))}
+                  <td className="py-1 px-2">
+                    $ {Number((payout.teamCashReward)?.toFixed(2)).toLocaleString()}
                   </td>
-                  <td className="py-2 px-4">
-                    {content.pointsVote}
+                  <td className="py-1 px-2">
+                    {Number((payout.ownershipReward))?.toLocaleString()} %
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className='flex justify-around mb-10 lg:flex-col lg:justify-between'>
-          <div className=''>
-            <h1 className='text-2xl'>Voters</h1>
-            {rewardRound?.Vote?.map((vote: any) => (
-              <div key={vote.id} class="flex items-center space-x-3">
-                <svg class="flex-shrink-0 w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <div key={vote.id}>{vote.user.name}</div>
-              </div>
-            ))}
-          </div>
-          <div>
-            <h1 className='text-2xl'>Voting Results</h1>
-            <div className="mt-2">
-              <table className="text-sm text-left text-gray-400">
-                <thead className="text-sm text-gray-700 uppercase bg-gray-50 bg-gray-700 text-gray-400">
-                  <tr>
-                    <th scope="col" className="py-2 px-2">
-                      Author
-                    </th>
-                    <th scope="col" className="py-2 px-2">
-                      Reward
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rewardRound.Payout?.map((payout: any) => (
-                    <tr key={payout.id} className="bg-white border-b bg-gray-800 border-gray-700">
-                      <th scope="row" className="py-1 px-2 font-sm text-gray-900 whitespace-nowrap text-white">
-                        {payout.user.name}
-                      </th>
-                      <td className="py-1 px-2">
-                        $ {Number((payout.cashReward).toFixed(2)).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
       </div>
+      <OwnerRewardRound rewardRound={rewardRound} />
+      <ContentRewardRound rewardRound={rewardRound} />
     </div>
-  );
-};
+  )
+}
 
 export default RewardRound;

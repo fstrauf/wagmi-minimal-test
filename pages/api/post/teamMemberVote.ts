@@ -6,11 +6,11 @@ export default async function handle(req, res) {
   var voteCalls = []
   voteFields.forEach(element => {
     var voteId = ''
-    if (element.Vote.length > 0) {
-      voteId = element.Vote[0]?.id
+    if (element.MemberVote.length > 0) {
+      voteId = element.MemberVote[0]?.id
     }
     voteCalls.push(
-      prisma.vote.upsert({
+      prisma.memberVote.upsert({
         where: {
           id: voteId,
         },
@@ -21,12 +21,12 @@ export default async function handle(req, res) {
               id: element.userId
             }
           },
-          rewardRound: {
+          teamValueAdd: {
             connect: {
-              id: element.rewardRoundId
+              id: element.teamValueAddId
             }
           },
-          content: {
+          RewardRoundTeamMember: {
             connect: {
               id: element.id
             }
@@ -39,46 +39,32 @@ export default async function handle(req, res) {
     );
   })
 
-  const result = await prisma.$transaction(
-    voteCalls
-  )
-  // res.json(result)
-
-  // const pointsTest = await prisma.vote.findMany({
-  //   where: {
-  //     rewardRoundId: String(voteFields[0].rewardRoundId)
-  //   }
-  // })
-  // console.log(pointsTest)
-
-  const pointsUpdate = await prisma.vote.groupBy({
-    by: ['contentId'],
+  const pointsUpdate = await prisma.memberVote.groupBy({
+    by: ['RewardRoundTeamMemberId'],
     where: {
-      rewardRoundId: String(voteFields[0].rewardRoundId)
+      teamValueAddId: String(voteFields[0].teamValueAddId)
     },
     _sum: {
       pointsSpent: true,
     }
   })
 
-  // console.log(pointsUpdate)
-
-  var contentCalls = []
+  var teamMemberCalls = []
   pointsUpdate.forEach(element => {
-    contentCalls.push(
-      prisma.content.update({
+    teamMemberCalls.push(
+      prisma.rewardRoundTeamMember.update({
         where: {
-          id: String(element.contentId)
+          id: String(element.RewardRoundTeamMemberId)
         },
         data: {
-          pointsVote: Number(element._sum.pointsSpent)
+          allocationPoints: Number(element._sum.pointsSpent)
         },
       })
     )
   })
 
   const result2 = await prisma.$transaction(
-    contentCalls
+    teamMemberCalls
   )
   res.json(result2)
 
