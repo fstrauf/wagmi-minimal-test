@@ -43,7 +43,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
 
     e.preventDefault();
     try {
-      const body = { rewardRound };
+      const body = { rewardRound, phase: 'closed' };
       await fetch('/api/post/closeRewardRound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,7 +63,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     expiryDate.setDate(expiryDate.getDate() + 2)
     // e.preventDefault();
     try {
-      const body = { rewardRound };
+      const body = { rewardRound, phase: 'open' };
       await fetch('/api/post/openRewardRound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -3,8 +3,6 @@ import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
 import { Transition, Popover } from '@headlessui/react'
 import React, { Fragment, } from 'react'
-// import { GetServerSideProps } from 'next';
-// import { userAgent } from 'next/server';
 
 export type RewardRoundProps = {
   url: string;
@@ -26,6 +24,7 @@ export type RewardRoundProps = {
   TeamAllocationProposal: any;
   TeamValueAdd: any;
   RewardRoundTeamMember: any;
+  phase: any;
 };
 
 const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
@@ -66,7 +65,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     },
                   })
                 })}
-                disabled={!rewardRound.isOpen || !session?.user}>
+                disabled={!rewardRound.isOpen || !session?.user || rewardRound.phase === 'memberVote'}>
                 New Proposal / Veto
               </button>
               <button className={`inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mt-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : 'bg-gray-200'}`}
@@ -79,7 +78,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     },
                   })
                 })}
-                disabled={!rewardRound.isOpen || !session?.user}>
+                disabled={!rewardRound.isOpen || !session?.user || rewardRound.phase==='memberVote'}>
                 Team Assignment
               </button>
             </div>
@@ -114,7 +113,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
               <>
                 <tr key={teamValueAdd.id} className="border-none bg-gray-800 border-gray-700">
                   <th scope="row" className="py-2 px-4 font-medium text-white">
-                    <button className='group inline-flex items-center rounded-md bg-dao-green px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                    <button className='group inline-flex items-center rounded-md bg-dao-green px-3 py-2 text-xs font-medium text-white hover:hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 disabled:opacity-70'
                       onClick={handleSubmit(() => {
                         Router.push({
                           pathname: "/valueAdd/[id]",
@@ -124,6 +123,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                           },
                         })
                       })}
+                      disabled={rewardRound.phase!=='open'}
                     >
                       {teamValueAdd.team.name}
                     </button>
@@ -161,7 +161,6 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                               <Popover.Panel className="absolute z-10 mt-3">
                                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                   <div className="relative grid gap-2 bg-white p-2">
-
                                     {teamValueAdd?.TeamProposal?.slice(1).map((proposal: any) => (
                                       <div
                                         key={proposal.id}
@@ -246,7 +245,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                           },
                         })
                       })}
-                      disabled={!teamValueAdd.userIsMember}
+                      disabled={!teamValueAdd.userIsMember || rewardRound.phase!=='memberVote'}
                     >
                       Team Vote
                     </button>

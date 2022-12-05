@@ -1,7 +1,7 @@
 import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
-  const { rewardRound } = req.body;
+  const { rewardRound, phase } = req.body;
   const contentPointsVoted = rewardRound.Content.reduce((a, v) => a = a + Number(v.pointsVote), 0)
   var authorCash:number = 0
 
@@ -23,13 +23,26 @@ export default async function handle(req, res) {
     })
   })
 
+  var teamCash:number = 0
+  var ownership:number = 0
+
   rewardRound.TeamValueAdd.forEach(teamValue => {
     teamValue.RewardRoundTeamMember.forEach(teamMember => {
+
+      teamCash = teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100)*teamValue.cashAllocation
+      if(isNaN(teamCash)){ //probably a 0 somewhere in division
+        teamCash = 0
+      }
+      ownership = teamValue.TeamProposal[0]?.allocation*(teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100))
+      if(isNaN(ownership)){ //probably a 0 somewhere in division
+        ownership = 0
+      }
+
       payout.push({
         userId: teamMember.userId,
         authorCash: 0,
-        teamCash: teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100)*teamValue.cashAllocation,
-        ownership: teamValue.TeamProposal[0].allocation*(teamMember.allocationPoints/(Number(teamValue._count.RewardRoundTeamMember)*100))
+        teamCash: teamCash,
+        ownership: ownership
       })
     })
   })
@@ -72,8 +85,6 @@ export default async function handle(req, res) {
     }))
   })
 
-  
-
   payCalls.push(
     prisma.rewardRound.update({
       where:{
@@ -81,6 +92,7 @@ export default async function handle(req, res) {
       },
       data: {
         isOpen: false,
+        phase: phase,
       }      
       
     })

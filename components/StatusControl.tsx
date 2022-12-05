@@ -35,7 +35,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
     phaseOpen = `bg-dao-red`
   }
   var phaseTeamVote = `bg-dao-green`
-  if (rewardRound.phase === 'teamVote') {
+  if (rewardRound.phase === 'memberVote') {
     phaseTeamVote = `bg-dao-red`
   }
   var phaseClosed = `bg-dao-green`
@@ -57,7 +57,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                       } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     1.1 Make sure your content is in the content calendar<br></br>
                     1.2 Discuss team value add with team members and add on the tool
@@ -76,7 +76,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                       } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     2.1 Vote on the content reward round<br />
                     2.2 Let's find consensus on which team added how much value by using Proposals/Vetos<br />
@@ -96,7 +96,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                       } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     3.1 Let's find consensus on how much each individual contributed to each team
                   </pre>
@@ -114,7 +114,7 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                       } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     Reward round is closed and will be paid out.
                   </pre>

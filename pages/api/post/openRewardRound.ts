@@ -1,7 +1,7 @@
 import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
-  const { rewardRound } = req.body;
+  const { rewardRound, phase } = req.body;
 
   const openRound = await prisma.rewardRound.update({
     where: {
@@ -9,6 +9,7 @@ export default async function handle(req, res) {
     },
     data: {
       isOpen: true,
+      phase: phase,
     }
   })
 
