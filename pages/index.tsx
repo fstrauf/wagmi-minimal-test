@@ -4,7 +4,8 @@ import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+// import Link from 'next/link';
+import { Link } from 'react-scroll'
 import RewardRound from '../components/RewardRound'
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -104,6 +105,17 @@ const Blog: React.FC<Props> = (props) => {
 
   return (
     <Layout>
+      <div className="overflow-x-scroll md:px-10 bg-white border-b-2 border-black">
+        <ul className='flex'>
+        {props.rewardRound.map((rewardRound) => (
+          <>
+          <li><Link className="flex items-center p-4 text-xs font-bold text-gray-900 hover:rounded hover:text-white hover:bg-gray-700 no-underline" activeClass="active" to={`${rewardRound.monthYear}Team`} href={`${rewardRound.monthYear}Team`} spy={true} smooth={true}>{rewardRound.monthYear} Team</Link></li>
+          <li><Link className="flex items-center p-4 text-xs font-bold text-gray-900 hover:rounded hover:text-white hover:bg-gray-700 no-underline" activeClass="active" to={`${rewardRound.monthYear}Content`} href={`${rewardRound.monthYear}Content`} spy={true} smooth={true}>{rewardRound.monthYear} Content</Link></li>
+          </>
+        ))}
+        </ul>
+      </div>
+
       <div className="mt-2 flex flex-col mb-10 m-auto">
         {session && !session?.user?.name && (
           <>

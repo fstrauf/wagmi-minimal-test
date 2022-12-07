@@ -28,7 +28,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded mt-5">
-      <h1 className="text-3xl font-bold text-left m-4">Content Reward Rounds (choose one to vote)</h1>
+      <h1 id={`${rewardRound.monthYear}Content`} className="text-3xl font-bold text-left m-4">Content Reward Rounds</h1>
       <div className='flex m-4 justify-between'>
         <div className='grid grid-cols-2 w-1/2'>
 
