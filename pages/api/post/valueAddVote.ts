@@ -14,14 +14,21 @@ export default async function handle(req, res) {
     })
   )
 
+  var proposalNumber = 0
+
   voteFields.forEach(element => {
+
+    if(!isNaN(Number(element.TeamProposal[0]?.proposalNumber))){
+      proposalNumber = element.TeamProposal[0]?.proposalNumber
+    }
+
     voteCalls.push(
       prisma.teamsProposal.create({
         data: {
           reason: element.newReason,
           active: true,
           allocation: Number(element.pointsSpent),
-          proposalNumber: Number(element.TeamProposal[0].proposalNumber + 1),
+          proposalNumber: Number(proposalNumber + 1),
           submittedOn: new Date,
           user: {
             connect: {

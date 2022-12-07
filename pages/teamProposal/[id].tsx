@@ -149,8 +149,8 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
                       </pre>
                       <td className="py-4 px-6">
                         <div className='flex flex-col'>
-                          <p>{valueAdd.TeamProposal[0].allocation}%</p>
-                          <p>({valueAdd.TeamProposal[0].reason})</p>
+                          <p>{valueAdd.TeamProposal[0]?.allocation}%</p>
+                          <p>({valueAdd.TeamProposal[0]?.reason})</p>
                         </div>
                       </td>
                       <td className="py-4 px-6">
