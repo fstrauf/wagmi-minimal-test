@@ -2,7 +2,7 @@
 import ContentRewardRound from "./ContentRewardRound";
 import OwnerRewardRound from "./OwnerRewardRound";
 import { Menu, Transition } from '@headlessui/react'
-import React, { Fragment, useRef, useState } from 'react'
+import React, { Fragment, useRef } from 'react'
 import { useForm } from "react-hook-form";
 import Router from "next/router";
 import { useSession } from 'next-auth/react';

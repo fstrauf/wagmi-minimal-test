@@ -27,7 +27,8 @@ const NewRewardRound: React.FC = () => {
       console.log('reward round created');
       sendDiscordUpdate(`***New Reward Round ${period.toISOString().slice(0, 7)} has been created:*** \n 
         1. Make sure your content for ${period.toISOString().slice(0, 7)} is in the content calendar https://tokenomicsdao.notion.site/e069a501d7ec4364a5d949bf6a8fbc83?v=b2b8ca583f3845a493f8635032b877d7 \n\n
-        2. Discuss team value add with team members and add on the tool \n\n
+        2. Discuss team value add with team members
+        3. Add team value add to the tool \n\n
         Next phase starts: <t:${Math.floor(Number(expiryDate)/1000)}:d>`)
     } catch (error) {
       console.error(error);

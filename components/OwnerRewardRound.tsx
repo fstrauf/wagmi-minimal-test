@@ -28,7 +28,7 @@ export type RewardRoundProps = {
 };
 
 const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
 
   const teamValueAdd = rewardRound?.TeamValueAdd?.map(tva => {
@@ -123,7 +123,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                           },
                         })
                       })}
-                      disabled={rewardRound.phase!=='open'}
+                      disabled={rewardRound.phase!=='preparation'}
                     >
                       {teamValueAdd.team.name}
                     </button>

@@ -60,7 +60,8 @@ const StatusControl: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRoun
                 <Disclosure.Panel className="px-4 pt-2 pb-2 text-sm text-gray-500">
                   <pre className="whitespace-pre-line block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     1.1 Make sure your content is in the content calendar<br></br>
-                    1.2 Discuss team value add with team members and add on the tool
+                    1.2 Discuss team value add with team members<br/>
+                    1.3 Add team value add to team below<br/>
                   </pre>
                 </Disclosure.Panel>
               </>

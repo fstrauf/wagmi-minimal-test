@@ -4,6 +4,7 @@ import Router from 'next/router';
 import Layout from '../../components/Layout';
 import prisma from '../../lib/prisma';
 import { useForm } from "react-hook-form";
+import { sendDiscordUpdate } from '../../lib/discordUpdate'
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
@@ -49,11 +50,13 @@ type Props = {
 
 }
 
-const OwnershipRewardRound: React.FC<Props> = (props) => {
-  const util = require('util');
+const TeamProposal: React.FC<Props> = (props) => {
+  // const util = require('util');
   const { handleSubmit, formState } = useForm();
 
   const submitData = async (e: React.SyntheticEvent) => {
+    var expiryDate = new Date()
+    expiryDate.setDate(expiryDate.getDate() + 2)
     // e.preventDefault();
     try {
       const body = { voteFields };
@@ -63,6 +66,8 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
         body: JSON.stringify(body),
       });
       await Router.push('/');
+      sendDiscordUpdate(`**A new Team Proposal / Veto was just submitted by ${props.user.name}** \n
+        You have until <t:${Math.floor(Number(expiryDate) / 1000)}:d> to veto, else it will be accepted as this months allocation!`)
       console.log('successful');
     } catch (error) {
       console.error(error);
@@ -193,4 +198,4 @@ const OwnershipRewardRound: React.FC<Props> = (props) => {
   );
 };
 
-export default OwnershipRewardRound;
+export default TeamProposal;
