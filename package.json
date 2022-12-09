@@ -13,6 +13,10 @@
     "@heroicons/react": "^1.0.6",
     "@notionhq/client": "^2.2.2",
     "@prisma/client": "^4.6.1",
+    "@tiptap/extension-image": "^2.0.0-beta.207",
+    "@tiptap/html": "^2.0.0-beta.207",
+    "@tiptap/react": "^2.0.0-beta.207",
+    "@tiptap/starter-kit": "^2.0.0-beta.207",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
@@ -21,6 +25,7 @@
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",
     "ethers": "^5.7.2",
+    "html-react-parser": "^3.0.4",
     "moralis": "^2.7.3",
     "next": "13.0.3",
     "next-auth": "^4.16.4",
@@ -39,6 +44,7 @@
     "wagmi": "^0.8.3"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.8",
     "@types/quill": "^2.0.9",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",

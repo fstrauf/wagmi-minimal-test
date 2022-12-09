@@ -1,21 +1,29 @@
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
+// import { couldStartTrivia } from "typescript";
 import prisma from "../../../lib/prisma";
 
 // POST /api/post
 // Required fields in body: title
 // Optional fields in body: content
 export default async function handle(req, res) {
-  const { title, content } = req.body;
+  const { title, content, contentId } = req.body;
 
-  console.log(req.body)
+  // console.log(contentId)
+  // console.log(content)
 
   // const session = await getSession({ req });
-  const result = await prisma.post.create({
-    data: {
+  const result = await prisma.post.upsert({
+    where: {
+      id: contentId,
+    },
+    create: {
       title: title,
       content: content,
       author: { connect: { email: 'f.strauf@gmail.com' } },
     },
+    update: {
+      content: content
+    }
   });
   res.json(result);
 }
