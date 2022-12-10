@@ -2,13 +2,12 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React from 'react'
 import Image from '@tiptap/extension-image'
-import Router from "next/router"; 
-// import { PostProps } from '../components/Post';
 
 type Props = {
     content?: any;
     contentId?: String;
-  };
+    setContent?: Function;
+}
 
 const Tiptap: React.FC<Props> = (props) => {
 
@@ -25,6 +24,10 @@ const Tiptap: React.FC<Props> = (props) => {
             },
         },
         content: JSON.parse(content),
+        onUpdate({ editor }) {
+            // The content has changed.
+            props.setContent(editor.getJSON())
+          },
     })
 
     const addImage = () => {
@@ -35,34 +38,11 @@ const Tiptap: React.FC<Props> = (props) => {
         }
     }
 
-    const submitData = async (e: React.SyntheticEvent) => {
-
-        const contentId = props.contentId
-    
-        const title = 'testing'
-        const content = JSON.stringify(editor.getJSON())
-    
-        e.preventDefault();
-        try {
-          const body = { title, content, contentId };
-          await fetch("/api/post", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          });
-          await Router.push("/drafts");
-        } catch (error) {
-          console.error(error);
-        }
-    
-      }
-
     return (
-        <div>            
+        <div>
             <MenuBar editor={editor} />
             <button onClick={addImage} className='text-lg font-bold m-1 border-2 rounded-lg'>add image from URL</button>
             <EditorContent editor={editor} />
-            <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={submitData}>Save</button>
         </div>
     )
 }
@@ -246,7 +226,7 @@ const MenuBar = ({ editor }) => {
                 className='text-lg font-bold m-1 border-2 rounded-lg'
             >
                 redo
-            </button>            
+            </button>
         </>
     )
 }

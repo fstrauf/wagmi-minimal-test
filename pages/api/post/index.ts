@@ -1,49 +1,25 @@
-// import { getSession } from "next-auth/react";
-// import { couldStartTrivia } from "typescript";
 import prisma from "../../../lib/prisma";
 
-// POST /api/post
-// Required fields in body: title
-// Optional fields in body: content
 export default async function handle(req, res) {
-  const { title, content, contentId } = req.body;
+  const { title, contentString1, contentString2, contentId } = req.body;
 
-  // console.log(contentId)
-  // console.log(content)
+  console.log(contentId)
+  const id = contentId ?? ''
 
-  // const session = await getSession({ req });
   const result = await prisma.post.upsert({
     where: {
-      id: contentId,
+      id: id,
     },
     create: {
       title: title,
-      content: content,
+      content: contentString1,
+      content2: contentString2,
       author: { connect: { email: 'f.strauf@gmail.com' } },
     },
     update: {
-      content: content
+      content: contentString1,
+      content2: contentString2,
     }
   });
   res.json(result);
 }
-
-// import { getSession } from "next-auth/react";
-// import prisma from "../../../lib/prisma";
-
-// // POST /api/post
-// // Required fields in body: title
-// // Optional fields in body: content
-// export default async function handle(req, res) {
-//   const { title, content } = req.body;
-
-//   const session = await getSession({ req });
-//   const result = await prisma.post.create({
-//     data: {
-//       title: title,
-//       content: content,
-//     //   author: { connect: { email: session?.user?.email } },
-//     },
-//   });
-//   res.json(result);
-// }

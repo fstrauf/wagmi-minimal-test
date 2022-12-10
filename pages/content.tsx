@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useSession, getSession } from 'next-auth/react';
 import Layout from '../components/Layout';
 import { PostProps } from '../components/Post';
 import prisma from '../lib/prisma';
-// import Router from "next/router";
-import 'quill/dist/quill.snow.css';
 import Tiptap from '../components/TipTap';
-import Tiptap2 from '../components/TipTap2';
+import Router from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -31,7 +29,28 @@ type Props = {
 
 const Content: React.FC<Props> = (props) => {
   const { data: session } = useSession();
+  const [content1, setContent1] = useState({});
+  const [content2, setContent2] = useState({});
 
+  const submitData = async (e: React.SyntheticEvent) => {
+
+    const title = 'testing'
+    const contentString1 = JSON.stringify(content1)
+    const contentString2 = JSON.stringify(content2)
+
+    e.preventDefault();
+    try {
+      const body = { title, contentString1, contentString2 };
+      await fetch("/api/post", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      await Router.push("/drafts");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   if (!session) {
     return (
@@ -45,8 +64,9 @@ const Content: React.FC<Props> = (props) => {
   return (
     <Layout>
       <div className="page">
-        <Tiptap />
-        <Tiptap2 />
+        <Tiptap setContent={setContent1} />
+        <Tiptap setContent={setContent2} />
+        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={submitData}>Save</button>
       </div>
     </Layout>
   );
