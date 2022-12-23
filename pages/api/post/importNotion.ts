@@ -110,7 +110,7 @@ export default async function handler(
   const notionResult = response.results.map((result) => (
     {
       title: result.properties.Name.title[0].plain_text,
-      url: result.properties.link.url,
+      url: result?.properties?.link?.url,
       users: result.properties.Author.people,
       type: result.properties.Type.multi_select[0].name,
       rewardRound: rewardRound.id

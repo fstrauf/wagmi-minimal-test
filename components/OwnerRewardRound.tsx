@@ -48,6 +48,8 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
     };
   });
 
+  // console.log(teamValueAdd)
+
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded">
       <div className='flex justify-between'>
@@ -78,11 +80,27 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                     },
                   })
                 })}
-                disabled={!rewardRound.isOpen || !session?.user || rewardRound.phase==='memberVote'}>
+                disabled={!rewardRound.isOpen || !session?.user || rewardRound.phase === 'memberVote'}>
                 Team Assignment
               </button>
             </div>
           </div>
+        </div>
+      </div>
+      <div className='flex justify-around mb-10 lg:flex-col lg:justify-between'>
+        <div className=''>
+          <h1 className='text-2xl'>Voters</h1>
+          {teamValueAdd?.map((team: any) => (
+            <>
+              <p key={team.id}>{team.team.name}</p>
+              {team?.MemberVote.map((mv: any) => (
+                <div key={mv.id} className="flex items-center space-x-3">
+                  <svg className="flex-shrink-0 w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                  <div>{mv.user.name}</div>
+                </div>
+              ))}
+            </>
+          ))}
         </div>
       </div>
       <div className="relative py-4">
@@ -123,7 +141,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                           },
                         })
                       })}
-                      disabled={rewardRound.phase!=='preparation'}
+                      disabled={rewardRound.phase !== 'preparation'}
                     >
                       {teamValueAdd.team.name}
                     </button>
@@ -245,7 +263,7 @@ const OwnerRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardR
                           },
                         })
                       })}
-                      disabled={!teamValueAdd.userIsMember || rewardRound.phase!=='memberVote'}
+                      disabled={!teamValueAdd.userIsMember || rewardRound.phase !== 'memberVote'}
                     >
                       Team Vote
                     </button>

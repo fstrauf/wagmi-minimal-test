@@ -2,7 +2,7 @@ import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
   const { voteFields } = req.body;
-
+  console.log(voteFields)
   var voteCalls = []
   voteFields.forEach(element => {
     var voteId = ''
@@ -39,6 +39,11 @@ export default async function handle(req, res) {
     );
   })
 
+  const result1 = await prisma.$transaction(
+    voteCalls
+  )
+  // console.log(result1)
+
   const pointsUpdate = await prisma.memberVote.groupBy({
     by: ['RewardRoundTeamMemberId'],
     where: {
@@ -48,6 +53,8 @@ export default async function handle(req, res) {
       pointsSpent: true,
     }
   })
+
+  // console.log(await pointsUpdate)
 
   var teamMemberCalls = []
   pointsUpdate.forEach(element => {

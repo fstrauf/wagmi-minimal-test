@@ -62,6 +62,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
               selected: true,
             }
           },
+          MemberVote: {
+            distinct: ['userId'],
+            include: {
+              user:{},
+            }
+          },
           _count: {
             select: {
               RewardRoundTeamMember: true,
