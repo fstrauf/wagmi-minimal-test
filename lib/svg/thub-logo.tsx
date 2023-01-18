@@ -1,6 +1,7 @@
 export default function ThubLogo() {
   return (
-    <a href="/" className="mb-6 h-3.5 w-3.5 md:mb-0">
+    // <a href="/" className="mb-6 h-3.5 w-3.5 md:mb-0">
+    <>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 153 153">
         <rect width="153" height="153" rx="7.66" fill="#f66" />
         <path
@@ -42,6 +43,7 @@ export default function ThubLogo() {
         />
       </svg>
       <span className="sr-only">Website</span>
-    </a>
+      </>
+    // </a>
   )
 }

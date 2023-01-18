@@ -24,9 +24,11 @@ export default async function handler(
   })
 
   const startDate = new Date(rewardRound.monthYear).toISOString().slice(0, 10)
+  console.log("🚀 ~ file: importNotion.ts:27 ~ startDate", startDate)
   const helpDate = new Date(rewardRound.monthYear)
   // const startDate = rewardRound.monthYear + '-01'
   const endDate = new Date(helpDate.getFullYear(), helpDate.getMonth()+1, 1).toISOString().slice(0, 10)
+  console.log("🚀 ~ file: importNotion.ts:31 ~ endDate", endDate)
   // console.log(endDate)
 
   const databaseId = 'e069a501d7ec4364a5d949bf6a8fbc83';
@@ -57,51 +59,51 @@ export default async function handler(
             {
               property: 'Type',
               multi_select: {
-                contains: 'Substack',
+                contains: 'rewards rounds',
               }
             },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'Podcast',
-              }
-            },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'Tweet',
-              }
-            },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'Video',
-              }
-            },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'Community Talk',
-              }
-            },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'YouTube',
-              }
-            },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'LinkedIn',
-              }
-            },
-            {
-              property: 'Type',
-              multi_select: {
-                contains: 'thub template',
-              }
-            },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'Podcast',
+            //   }
+            // },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'Tweet',
+            //   }
+            // },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'Video',
+            //   }
+            // },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'Community Talk',
+            //   }
+            // },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'YouTube',
+            //   }
+            // },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'LinkedIn',
+            //   }
+            // },
+            // {
+            //   property: 'Type',
+            //   multi_select: {
+            //     contains: 'thub template',
+            //   }
+            // },
           ]
         }
 
@@ -117,7 +119,7 @@ export default async function handler(
   const notionResult = response.results.map((result) => (
     {
       title: result.properties.Name.title[0].plain_text,
-      url: result?.properties?.link?.url,
+      url: result?.properties['published link']?.url || '',
       users: result.properties.Author.people,
       type: result.properties.Type.multi_select[0].name,
       rewardRound: rewardRound.id
@@ -125,111 +127,8 @@ export default async function handler(
     }
   ))
 
-  // pass this to second function 
-
-
-  // var authorCallsFirstAuthor = []
-  // notionResult.forEach((element, index) => {
-  //   authorCallsFirstAuthor.push(
-  //     //first call will need to create
-  //     prisma.contentAuthor.create({
-  //       data: {
-  //         content: {
-  //           create: {
-  //             description: element.title,
-  //             url: element.url,
-  //             rewardRound: {
-  //               connect: {
-  //                 id: element.rewardRound
-  //               },
-  //             },
-  //           },
-  //         },
-  //         user: {
-  //           connectOrCreate: {
-  //             where: {
-  //               email: element.users[0].person.email,
-  //             },
-  //             create: {
-  //               email: element.users[0].person.email,
-  //             }
-  //           }
-  //         }
-  //       },
-  //     })
-  //   )    
-  // })
-
-  // authorCallsFirstAuthor.push(
-  //   prisma.rewardRound.update({
-  //     where: {
-  //       // id: 'clakacvcl00fremx3581euv67',
-  //       id: rewardRound.id,
-  //     },
-  //     data: {
-  //       contentPoints: {
-  //         increment: notionResult.length * 10,
-  //       }
-  //     }
-  //   })
-  // )
-
-  // const contentAuthors = await prisma.$transaction(
-  //   authorCallsFirstAuthor
-  // )
-
-  // // console.log(contentAuthors)
-
-  // var authorCallsMoreAuthors = []
-  // notionResult.forEach((element, contentIndex) => {
-  //   if (element.users.length > 1) {
-  //     element.users.forEach((user, userIndex) => {
-  //       //skip first
-  //       if(userIndex==0){
-  //         return
-  //       }
-  //       authorCallsMoreAuthors.push(
-  //         prisma.contentAuthor.create({
-  //           data: {
-  //             content: {
-  //               connect: {
-  //                 id: contentAuthors[contentIndex].contentId,
-  //               }
-  //             },
-  //             user: {
-  //               connectOrCreate: {
-  //                 where: {
-  //                   email: user.person.email,
-  //                 },
-  //                 create: {
-  //                   email: user.person.email,
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         })
-  //       )
-  //     })
-  //   }
-  // })
-
-  // const contentMoreAuthors = await prisma.$transaction(
-  //   authorCallsMoreAuthors
-  // )
-
-  // // console.log(contentMoreAuthors)
-
-  
-
-      // const body = { notionResult };
-      // await fetch('/api/post/insertNotionContent', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(body),
-      // });
-      // await Router.push('/');
-      // console.log('successful');
-
+      console.log("🚀 ~ file: importNotion.ts:236 ~ notionResult", notionResult)
       res.json({notionResult})
+      
   
 }

@@ -30,7 +30,9 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
   const { isSignedIn } = useAuth()
   const { user } = useUser()
   const contributor = user?.publicMetadata?.contributor || false
-  const admin = user?.publicMetadata?.admin || false
+  // const admin = user?.publicMetadata?.admin || false
+
+  console.log("🚀 ~ file: ContentRewardRound.tsx:126 ~ rewardRound", rewardRound)
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded mt-5">
@@ -89,8 +91,10 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
             <tbody>
               {rewardRound.Content?.map((content: any) => (
                 <tr key={content.id} className="border-b bg-gray-800 border-gray-700">
-                  <th scope="row" className="py-2 px-4 font-medium w-1/2 text-white">
+                  <th scope="row" className="py-2 px-4 font-medium w-1/2 text-white ">
+                    <a href={content?.url} className='hover:underline'>
                     {content.description}
+                    </a>
                   </th>
                   <td className="py-2 px-4">
                     {content.type}
@@ -123,5 +127,7 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
     </div>
   );
 };
+
+
 
 export default ContentRewardRound;
