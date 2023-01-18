@@ -1,5 +1,3 @@
-// const getClient = (preview) => (preview ? previewClient : client)
-
 export async function sendDiscordUpdate(message) {
     fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK, {        
         "method": "POST",

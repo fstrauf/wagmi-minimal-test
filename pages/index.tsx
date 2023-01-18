@@ -99,15 +99,15 @@ type Props = {
 }
 
 const Blog: React.FC<Props> = (props) => {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
 
-  if (!session) {
-    return (
-      <Layout>
-        <p>Please log in to see reward rounds</p>
-      </Layout>
-    )
-  }
+  // if (!session) {
+  //   return (
+  //     <Layout>
+  //       <p>Please log in to see reward rounds</p>
+  //     </Layout>
+  //   )
+  // }
 
   return (
     <Layout>
@@ -123,12 +123,12 @@ const Blog: React.FC<Props> = (props) => {
       </div>
 
       <div className="mt-2 flex flex-col mb-10 m-auto">
-        {session && !session?.user?.name && (
+        {/* {session && !session?.user?.name && (
           <>
             <h1 className='text-3xl text-rose-600'>First Time? Set user details, save & then log back in</h1>
             <Link href='/updateUser' className='bg-gray-200 border-solid border-1 border-sky-500 rounded'>Update User</Link>
           </>
-        )}
+        )} */}
         <main>
           <div className="flex flex-col m-auto">
             {props.rewardRound.map((rewardRound) => (

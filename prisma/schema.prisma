@@ -7,18 +7,113 @@ generator client {
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Post {
-  id        String  @id @default(cuid())
-  title     String
-  content   String? @db.VarChar(10000)
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  String?
+  id                    String              @id @default(cuid())
+  title                 String?
+  slug                  String              @unique @default("eth")
+  shortDescription      String?             @db.Text
+  breakdown             String?             @db.Text
+  ourTake               String?             @db.Text
+  published             Boolean             @default(false)
+  author                User?               @relation(fields: [authorId], references: [id])
+  authorId              String?
+  authorEmail           String?
+  authorClerkId         String?
+  categories            Category[]
+  tags                  Tag[]
+  protocolTimeLine      ProtocolTimeLine[]
+  publishedAt           DateTime?
+  mainImageUrl          String?
+  tokenUtility          String?             @db.Text
+  tokenUtilityStrength  Float?
+  businessModel         String?             @db.Text
+  businessModelStrength Float?
+  valueCreation         String?             @db.Text
+  valueCreationStrength Float?
+  valueCapture          String?             @db.Text
+  valueCaptureStrength  Float?
+  demandDrivers         String?             @db.Text
+  demandDriversStrength Float?
+  tokenStrength         Float?
+  threeMonthHorizon     String?             @db.Text
+  oneYearHorizon        String?             @db.Text
+  upside                String?             @db.Text
+  downside              String?             @db.Text
+  horizon               String?             @db.Text
+  metrics               String?             @db.Text
+  diagramUrl            String?             @db.Text
+  strongPoints          String?             @db.Text
+  weakPoints            String?             @db.Text
+  problemSolution       String?             @db.Text
+  parent                String?             @db.Text
+  ProtocolResources     ProtocolResources[]
+  calculationId         String?
+  calculation           Calculation?        @relation(fields: [calculationId], references: [id])
+
+  @@index([authorId])
+}
+
+model Category {
+  value String  @id
+  label String?
+  posts Post[]
+}
+
+model Tag {
+  value String  @id
+  label String?
+  posts Post[]
+}
+
+model ProtocolTimeLine {
+  id          String    @id @default(cuid())
+  title       String?
+  date        DateTime?
+  description String?
+  postId      String
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+model ProtocolResources {
+  id       String   @id @default(cuid())
+  title    String?
+  url      String?
+  internal Boolean?
+  postId   String
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+model Calculation {
+  id              String            @id @default(cuid())
+  title           String?
+  authorClerkId   String?
+  months          Int?
+  totalSupply     Float?
+  startDate       DateTime?
+  CalculationRows CalculationRows[]
+  Post            Post[]
+}
+
+model CalculationRows {
+  id                   String      @id @default(cuid())
+  category             String?
+  lockupPeriod         Float?
+  unlockPeriod         Float?
+  percentageAllocation Float?
+  color                String?
+  calculationId        String
+  calculation          Calculation @relation(fields: [calculationId], references: [id], onDelete: Cascade)
+
+  @@index([calculationId])
 }
 
 model Account {
@@ -40,6 +135,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -48,6 +144,8 @@ model Session {
   userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -66,6 +164,7 @@ model User {
   emailVerified         DateTime?
   image                 String?
   role                  String?
+  slug                  String?                 @unique
   posts                 Post[]
   accounts              Account[]
   sessions              Session[]
@@ -103,6 +202,9 @@ model Payout {
   contentCashReward Float?
   teamCashReward    Float?
   ownershipReward   Float?
+
+  @@index([userId])
+  @@index([rewardRoundId])
 }
 
 model Content {
@@ -119,6 +221,8 @@ model Content {
   ContentAuthor   ContentAuthor[]
   rewardRoundId   String?         @default(cuid())
   rewardRound     RewardRound?    @relation(fields: [rewardRoundId], references: [id], onDelete: Cascade)
+
+  @@index([rewardRoundId])
 }
 
 model Vote {
@@ -130,6 +234,10 @@ model Vote {
   pointsSpent   Int?
   contentId     String
   content       Content     @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([rewardRoundId])
+  @@index([userId])
+  @@index([contentId])
 }
 
 model ContentAuthor {
@@ -138,6 +246,9 @@ model ContentAuthor {
   user      User    @relation(fields: [userId], references: [id])
   contentId String
   content   Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([contentId])
 }
 
 model Team {
@@ -160,6 +271,9 @@ model TeamValueAdd {
   RewardRoundTeamMember RewardRoundTeamMember[]
   MemberVote            MemberVote[]
   cashAllocation        Float?
+
+  @@index([teamId])
+  @@index([rewardRoundId])
 }
 
 model TeamsProposal {
@@ -175,6 +289,10 @@ model TeamsProposal {
   allocation     Int?
   proposalNumber Int?
   submittedOn    DateTime?
+
+  @@index([userId])
+  @@index([rewardRoundId])
+  @@index([teamValueAddId])
 }
 
 model RewardRoundTeamMember {
@@ -187,6 +305,9 @@ model RewardRoundTeamMember {
   selected         Boolean       @default(false)
   MemberVote       MemberVote[]
   allocationPoints Int?
+
+  @@index([userId])
+  @@index([teamValueAddId])
 }
 
 model MemberVote {
@@ -198,4 +319,8 @@ model MemberVote {
   teamValueAdd            TeamValueAdd?          @relation(fields: [teamValueAddId], references: [id], onDelete: Cascade)
   RewardRoundTeamMemberId String?                @default(cuid())
   RewardRoundTeamMember   RewardRoundTeamMember? @relation(fields: [RewardRoundTeamMemberId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([teamValueAddId])
+  @@index([RewardRoundTeamMemberId])
 }

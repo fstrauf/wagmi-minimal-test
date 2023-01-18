@@ -1,7 +1,9 @@
 import React from 'react';
 import Router from "next/router";
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
+import { useUser } from '@clerk/clerk-react/dist/hooks/useUser'
+import { useAuth } from '@clerk/clerk-react/dist/hooks/useAuth'
 
 export type RewardRoundProps = {
   url: string;
@@ -23,8 +25,12 @@ export type RewardRoundProps = {
 };
 
 const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const { handleSubmit, formState } = useForm();
+  const { isSignedIn } = useAuth()
+  const { user } = useUser()
+  const contributor = user?.publicMetadata?.contributor || false
+  const admin = user?.publicMetadata?.admin || false
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded mt-5">
@@ -45,11 +51,12 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
                   pathname: "/vote/[id]",
                   query: {
                     id: rewardRound.id,
-                    session: session?.user?.address,
+                    // session: session?.user?.address,
+                    session: user?.id,
                   },
                 })
               })}
-              disabled={!rewardRound.isOpen || !session?.user}>
+              disabled={!rewardRound.isOpen || !isSignedIn || !contributor}>
               Vote
             </button>
           </div>

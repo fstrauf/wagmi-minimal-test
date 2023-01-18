@@ -1,14 +1,14 @@
 // import React from 'react';
 import ContentRewardRound from "./ContentRewardRound";
 import OwnerRewardRound from "./OwnerRewardRound";
-import { Menu, Transition } from '@headlessui/react'
-import React, { Fragment, useRef } from 'react'
+import { Menu, Transition } from "@headlessui/react";
+import React, { Fragment, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Router from "next/router";
-import { useSession } from 'next-auth/react';
-import { sendDiscordUpdate } from '../lib/discordUpdate'
+// import { useSession } from 'next-auth/react';
+import { sendDiscordUpdate } from "../lib/discordUpdate";
 import StatusControl from "./StatusControl";
-
+import { useUser } from "@clerk/clerk-react/dist/hooks/useUser";
 
 export type RewardRoundProps = {
   url: string;
@@ -33,73 +33,84 @@ export type RewardRoundProps = {
   Vote: any;
 };
 
-const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound }) => {
+const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({
+  rewardRound,
+}) => {
   const { handleSubmit, formState } = useForm();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const buttonRef = useRef();
+
+  const { user } = useUser();
+  const contributor = user?.publicMetadata?.contributor || false;
+  const admin = user?.publicMetadata?.admin || false;
 
   const closeRewardRound = async (data: any, e: React.SyntheticEvent) => {
     // const closeRewardRound = async (e: React.SyntheticEvent) => {
 
     e.preventDefault();
     try {
-      const body = { rewardRound, phase: 'closed' };
-      await fetch('/api/post/closeRewardRound', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const body = { rewardRound, phase: "closed" };
+      await fetch("/api/post/closeRewardRound", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      buttonRef.current?.click() //dirty hack
-      await Router.push('/');
-      console.log('successful');
-      sendDiscordUpdate(`Reward Round ${rewardRound.monthYear} has been closed - thanks for voting!`)
+      buttonRef.current?.click(); //dirty hack
+      await Router.push("/");
+      console.log("successful");
+      sendDiscordUpdate(
+        `Reward Round ${rewardRound.monthYear} has been closed - thanks for voting!`
+      );
     } catch (error) {
       console.error(error);
     }
   };
 
   const openRewardRound = async (e: React.SyntheticEvent) => {
-    var expiryDate = new Date()
-    expiryDate.setDate(expiryDate.getDate() + 2)
+    var expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 2);
     // e.preventDefault();
     try {
-      const body = { rewardRound, phase: 'open' };
-      await fetch('/api/post/openRewardRound', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const body = { rewardRound, phase: "open" };
+      await fetch("/api/post/openRewardRound", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      buttonRef.current?.click() //dirty hack
-      await Router.push('/');
-      console.log('successful');
-      sendDiscordUpdate(`**Reward Round ${rewardRound.monthYear} was just opened!** \n
+      buttonRef.current?.click(); //dirty hack
+      await Router.push("/");
+      console.log("successful");
+      sendDiscordUpdate(`**Reward Round ${
+        rewardRound.monthYear
+      } was just opened!** \n
         1. Vote on the content reward round \n\n
         2. Let's find consensus on which team added how much value by using Proposals/Vetos\n\n
         3. Add yourself and your team value add to each team to contributed to \n\n
-        Next phase starts: <t:${Math.floor(Number(expiryDate) / 1000)}:d>`)
+        Next phase starts: <t:${Math.floor(Number(expiryDate) / 1000)}:d>`);
     } catch (error) {
       console.error(error);
     }
   };
 
-
   const startMemberVotePhase = async (e: React.SyntheticEvent) => {
-    var expiryDate = new Date()
-    expiryDate.setDate(expiryDate.getDate() + 2)
+    var expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 2);
     // e.preventDefault();
     try {
-      const body = { rewardRound, phase: 'memberVote' };
-      await fetch('/api/post/setRrPhase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const body = { rewardRound, phase: "memberVote" };
+      await fetch("/api/post/setRrPhase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      buttonRef.current?.click() //dirty hack
-      await Router.push('/');
-      console.log('successful');
-      sendDiscordUpdate(`**Reward Round ${rewardRound.monthYear} has moved to member allocation phase!** \n        
+      buttonRef.current?.click(); //dirty hack
+      await Router.push("/");
+      console.log("successful");
+      sendDiscordUpdate(`**Reward Round ${
+        rewardRound.monthYear
+      } has moved to member allocation phase!** \n        
         1. Let's find consensus on how much each individual contributed to each team.\n\n
-        Reward closes: <t:${Math.floor(Number(expiryDate) / 1000)}:d>`)
+        Reward closes: <t:${Math.floor(Number(expiryDate) / 1000)}:d>`);
     } catch (error) {
       console.error(error);
     }
@@ -110,22 +121,22 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
 
     try {
       const body = { rewardRound };
-      const notionResult = await fetch('/api/post/importNotion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const notionResult = await fetch("/api/post/importNotion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
       const data = await notionResult.json();
 
-      await fetch('/api/post/insertNotionContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/post/insertNotionContent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      buttonRef.current?.click() //dirty hack
-      await Router.push('/');
-      console.log('successful');
+      buttonRef.current?.click(); //dirty hack
+      await Router.push("/");
+      console.log("successful");
     } catch (error) {
       console.error(error);
     }
@@ -135,28 +146,34 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
     // e.preventDefault();
     try {
       const body = { rewardRound };
-      await fetch('/api/post/clearRR', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/post/clearRR", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      buttonRef.current?.click() //dirty hack
-      await Router.push('/');
-      console.log('successful');
+      buttonRef.current?.click(); //dirty hack
+      await Router.push("/");
+      console.log("successful");
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div key={rewardRound.id} className='bg-gray-300 p-5 rounded-lg border-dao-red border-2'>
+    <div
+      key={rewardRound.id}
+      className="bg-gray-300 p-5 rounded-lg border-dao-red border-2"
+    >
       <div className="flex justify-between mb-5">
         <p className="text-xl font-bold w-28">{rewardRound.monthYear}</p>
         {/* <p className="text-2xl col-span-2">{rewardRound.isOpen ? 'Open' : 'Closed'}</p> */}
-        <StatusControl rewardRound={rewardRound}/>
+        <StatusControl rewardRound={rewardRound} />
         <Menu as="div" className="relative inline-block text-left">
           {/* <div> */}
-          <Menu.Button ref={buttonRef} className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          <Menu.Button
+            ref={buttonRef}
+            className="inline-flex w-full justify-center rounded-md bg-dao-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          >
             Options
           </Menu.Button>
           {/* </div> */}
@@ -174,29 +191,56 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 <Menu.Item>
                   {({ active }) => (
                     <button
-                      className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} 
+                      className={`${
+                        active ? "bg-dao-green text-white" : "text-gray-900"
+                      } 
                           group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 
-                          ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                          ${formState.isSubmitting ? "bg-red-200" : ""}`}
                       onClick={handleSubmit(closeRewardRound)}
-                      disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
+                      disabled={
+                        // !(user?.publicMetadata?.role === "contributor") ||
+                        !(admin) ||
+                        !rewardRound.isOpen
+                      }
+                    >
                       Close Reward Round for all
                     </button>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button
+                      className={`${
+                        active ? "bg-dao-green text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${
+                        formState.isSubmitting ? "bg-red-200" : ""
+                      }`}
                       onClick={handleSubmit(openRewardRound)}
-                      disabled={!session?.user?.isAdmin || rewardRound.isOpen}>
+                      disabled={
+                        // !(user?.publicMetadata?.role === "contributor") ||
+                        !(admin) ||
+                        rewardRound.isOpen
+                      }
+                    >
                       Open Reward Round
                     </button>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button
+                      className={`${
+                        active ? "bg-dao-green text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${
+                        formState.isSubmitting ? "bg-red-200" : ""
+                      }`}
                       onClick={handleSubmit(startMemberVotePhase)}
-                      disabled={!session?.user?.isAdmin || !rewardRound.isOpen}>
+                      disabled={
+                        // !(user?.publicMetadata?.role === "contributor") ||
+                        !(admin) ||
+                        !rewardRound.isOpen
+                      }
+                    >
                       Start member vote phase
                     </button>
                   )}
@@ -205,18 +249,36 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
               <div className="px-1 py-1">
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button
+                      className={`${
+                        active ? "bg-dao-green text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${
+                        formState.isSubmitting ? "bg-red-200" : ""
+                      }`}
                       onClick={handleSubmit(importFromNotion)}
-                      disabled={formState.isSubmitting || !session?.user?.isAdmin || rewardRound.isOpen} >
+                      disabled={
+                        formState.isSubmitting ||
+                        // !(user?.publicMetadata?.role === "contributor") ||
+                        !(admin) ||
+                        rewardRound.isOpen
+                      }
+                    >
                       Import from Notion
                     </button>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button className={`${active ? 'bg-dao-green text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${formState.isSubmitting ? 'bg-red-200' : ''}`}
+                    <button
+                      className={`${
+                        active ? "bg-dao-green text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm disabled:opacity-40 ${
+                        formState.isSubmitting ? "bg-red-200" : ""
+                      }`}
                       onClick={handleSubmit(clearRewardRound)}
-                      disabled={!session?.user?.isAdmin}>
+                      // disabled={!(user?.publicMetadata?.role === "contributor")}
+                      disabled={!(admin)}
+                    >
                       Delete this reward round
                     </button>
                   )}
@@ -231,8 +293,8 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           <div className="w-3/4 m-auto border-b border-gray-400"></div>
         </div>
       </div>
-      <div className={`mb-5 ${rewardRound.isOpen ? 'collapse' : ''}`}>
-        <h1 className='text-2xl'>Voting Results</h1>
+      <div className={`mb-5 ${rewardRound.isOpen ? "collapse" : ""}`}>
+        <h1 className="text-2xl">Voting Results</h1>
         <div className="mt-2">
           <table className="text-sm text-left text-gray-400">
             <thead className="text-sm uppercase bg-gray-700 text-gray-400">
@@ -253,18 +315,28 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
             </thead>
             <tbody>
               {rewardRound.Payout?.map((payout: any) => (
-                <tr key={payout.id} className="border-b bg-gray-800 border-gray-700">
-                  <th scope="row" className="py-1 px-2 font-sm whitespace-nowrap text-white">
+                <tr
+                  key={payout.id}
+                  className="border-b bg-gray-800 border-gray-700"
+                >
+                  <th
+                    scope="row"
+                    className="py-1 px-2 font-sm whitespace-nowrap text-white"
+                  >
                     {payout.user.name}
                   </th>
                   <td className="py-1 px-2">
-                    $ {Number((payout.contentCashReward)?.toFixed(2)).toLocaleString()}
+                    ${" "}
+                    {Number(
+                      payout.contentCashReward?.toFixed(2)
+                    ).toLocaleString()}
                   </td>
                   <td className="py-1 px-2">
-                    $ {Number((payout.teamCashReward)?.toFixed(2)).toLocaleString()}
+                    ${" "}
+                    {Number(payout.teamCashReward?.toFixed(2)).toLocaleString()}
                   </td>
                   <td className="py-1 px-2">
-                    {Number((payout.ownershipReward))?.toLocaleString()} %
+                    {Number(payout.ownershipReward)?.toLocaleString()} %
                   </td>
                 </tr>
               ))}
@@ -275,7 +347,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
       <OwnerRewardRound rewardRound={rewardRound} />
       <ContentRewardRound rewardRound={rewardRound} />
     </div>
-  )
-}
+  );
+};
 
 export default RewardRound;

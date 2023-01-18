@@ -87,13 +87,19 @@ export default async function handler(
             {
               property: 'Type',
               multi_select: {
-                contains: 'Youtube',
+                contains: 'YouTube',
               }
             },
             {
               property: 'Type',
               multi_select: {
                 contains: 'LinkedIn',
+              }
+            },
+            {
+              property: 'Type',
+              multi_select: {
+                contains: 'thub template',
               }
             },
           ]
@@ -103,6 +109,7 @@ export default async function handler(
       ],
     },
   });
+  console.log("🚀 ~ file: importNotion.ts:112 ~ response", response)
 
   //content
   // title, url, users, rewardround
