@@ -36,7 +36,7 @@ const TeamValueAdd: React.FC<Props> = (props) => {
   const [valueAdd, setValueAdd] = useState(props?.teamValue?.valueAdd);
   const [budget, setBudget] = useState(props?.teamValue?.cashAllocation);
 
-  console.log(props)
+  // console.log(props)
 
   const vaueAddId = props.teamValue.id
 

@@ -5,20 +5,27 @@ import Layout from '../../components/Layout';
 import prisma from '../../lib/prisma';
 import { useForm } from "react-hook-form";
 import { sendDiscordUpdate } from '../../lib/discordUpdate'
+import { getAuth } from "@clerk/nextjs/server";
+import type{ AuthData } from '@clerk/nextjs/dist/server/types'
+import { useUser } from '@clerk/clerk-react/dist/hooks/useUser';
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+// console.log("🚀 ~ file: [id].tsx:13 ~ constgetServerSideProps:GetServerSideProps= ~ req", req.query)
 
-  const user = await prisma.user.findUnique({
-    where: {
-      // wallet: String(query.session),
-      id: String(query.session),
-    },
-  },
-  );
+  const { userId }: AuthData = getAuth(context.req)
+  // const user = await prisma.user.findUnique({
+  //   where: {
+  //     // wallet: String(query.session),
+  //     id: String(query.session),
+  //   },
+  // },
+  // );
+
+
 
   const rewardRound = await prisma.rewardRound.findUnique({
     where: {
-      id: String(query?.id),
+      id: String(context.query?.id),
     },
     include: {
       TeamValueAdd: {
@@ -40,13 +47,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
     props: {
       rewardRound,
-      user,
+      userId,
     },
   };
 };
 
 type Props = {
-  user: any;
+  userId: any;
   rewardRound: any;
 
 }
@@ -54,20 +61,36 @@ type Props = {
 const TeamProposal: React.FC<Props> = (props) => {
   // const util = require('util');
   const { handleSubmit, formState } = useForm();
+  const { user } = useUser();
+
+  const updateUser = async () => {
+    const userId = props?.userId
+    const userName = user?.username
+    const body = { userName, userId };
+    await fetch('/api/post/newUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  }
 
   const submitData = async (e: React.SyntheticEvent) => {
     var expiryDate = new Date()
     expiryDate.setDate(expiryDate.getDate() + 2)
+    const userId = props?.userId
+
+    updateUser()
+
     // e.preventDefault();
     try {
-      const body = { voteFields };
+      const body = { voteFields, userId };
       await fetch('/api/post/valueAddVote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
       await Router.push('/');
-      sendDiscordUpdate(`**A new Team Proposal / Veto was just submitted by ${props.user.name}** \n
+      sendDiscordUpdate(`**A new Team Proposal / Veto was just submitted by ${user?.username}** \n
         You have until <t:${Math.floor(Number(expiryDate) / 1000)}:d> to veto, else it will be accepted as this months allocation!`)
       console.log('successful');
     } catch (error) {
@@ -76,11 +99,11 @@ const TeamProposal: React.FC<Props> = (props) => {
   };
 
   //preload fields with previous values
-  const votePrep = props.rewardRound.TeamValueAdd.map(valueAdd => {
+  const votePrep = props.rewardRound?.TeamValueAdd.map(valueAdd => {
     return {
       ...valueAdd,
       rewardRoundID: props.rewardRound.id,
-      userId: props.user.id,
+      userId: props?.userId,
       pointsSpent: 0, // util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
       proposalNumber: valueAdd.TeamProposal.reduce((prev, current) => (prev.proposalNumber > current.proposalNumber) ? prev : current, 0).proposalNumber,
       newReason: ''
@@ -90,7 +113,7 @@ const TeamProposal: React.FC<Props> = (props) => {
   // console.log(votePrep)
 
   const [voteFields, setvoteFields] = useState(votePrep)
-  const [totalVoted, setTotalVoted] = useState(votePrep.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
+  const [totalVoted, setTotalVoted] = useState(votePrep?.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
   const [totalReached, setTotalReached] = useState(false)
 
   const handleFormChange = (index, event) => {
@@ -113,9 +136,9 @@ const TeamProposal: React.FC<Props> = (props) => {
       <div className='max-w-5xl mt-2 flex flex-col mb-10 m-auto'>
         <div className='grid grid-cols-2'>
           <h2 className="font-bold">Period</h2>
-          <p>{props.rewardRound.monthYear}</p>
+          <p>{props?.rewardRound?.monthYear}</p>
           <h2 className="font-bold">Budget</h2>
-          <p>{props.rewardRound.budget}</p>
+          <p>{props?.rewardRound?.budget}</p>
           <h2 className="font-bold">Your Vote vs. your vote budget</h2>
           <p className={`${totalReached ? 'text-red-600' : 'text-black'}`}>{totalVoted} / 100 </p>
         </div>
@@ -145,7 +168,7 @@ const TeamProposal: React.FC<Props> = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {voteFields.map((valueAdd, index) => (
+                  {voteFields?.map((valueAdd, index) => (
                     <tr key={valueAdd.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                       <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {valueAdd.team.name}

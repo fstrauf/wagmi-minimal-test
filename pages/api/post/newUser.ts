@@ -3,23 +3,25 @@
 import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
-  const { user, name, email, wallet, authorClerkId } = req.body;
+  const { userName, userId } = req.body;
   
 
   // console.log(req.body)
 
   // var email = 
   
-  const response = await prisma.user.update({
+  const response = await prisma.user.upsert({
     where: {
-      id: user.id,
+      id: userId
     },
-    data: {
-      name: name,
-      wallet: wallet,
-      email: email,
-      id: authorClerkId,
+    update: {
+      id: userId,
+      name: userName,
     },
+    create: {
+      id: userId,
+      name: userName,
+    }
   })
 
   res.json(response);

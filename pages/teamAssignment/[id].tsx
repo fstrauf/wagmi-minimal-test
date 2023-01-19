@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       team: {},
       RewardRoundTeamMember: {
         where: {
-          userId: user.id
+          userId: user?.id
         }
       }
     }
@@ -74,7 +74,7 @@ const TeamAssignment: React.FC<Props> = (props) => {
       checked: util.isUndefined(team.RewardRoundTeamMember[0]) ? false : team.RewardRoundTeamMember[0].selected,
       valueAdd: util.isUndefined(team.RewardRoundTeamMember[0]) ? '' : team.RewardRoundTeamMember[0].valueAdd,
       RewardRoundTeamMemberId: util.isUndefined(team.RewardRoundTeamMember[0]?.id) ? '' : team.RewardRoundTeamMember[0]?.id,
-      userId: props.user.id,
+      userId: props?.user?.id,
     };
   });
 

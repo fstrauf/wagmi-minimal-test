@@ -30,9 +30,6 @@ const ContentRewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewar
   const { isSignedIn } = useAuth()
   const { user } = useUser()
   const contributor = user?.publicMetadata?.contributor || false
-  // const admin = user?.publicMetadata?.admin || false
-
-  console.log("🚀 ~ file: ContentRewardRound.tsx:126 ~ rewardRound", rewardRound)
 
   return (
     <div className="bg-gray-200 border-solid border-2 border-dao-red rounded mt-5">

@@ -3,10 +3,12 @@ import { GetServerSideProps } from "next"
 import Layout from "../components/Layout"
 import { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 // import Link from 'next/link';
 import { Link } from 'react-scroll'
 import RewardRound from '../components/RewardRound'
+// import { useSignIn } from '@clerk/nextjs/dist/client';
+
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const rewardRound = await prisma.rewardRound.findMany({
@@ -98,7 +100,7 @@ type Props = {
   rewardRound: any;
 }
 
-const Blog: React.FC<Props> = (props) => {
+const Blog: React.FC<Props> = (props) => {  
   // const { data: session, status } = useSession();
 
   // if (!session) {
