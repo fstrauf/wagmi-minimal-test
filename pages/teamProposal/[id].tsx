@@ -35,9 +35,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             where: {
               active: true,
             },
-            include: {
-              user: {},
-            },
+            // include: {
+            //   user: {},
+            // },
           }
         }
       }
@@ -47,13 +47,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       rewardRound,
-      userId,
+      // userId,
     },
   };
 };
 
 type Props = {
-  userId: any;
+  // userId: any;
   rewardRound: any;
 
 }
@@ -64,7 +64,7 @@ const TeamProposal: React.FC<Props> = (props) => {
   const { user } = useUser();
 
   const updateUser = async () => {
-    const userId = props?.userId
+    const userId = user?.id
     const userName = user?.username
     const body = { userName, userId };
     await fetch('/api/post/newUser', {
@@ -77,13 +77,15 @@ const TeamProposal: React.FC<Props> = (props) => {
   const submitData = async (e: React.SyntheticEvent) => {
     var expiryDate = new Date()
     expiryDate.setDate(expiryDate.getDate() + 2)
-    const userId = props?.userId
+    // const userId = props?.userId
+    const userId = user?.id
 
     updateUser()
 
     // e.preventDefault();
     try {
-      const body = { voteFields, userId };
+      // const body = { voteFields, userId };
+      const body = { voteFields };
       await fetch('/api/post/valueAddVote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -103,7 +105,8 @@ const TeamProposal: React.FC<Props> = (props) => {
     return {
       ...valueAdd,
       rewardRoundID: props.rewardRound.id,
-      userId: props?.userId,
+      // userId: props?.userId,
+      userId: user?.id,
       pointsSpent: 0, // util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
       proposalNumber: valueAdd.TeamProposal.reduce((prev, current) => (prev.proposalNumber > current.proposalNumber) ? prev : current, 0).proposalNumber,
       newReason: ''
