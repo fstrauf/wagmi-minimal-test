@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Router from 'next/router';
 import Layout from '../../components/Layout';
